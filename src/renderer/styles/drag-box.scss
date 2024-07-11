@@ -1,0 +1,23 @@
+
+.drag-box {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background-color: #4CAF50;
+  padding: 20px;
+  text-align: center;
+  line-height: 100px;
+  color: white;
+  cursor: move;
+  user-select: none;
+
+  //--webkit-app-region: drag;
+  //cursor: grab;
+  //transition: transform 0.3s ease-out;
+  //
+  //&:active{
+  //  cursor: grabbing;
+  //  transform: translate(calc(var(--mouse-x) - 50px), calc(var(--mouse-y) - 50px));
+  //}
+}
+
