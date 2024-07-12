@@ -1,10 +1,13 @@
-import {Component, useEffect, useId} from "react";
+import {Component, useEffect, useId, useRef} from "react";
 import {asyncSleep, getRandomStr} from "../common";
+import { throttle } from 'lodash';
 import Draggable from 'react-draggable'
 
 
 // 为了使用 useId 换成函数组件
 export const DragBox = () => {
+
+    const refListener = useRef(null);
 
     let boxId: string,
         dialogId: string
@@ -32,7 +35,12 @@ export const DragBox = () => {
         mousePosition.isMouseDown = true;
         mousePosition.offsetX = e.offsetX;
         mousePosition.offsetY = e.offsetY;
+
+        addDocMove()
     }
+
+    const addDocMove = () => document.addEventListener('mousemove', dragMouseMove)
+    const removeDocMove = () => document.removeEventListener('mousemove', dragMouseMove)
 
     const dragMouseMove = (e: MouseEvent) => {
         if (mousePosition.isMouseDown) {
@@ -60,18 +68,25 @@ export const DragBox = () => {
             }
 
             // console.log(height, width)
+            console.log('>> move...')
             // 拖动的是标题部分, 移动的是整个dialog
-            _box.style.left = cx  + 'px';
-            _box.style.top = cy + 'px';
+            // _box.style.left = cx  + 'px';
+            // _box.style.top = cy + 'px';
+
+            // 设置 left 跟 top 太卡了,
+            _box.style.transform = `translate(${cx}px, ${cy}px)`;
+
         }
     }
     const dragMouseUp = (e: MouseEvent) =>  {
         mousePosition.isMouseDown = false;
+        removeDocMove()
     }
     // 解决移出界面时 div 的 mouseup 不触发的问题
     const bodyMouseUp = (e: MouseEvent) =>  {
         if(e.clientY > window.innerHeight || e.clientY < 0 || e.clientX < 0 ||e.clientX > window.innerWidth){
             mousePosition.isMouseDown = false;
+            removeDocMove()
             document.body.classList.remove('no-select');
         }
     }
@@ -90,7 +105,7 @@ export const DragBox = () => {
         //     width = dialogOverlay.offsetWidth;
 
         draggable.addEventListener('mousedown', dragMouseDown)
-        draggable.addEventListener('mousemove', dragMouseMove)
+        // draggable.addEventListener('mousemove', throttle(dragMouseMove, 10))
         draggable.addEventListener('mouseup', dragMouseUp)
 
         // 解决移出界面时 div 的 mouseup 不触发的问题
@@ -105,10 +120,11 @@ export const DragBox = () => {
             let draggable: HTMLElement = document.getElementById(boxId);
             if (draggable){
                 draggable.removeEventListener('mousedown', dragMouseDown)
-                draggable.removeEventListener('mousemove', dragMouseMove)
+                // draggable.removeEventListener('mousemove', throttle(dragMouseMove, 10))
                 draggable.removeEventListener('mouseup', dragMouseUp)
             }
             document.removeEventListener('mouseup', bodyMouseUp);
+            removeDocMove()
         }
     }, []);
 
@@ -125,21 +141,39 @@ export const DragBox = () => {
                     </div>
                 </div>
             </div>
-            // <Draggable
-            //     axis="x"
-            //     handle=".handle"
-            //     defaultPosition={{x: 0, y: 0}}
-            //     position={null}
-            //     grid={[25, 25]}
-            //     scale={1}
-            //     onStart={() => {}}
-            //     onDrag={() => {}}
-            //     onStop={() => {}}>
-            //     <div style={{resize: "both", border: "1px solid black", width: "100px"}}>
-            //         <div className="handle">Drag from here</div>
-            //         <div>This readme is really dragging on...</div>
-            //     </div>
-            // </Draggable>
+
+        )
+    }
+
+    return render()
+}
+
+
+export const DragDialog = () => {
+
+    const render = () => {
+        return (
+            <div>
+                <Draggable
+                    axis="both"
+                    handle=".handle"
+                    defaultPosition={{x: 0, y: 0}}
+                    position={null}
+                    grid={[25, 25]}
+                    scale={1}
+                    onStart={() => {}}
+                    onDrag={() => {}}
+                    onStop={() => {}}>
+                    <div style={{
+                        resize: "both", border: "1px solid black",
+                        width: "100px", overflow: "auto",
+                        position: "fixed", background: "grey"
+                    }}>
+                        <div className="handle">Drag from here</div>
+                        <div>This readme is really dragging on...</div>
+                    </div>
+                </Draggable>
+            </div>
         )
     }
 

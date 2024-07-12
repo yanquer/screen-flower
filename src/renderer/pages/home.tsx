@@ -2,7 +2,7 @@ import React from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import Image from 'next/image'
-import {DragBox} from "../common/components/drag-box";
+import {DragBox, DragDialog} from "../common/components/drag-box";
 
 export default function HomePage() {
   return (
@@ -10,8 +10,8 @@ export default function HomePage() {
       <Head>
         <title>Home - Nextron (with-tailwindcss)</title>
       </Head>
-        <DragBox width={256} height={256}/>
-
+        <DragBox/>
+        {/*<DragDialog/>*/}
       <div className="grid grid-col-1 text-2xl w-full text-center">
         <div>
           <Image
