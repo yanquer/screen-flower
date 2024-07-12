@@ -7,11 +7,10 @@ import Draggable from 'react-draggable'
 // 为了使用 useId 换成函数组件
 export const DragBox = () => {
 
-    const refListener = useRef(null);
-
     let boxId: string,
         dialogId: string
 
+    // 使用随机id, 方便支持弹出多个窗口
     const setIds = () => {
         // const randStr = getRandomStr()
         const randStr = useId()
@@ -28,7 +27,7 @@ export const DragBox = () => {
         offsetY: 0,
     }
 
-    // 动态获取, 因为可能是resizeable
+    // 动态获取, 因为可能是 resizeable
     const dialogContentBox = () => document.getElementById(dialogId);
 
     const dragMouseDown = (e: MouseEvent) => {
@@ -85,8 +84,7 @@ export const DragBox = () => {
     // 解决移出界面时 div 的 mouseup 不触发的问题
     const bodyMouseUp = (e: MouseEvent) =>  {
         if(e.clientY > window.innerHeight || e.clientY < 0 || e.clientX < 0 ||e.clientX > window.innerWidth){
-            mousePosition.isMouseDown = false;
-            removeDocMove()
+            dragMouseUp(e)
             document.body.classList.remove('no-select');
         }
     }
@@ -124,7 +122,7 @@ export const DragBox = () => {
                 draggable.removeEventListener('mouseup', dragMouseUp)
             }
             document.removeEventListener('mouseup', bodyMouseUp);
-            removeDocMove()
+            removeDocMove()         // 这一句不一定成功
         }
     }, []);
 
