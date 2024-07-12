@@ -1,23 +1,48 @@
 
-.drag-box {
+.dialog-overlay{
   position: absolute;
-  width: 100px;
-  height: 100px;
+  width: 100vw;
+  height: 100vh;
+
+  &.not-mode-window{
+    pointer-events: none;
+  }
+  & > * {
+    pointer-events: auto;
+  }
+
+  .dialog-title {
+    width: 100%;
+    height: 40px;
+  }
+
+  .dialog-box{
+    position: relative;
+  }
+}
+
+.drag-box {
   background-color: #4CAF50;
-  padding: 20px;
   text-align: center;
-  line-height: 100px;
   color: white;
-  cursor: move;
+  //cursor: move;
   user-select: none;
 
-  //--webkit-app-region: drag;
-  //cursor: grab;
+  cursor: grab;
   //transition: transform 0.3s ease-out;
-  //
-  //&:active{
-  //  cursor: grabbing;
-  //  transform: translate(calc(var(--mouse-x) - 50px), calc(var(--mouse-y) - 50px));
-  //}
+
+  &:active{
+    cursor: grabbing;
+    //transform: translate(calc(var(--mouse-x) - 50px), calc(var(--mouse-y) - 50px));
+  }
 }
+
+.resize-box {
+  border:1px solid rebeccapurple;
+  resize: both;
+  overflow: hidden;
+}
+
+
+
 

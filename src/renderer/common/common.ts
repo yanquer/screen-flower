@@ -11,3 +11,7 @@ export const getRandomStr = () => {
     // console.log(randomStr)
     return `${nowDate}${randomStr}`;
 }
+
+export const asyncSleep = (ms: number) => {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}

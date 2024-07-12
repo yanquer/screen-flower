@@ -11,6 +11,7 @@ export default function HomePage() {
         <title>Home - Nextron (with-tailwindcss)</title>
       </Head>
         <DragBox width={256} height={256}/>
+
       <div className="grid grid-col-1 text-2xl w-full text-center">
         <div>
           <Image
