@@ -1,9 +1,13 @@
-import {BrowserWindow} from "electron";
-import {createWindow} from "../helpers";
-import {BaseWidget} from "../common/base";
 
 
-export class CaptureWidget extends BaseWidget{
+import {BaseSFWindow} from "./base";
+import {WindowNames} from "../common/defines";
+import {injectable} from "inversify";
+
+@injectable()
+export class CaptureWindow extends BaseSFWindow{
+    id = WindowNames.CaptureWin
+
     url: string = '/capture'
     name = 'capture-win'
     options = {
