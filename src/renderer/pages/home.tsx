@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import Image from 'next/image'
 import {DragBox, DragBoxInner, DragDialog} from "../common/components/drag-box";
+import {CTree} from "../common/components/c-tree";
 
 export default function HomePage() {
   return (
@@ -11,6 +12,7 @@ export default function HomePage() {
         <title>Home - Nextron (with-tailwindcss)</title>
       </Head>
         <DragBoxInner/>
+
         {/*<DragDialog/>*/}
       <div className="grid grid-col-1 text-2xl w-full text-center">
         <div>
@@ -33,6 +35,8 @@ export default function HomePage() {
       <div className="mt-1 w-full flex-wrap flex justify-center">
         <Link href="/next">Go to next page</Link>
       </div>
+
+        {/*<CTree/>*/}
     </React.Fragment>
   )
 }

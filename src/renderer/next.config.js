@@ -19,6 +19,10 @@ module.exports = {
     //     "sass-loader"
     //   ],
     // });
+
+    // required to make Konva & react-konva work
+    config.externals = [...config.externals, { canvas: 'canvas' }];
+
     return config
   },
   sassOptions: {

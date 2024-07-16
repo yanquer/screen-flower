@@ -8,8 +8,9 @@ import {join} from "path";
 export const initAll = () => {
     bindWindows()
 
-    console.log(">> ", __dirname)
-    // initializeMenu(join(__dirname, "../", "resources", "logo.png"))
-    // initializeMenu(join("../", "resources", "1.jpg"))
-    initializeMenu(join("images", "logo.png"))
+    // console.log(">> ", __dirname)
+    // const img = join(__dirname, "../resources/1.jpg")
+    const img = join(__dirname, "../resources/icon_16x16.png")
+    // console.log(">> ", img)
+    initializeMenu(img)
 }

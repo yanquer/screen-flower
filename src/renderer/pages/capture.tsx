@@ -2,7 +2,8 @@ import {Component} from "react";
 import {CaptureWin} from "../components/capture-win";
 import {ActionBar} from "../components/action-bar";
 
-export default class Capture extends Component<any, any>{
+
+class _Capture extends Component<any, any>{
 
     render() {
         return (
@@ -12,6 +13,10 @@ export default class Capture extends Component<any, any>{
             </div>
         )
     }
+}
+
+export default function CapturePage(){
+    return (<_Capture/>)
 }
 
 

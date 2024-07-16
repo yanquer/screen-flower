@@ -15,7 +15,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "types": ["reflect-metadata"]
   },
   "exclude": ["node_modules",
     "src/renderer/next.config.js", "app", "dist"]

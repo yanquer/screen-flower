@@ -1,6 +1,6 @@
 import {BrowserWindow, BrowserWindowConstructorOptions} from "electron";
 import {createWindow} from "../helpers";
-import {WindowNames} from "../common/defines";
+import {getHostUrl, WindowNames} from "../common/defines";
 import {injectable} from "inversify";
 
 
@@ -26,8 +26,14 @@ export class BaseSFWindow implements IBaseWindow{
     win?: BrowserWindow;
 
     async open(): Promise<void> {
+        if (this.win) {
+            this.win.show()
+            return
+        }
+
         this.win = this.initWindow()
-        this.loadWindow().then()
+        await this.loadWindow()
+        await this.extOperation()
     }
 
     initWindow(): BrowserWindow{
@@ -38,7 +44,11 @@ export class BaseSFWindow implements IBaseWindow{
     }
 
     async loadWindow(): Promise<void> {
-        await this.win.loadURL(this.url)
+        await this.win.loadURL(getHostUrl(this.url))
+    }
+
+    async extOperation(): Promise<void>{
+
     }
 
 }
