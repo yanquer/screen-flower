@@ -1,6 +1,6 @@
 import {Component} from "react";
 import {CaptureWin} from "../components/capture-win";
-import {ActionBar} from "../components/action-bar";
+import {ActionToolBar} from "../components/action-tool-bar";
 
 
 class _Capture extends Component<any, any>{
@@ -9,7 +9,7 @@ class _Capture extends Component<any, any>{
         return (
             <div>
                 <CaptureWin/>
-                <ActionBar/>
+                <ActionToolBar/>
             </div>
         )
     }

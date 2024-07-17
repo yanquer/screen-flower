@@ -22,7 +22,13 @@ export class BaseSFWindow implements IBaseWindow{
     id: WindowNames
     name: string
     url: string;
-    options?: BrowserWindowConstructorOptions
+    private _options?: BrowserWindowConstructorOptions;
+    public get options(): BrowserWindowConstructorOptions {
+        return this._options;
+    }
+    public set options(value: BrowserWindowConstructorOptions) {
+        this._options = value;
+    }
     win?: BrowserWindow;
 
     async open(): Promise<void> {

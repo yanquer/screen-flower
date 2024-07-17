@@ -1,0 +1,78 @@
+
+.resizeHandle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: white;
+  border: 2px solid rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+
+  &.bottom{
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: ns-resize;
+  }
+
+  &.bottomLeft {
+    bottom: 0;
+    left: 0;
+    top: 0;
+    right: 0;
+    margin: auto;
+    cursor: nesw-resize;
+  }
+
+  &.bottomRight {
+    bottom: 0;
+    left: 0;
+    top: 0;
+    right: 0;
+    margin: auto;
+    cursor: nwse-resize;
+  }
+
+  &.left {
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    cursor: ew-resize;
+  }
+
+  &.right {
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    cursor: ew-resize;
+  }
+
+  &.top {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: ns-resize;
+  }
+
+  &.topLeft {
+    bottom: 0;
+    left: 0;
+    top: 0;
+    right: 0;
+    margin: auto;
+    cursor: nwse-resize;
+  }
+
+  &.topRight {
+    bottom: 0;
+    left: 0;
+    top: 0;
+    right: 0;
+    margin: auto;
+    cursor: nesw-resize;
+  }
+}
+
+.boxShadowFull{
+  box-shadow: rgba(0, 0, 0, 0.2) 0 0 0 9999px;
+}
