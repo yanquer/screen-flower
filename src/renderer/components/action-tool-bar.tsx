@@ -16,29 +16,39 @@ import {
 
 // @ts-ignore
 import {toolbarSeparator, toolbarButton} from "../styles/components/action-tool-bar.module.scss"
-import {ToolTipWrap} from "./radix-ui/tool-tip-wrap";
+import {ToolTipButtonWrap} from "./radix-ui/tool-tip-button-wrap";
+import {IRecordContext, RecordContext} from "../common/global-context";
 
-export class ActionToolBar extends Component<any, any>{
+enum CursorMode{
+    "none",
+    "target",
+    "highlight",
+    "spotlight" ,
+}
 
-    state: {
-        canDrag: boolean,
-        x: number,
-        y: number,
-        openDraw: boolean,
-        openBlur: boolean,
-        pause: boolean,
-        cursorMode: "target" | "highlight" | "spotlight" | "none",
-    } = {
+interface ActionToolBarState {
+    canDrag: boolean,
+    x: number,
+    y: number,
+    openDraw: boolean,
+    openBlur: boolean,
+    pause: boolean,
+    cursorMode: CursorMode,
+}
+
+export class ActionToolBar extends Component<any, ActionToolBarState>{
+    static contextType = RecordContext
+    context: IRecordContext
+
+    state = {
         canDrag: false,
         x: 200,
         y: 500,
         openDraw: false,
         openBlur: false,
         pause: false,
-        cursorMode: "none",
+        cursorMode: CursorMode.none,
     }
-
-    protected boxRef = createRef<HTMLDivElement | undefined>();
 
     protected setCanDrag(can: boolean){this.setState({canDrag: can});}
     protected handleDocMouseUp(){this.setCanDrag(false)}
@@ -55,23 +65,21 @@ export class ActionToolBar extends Component<any, any>{
 
     protected renderCloseTool(){
         return (
-            <ToolTipWrap title={"关闭"}>
-                <Button>
-                    <CloseButtonToolbar/>
-                </Button>
-            </ToolTipWrap>
+            <ToolTipButtonWrap title={"关闭"}>
+                <CloseButtonToolbar/>
+            </ToolTipButtonWrap>
         )
     }
 
     protected renderCursorModeIcon(){
         switch (this.state.cursorMode){
-            case "target":
+            case CursorMode.target:
                 return <TargetCursorIcon/>
-            case "highlight":
+            case CursorMode.highlight:
                 return <HighlightCursorIcon />
-            case "spotlight":
+            case CursorMode.spotlight:
                 return <SpotlightCursorIcon />
-            case "none":
+            case CursorMode.none:
                 return <CursorIcon />
             default:
                 return <CursorIcon />
@@ -79,6 +87,8 @@ export class ActionToolBar extends Component<any, any>{
     }
 
     render() {
+        const buttonCanUseClass = this.context.recording ? "" : " cursor-not-allowed "
+
         return (
             <div className={"bg-white"}>
                 <Rnd
@@ -90,78 +100,74 @@ export class ActionToolBar extends Component<any, any>{
                     dragAxis={this.state.canDrag ? "both" : "none"}
                     onDragStop={(e, d) => this.setState({x: d.x, y: d.y})}
                 >
-                    <div className={"bg-white rounded-full cursor-auto " + (this.state.canDrag ? "scale-105" : "")} ref={this.boxRef}>
+                    <div className={"bg-white rounded-full cursor-auto pl-2 pr-2 " +
+                        (this.state.canDrag ? "scale-105" : "")}
+                    >
                         <Root className={"h-12"}>
                             <Flex className={'h-full'} direction="row"
                                   align={"center"} justify={"center"}
-                                  gap="8px"
+                                  gap="1px"
                             >
                                 <div>
-                                    <ToolTipWrap title={"拖动"}>
-                                        <Button
-                                            className={`${toolbarButton}`}
-                                            onMouseDown={() => this.setCanDrag(true)}
-                                        ><GrabIcon/></Button>
-                                    </ToolTipWrap>
+                                    <ToolTipButtonWrap
+                                        title={"拖动"}
+                                        buttonClassName={`${toolbarButton}`}
+                                        buttonMouseDownHandler={() => this.setCanDrag(true)}
+                                    >
+                                        <GrabIcon/>
+                                    </ToolTipButtonWrap>
                                 </div>
 
                                 <Separator className={toolbarSeparator}/>
 
-                                <Flex direction={"row"} gap={"8px"}>
+                                <Flex
+                                    className={'bg-gray-100 p-1 rounded-full'}
+                                    direction={"row"} gap={"8px"}>
                                     <div>
-                                        <ToolTipWrap title={"结束录制"}>
-                                            <Button
-                                            className={`${toolbarButton}`}
-
-                                            >
-                                                <StopIcon width="20" height="20"/>
-                                            </Button>
-                                        </ToolTipWrap>
+                                        <ToolTipButtonWrap
+                                            title={"结束录制"}
+                                            buttonClassName={`${toolbarButton} ${buttonCanUseClass}`}
+                                        >
+                                            <StopIcon width="20" height="20"/>
+                                        </ToolTipButtonWrap>
                                     </div>
                                     <div className="ToolbarRecordingTime">
                                         {/*{timestamp}*/}
                                     </div>
-                                    <ToolTipWrap title={"重新开始录制"}>
-                                        <div>
-                                            <Button
-                                            className={`${toolbarButton}`}
 
-                                            >
-                                                <RestartIcon/>
-                                            </Button>
-                                        </div>
-                                    </ToolTipWrap>
+                                    <ToolTipButtonWrap
+                                        title={"重新开始录制"}
+                                        buttonClassName={`${toolbarButton} ${buttonCanUseClass}`}
+                                    >
+                                        <RestartIcon/>
+                                    </ToolTipButtonWrap>
+
                                     <div>
                                         {!this.state.pause ? (
-                                            <ToolTipWrap title={"暂停录制"}>
-                                                <Button
-                                            className={`${toolbarButton}`}
-
-                                                >
-                                                    <PauseIcon/>
-                                                </Button>
-                                            </ToolTipWrap>
+                                            <ToolTipButtonWrap
+                                                title={"暂停录制"}
+                                                buttonClassName={`${toolbarButton} ${buttonCanUseClass}`}
+                                            >
+                                                <PauseIcon/>
+                                            </ToolTipButtonWrap>
                                         ) : (
-                                            <ToolTipWrap title={"继续录制"}>
-                                                <Button
-                                            className={`${toolbarButton}`}
-
-                                                >
-                                                    <ResumeIcon/>
-                                                </Button>
-                                            </ToolTipWrap>
+                                            <ToolTipButtonWrap
+                                                title={"继续录制"}
+                                                buttonClassName={`${toolbarButton} ${buttonCanUseClass}`}
+                                            >
+                                                <ResumeIcon/>
+                                            </ToolTipButtonWrap>
                                         )}
 
                                     </div>
                                     <div>
-                                        <ToolTipWrap title={"取消录制"}>
-                                            <Button
-                                            className={`${toolbarButton}`}
+                                        <ToolTipButtonWrap
+                                            title={"取消录制"}
+                                            buttonClassName={`${toolbarButton} ${buttonCanUseClass}`}
+                                        >
+                                            <DiscardIcon/>
+                                        </ToolTipButtonWrap>
 
-                                            >
-                                                <DiscardIcon/>
-                                            </Button>
-                                        </ToolTipWrap>
                                     </div>
                                 </Flex>
 
@@ -171,12 +177,12 @@ export class ActionToolBar extends Component<any, any>{
                                     {this.state.openDraw ? (
                                         this.renderCloseTool()
                                     ) : (
-                                        <ToolTipWrap title={"切换绘图工具"}>
-                                            <Button
-                                            className={`${toolbarButton}`}>
-                                                <DrawIcon/>
-                                            </Button>
-                                        </ToolTipWrap>
+                                        <ToolTipButtonWrap
+                                            title={"切换绘图工具"}
+                                            buttonClassName={`${toolbarButton}`}
+                                        >
+                                            <DrawIcon/>
+                                        </ToolTipButtonWrap>
                                     )}
 
                                 </div>
@@ -185,41 +191,44 @@ export class ActionToolBar extends Component<any, any>{
                                     {this.state.openBlur ? (
                                         this.renderCloseTool()
                                     ) : (
-                                        <ToolTipWrap title={"切换模糊工具"}>
-                                            <Button
-                                            className={`${toolbarButton}`}>
-                                                <BlurIcon/>
-                                            </Button>
-                                        </ToolTipWrap>
+                                        <ToolTipButtonWrap
+                                            title={"切换模糊工具"}
+                                            buttonClassName={`${toolbarButton}`}
+                                        >
+                                            <BlurIcon/>
+                                        </ToolTipButtonWrap>
                                     )}
                                 </div>
 
                                 <div>
-                                    <ToolTipWrap title={"切换光标选项"}>
-                                        <Button
-                                            className={`${toolbarButton}`}>
-                                            {this.renderCursorModeIcon()}
-                                        </Button>
-                                    </ToolTipWrap>
+                                    <ToolTipButtonWrap
+                                        title={"切换光标选项"}
+                                        buttonClassName={`${toolbarButton}`}
+                                    >
+                                        {this.renderCursorModeIcon()}
+                                    </ToolTipButtonWrap>
+
                                 </div>
 
                                 <Separator className={toolbarSeparator}/>
 
                                 <div>
-                                    <ToolTipWrap title={"打开麦克风"}>
-                                        <Button
-                                            className={`${toolbarButton}`}>
-                                            <MicIcon/>
-                                        </Button>
-                                    </ToolTipWrap>
+                                    <ToolTipButtonWrap
+                                        title={"打开麦克风"}
+                                        buttonClassName={`${toolbarButton}`}
+                                    >
+                                        <MicIcon/>
+                                    </ToolTipButtonWrap>
+
                                 </div>
                                 <div>
-                                    <ToolTipWrap title={"打开摄像头"}>
-                                        <Button
-                                            className={`${toolbarButton}`}>
-                                            <CameraIcon/>
-                                        </Button>
-                                    </ToolTipWrap>
+                                    <ToolTipButtonWrap
+                                        title={"打开摄像头"}
+                                        buttonClassName={`${toolbarButton}`}
+                                    >
+                                        <CameraIcon/>
+                                    </ToolTipButtonWrap>
+
                                 </div>
 
                             </Flex>

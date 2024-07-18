@@ -1,6 +1,8 @@
 import {Component, ReactNode} from "react";
 import {Content, Trigger, Portal, Arrow, Provider, Root } from '@radix-ui/react-tooltip';
 
+import {tooltipContent} from '../../styles/components/radix-ui/tool-tip-wrap.module.scss'
+
 interface ToolTipProps {
     title?: string;
     children?: ReactNode;
@@ -21,14 +23,22 @@ export class ToolTipWrap extends Component<ToolTipProps, any> {
             <Provider>
                 <Root>
 
-                    <Trigger
-                        asChild
-                        className={"size-8 content-center justify-center flex items-center rounded-full tool-button"}>
+                    <Trigger asChild>
                         {this._props.children}
                     </Trigger>
 
                     <Portal>
-                        <Content className="TooltipContent" sideOffset={5}>
+                        <Content
+                            className={`rounded-full text-xs 
+                                pl-4 pr-4 pt-2.5 pb-2.5 
+                                mb-2.5 bg-gray-900
+                                bottom-24 leading-none z-50 text-white select-none 
+                                transition transition-opacity ease-in-out delay-150
+                                will-change-transform
+                                ${tooltipContent}
+                                `}
+                            sideOffset={5}
+                        >
                             {this._props.title}
                             <Arrow className="TooltipArrow" />
                         </Content>

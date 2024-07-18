@@ -3,6 +3,7 @@ import { app, ipcMain } from 'electron'
 import serve from 'electron-serve'
 import { createWindow } from './helpers'
 import {initAll} from "./init-all";
+import {setNoMenuDock} from "./common/electron/menu";
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -14,6 +15,9 @@ if (isProd) {
 
 ;(async () => {
   await app.whenReady()
+
+  setNoMenuDock()
+  return
 
   const mainWindow = createWindow('main', {
     width: 1000,

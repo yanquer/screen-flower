@@ -1,7 +1,7 @@
-import {BrowserWindow, BrowserWindowConstructorOptions} from "electron";
+import {BrowserWindow, BrowserWindowConstructorOptions, screen} from "electron";
 import {createWindow} from "../helpers";
 import {getHostUrl, WindowNames} from "../common/defines";
-import {injectable} from "inversify";
+import {injectable, postConstruct} from "inversify";
 
 
 export const IBaseWindow = Symbol("IBaseWindow");
@@ -31,15 +31,37 @@ export class BaseSFWindow implements IBaseWindow{
     }
     win?: BrowserWindow;
 
+    // 预加载来提高打开截屏窗口的启动速度, 比如每次创建新窗口
+    // 需要与 show: false 一起使用
+    preLoad: boolean
+    // 是否是第一次show窗口, 支持close后
+    firstInit: boolean = true;
+
+    @postConstruct()
+    protected init () {
+        console.log('>>> init base...', this.preLoad, this.id)
+        if (this.preLoad){
+            console.log('>>> preload init ...')
+            this.open().then()
+        }
+    }
+
     async open(): Promise<void> {
         if (this.win) {
-            this.win.show()
+            console.log('>>> already has win...')
+            this.show()
+            this.firstInit = false
             return
         }
 
+        this.firstInit = true
+        console.log('>>> init win...')
         this.win = this.initWindow()
         await this.loadWindow()
         await this.extOperation()
+        // this.win.once('ready-to-show', () => {
+        //     this.win.show()
+        // })
     }
 
     initWindow(): BrowserWindow{
@@ -55,6 +77,21 @@ export class BaseSFWindow implements IBaseWindow{
 
     async extOperation(): Promise<void>{
 
+    }
+
+    close(){
+        console.log('>>> close window')
+        this.win?.close()
+        this.win = undefined
+    }
+
+    show() {
+        this.win.show()
+    }
+
+    hide() {
+        console.log('>>> hide window')
+        this.win?.hide()
     }
 
 }

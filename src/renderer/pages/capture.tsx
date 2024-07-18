@@ -1,22 +1,27 @@
-import {Component} from "react";
+
 import {CaptureWin} from "../components/capture-win";
 import {ActionToolBar} from "../components/action-tool-bar";
+import {RecordContext} from "../common/global-context";
+import {useState} from "react";
 
 
-class _Capture extends Component<any, any>{
+export default function Capture() {
+    const [recording, setRecording] = useState<boolean>(false)
 
-    render() {
+    const render = () => {
         return (
-            <div>
-                <CaptureWin/>
-                <ActionToolBar/>
-            </div>
+            <RecordContext.Provider value={{
+                recording, setRecording,
+            }}>
+                <div>
+                    <CaptureWin/>
+                    <ActionToolBar/>
+                </div>
+            </RecordContext.Provider>
         )
     }
-}
 
-export default function CapturePage(){
-    return (<_Capture/>)
+    return render()
 }
 
 

@@ -5,6 +5,7 @@ import {WindowNames} from "../common/defines";
 import {injectable} from "inversify";
 import {Input, Event, screen, Display, BrowserWindowConstructorOptions} from "electron";
 import {getCurrentScreenPoint, getCurrentScreenSize, moveToFoucScreen} from "../common/electron/display";
+import {setNoMenuDock} from "../common/electron/menu";
 
 @injectable()
 export class CaptureWindow extends BaseSFWindow{
@@ -12,20 +13,19 @@ export class CaptureWindow extends BaseSFWindow{
 
     url: string = '/capture'
     name = 'capture-win'
+    preLoad = true
     get options(): BrowserWindowConstructorOptions  {
         return {
             ...getCurrentScreenSize(),  // x, y, width, height
-            height: getCurrentScreenSize().height + 20,
             frame: false, // 删除默认窗口边框
             transparent: true, // 设置窗口为透明
-
             hasShadow: false,
             enableLargerThanScreen: true,
             resizable: false,
             movable: false,
             show: false,
             alwaysOnTop: true,
-            opacity: 0.5,
+            opacity: 0,
             titleBarStyle: 'hidden',
             autoHideMenuBar: true,
             // webPreferences: {
@@ -39,7 +39,7 @@ export class CaptureWindow extends BaseSFWindow{
     async extOperation(){
         // this.win.setAlwaysOnTop(true)
         // this.win.maximize()
-        // this.win.setOpacity(0.4)
+
         // 设置全屏可见
         this.win.setVisibleOnAllWorkspaces(true, {visibleOnFullScreen: true})
 
@@ -54,12 +54,14 @@ export class CaptureWindow extends BaseSFWindow{
             (event: Event, input: Input) => this.handleKeydown(event, input))
 
         // 兼容桌面切换
-        screen.on('display-metrics-changed', this.displayChange.bind(this));
+        // screen.on('display-metrics-changed', this.displayChange.bind(this));
     }
 
     protected handleKeydown(event: Event, input: Input) {
-        if (input.key === 'Escape') {
-            this.close()
+        switch (input.key){
+            case 'Escape':
+                this.hide()
+                break
         }
         event.preventDefault()
     }
@@ -71,10 +73,17 @@ export class CaptureWindow extends BaseSFWindow{
         // if (this.win) moveToFoucScreen(this.win)
     }
 
-    protected close(){
-        console.log('>>> close capture window')
-        this.win.close()
-        this.win = undefined
-        screen.off('display-metrics-changed', this.displayChange.bind(this))
+    close(){
+        super.close()
+        // screen.off('display-metrics-changed', this.displayChange.bind(this))
+    }
+
+    show(){
+        super.show()
+        if (this.firstInit) {
+            // 首次启动的时候, 先 opacity: 0 , 再 1 , 避免看到首次show browserWindows 白屏
+            //      除了此方案, 貌似还可以先加载一个其他的 browserWindows
+            setTimeout(() => this.win.setOpacity(1), 100)
+        }
     }
 }
