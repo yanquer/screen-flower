@@ -55,6 +55,8 @@ export class CaptureWindow extends BaseSFWindow{
 
         // 兼容桌面切换
         // screen.on('display-metrics-changed', this.displayChange.bind(this));
+
+        this.win.webContents.openDevTools()
     }
 
     protected handleKeydown(event: Event, input: Input) {

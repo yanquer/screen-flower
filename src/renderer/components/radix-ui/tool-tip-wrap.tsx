@@ -1,6 +1,7 @@
 import {Component, ReactNode} from "react";
 import {Content, Trigger, Portal, Arrow, Provider, Root } from '@radix-ui/react-tooltip';
 
+// @ts-ignore
 import {tooltipContent} from '../../styles/components/radix-ui/tool-tip-wrap.module.scss'
 
 interface ToolTipProps {

@@ -2,7 +2,7 @@ import path from 'path'
 import { app, ipcMain } from 'electron'
 import serve from 'electron-serve'
 import { createWindow } from './helpers'
-import {initAll} from "./init-all";
+import {getPermission, initAll} from "./init-all";
 import {setNoMenuDock} from "./common/electron/menu";
 
 const isProd = process.env.NODE_ENV === 'production'
@@ -40,6 +40,7 @@ if (isProd) {
 ;(async () => {
   await app.whenReady()
   initAll()
+  getPermission()
 })()
 
 app.on('window-all-closed', () => {

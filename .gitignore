@@ -11,6 +11,7 @@ next-env.d.ts
 # build
 /app
 dist
+src/app
 
 .vscode
 .idea

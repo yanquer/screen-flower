@@ -8,7 +8,7 @@ import {
     DiscardIcon,
     DrawIcon,
     GrabIcon, HighlightCursorIcon, MicIcon,
-    PauseIcon,
+    PauseIcon, PlayIcon,
     RestartIcon,
     ResumeIcon, SpotlightCursorIcon,
     StopIcon, TargetCursorIcon
@@ -18,6 +18,7 @@ import {
 import {toolbarSeparator, toolbarButton} from "../styles/components/action-tool-bar.module.scss"
 import {ToolTipButtonWrap} from "./radix-ui/tool-tip-button-wrap";
 import {IRecordContext, RecordContext} from "../common/global-context";
+import {ScreenCapture} from "./movie-stream/screen-capture";
 
 enum CursorMode{
     "none",
@@ -34,13 +35,14 @@ interface ActionToolBarState {
     openBlur: boolean,
     pause: boolean,
     cursorMode: CursorMode,
+    stop: boolean
 }
 
 export class ActionToolBar extends Component<any, ActionToolBarState>{
     static contextType = RecordContext
     context: IRecordContext
 
-    state = {
+    state: ActionToolBarState = {
         canDrag: false,
         x: 200,
         y: 500,
@@ -48,7 +50,10 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
         openBlur: false,
         pause: false,
         cursorMode: CursorMode.none,
+        stop: true,
     }
+
+    protected captureRef = createRef<ScreenCapture | undefined>()
 
     protected setCanDrag(can: boolean){this.setState({canDrag: can});}
     protected handleDocMouseUp(){this.setCanDrag(false)}
@@ -65,7 +70,7 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
 
     protected renderCloseTool(){
         return (
-            <ToolTipButtonWrap title={"关闭"}>
+            <ToolTipButtonWrap key={`${this.state.openDraw} ${this.state.openBlur}`} title={"关闭"}>
                 <CloseButtonToolbar/>
             </ToolTipButtonWrap>
         )
@@ -88,6 +93,8 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
 
     render() {
         const buttonCanUseClass = this.context.recording ? "" : " cursor-not-allowed "
+
+        const {stop} = this.state
 
         return (
             <div className={"bg-white"}>
@@ -123,14 +130,39 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                 <Flex
                                     className={'bg-gray-100 p-1 rounded-full'}
                                     direction={"row"} gap={"8px"}>
-                                    <div>
-                                        <ToolTipButtonWrap
-                                            title={"结束录制"}
-                                            buttonClassName={`${toolbarButton} ${buttonCanUseClass}`}
-                                        >
-                                            <StopIcon width="20" height="20"/>
-                                        </ToolTipButtonWrap>
-                                    </div>
+
+                                    {stop ? (
+                                        <div>
+                                            <ToolTipButtonWrap
+                                                key={`${stop}`}
+                                                title={"开始录制"}
+                                                buttonClassName={`${toolbarButton}`}
+                                                buttonClickHandler={() => {
+                                                    this.captureRef.current.startCapture().then()
+                                                    this.setState({stop: false})
+                                                    this.context.setRecording(true)
+                                                }}
+                                            >
+                                                <PlayIcon width="20" height="20"/>
+                                            </ToolTipButtonWrap>
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <ToolTipButtonWrap
+                                                key={`${stop}`}
+                                                title={"结束录制"}
+                                                buttonClassName={`${toolbarButton}`}
+                                                buttonClickHandler={() => {
+                                                    this.captureRef.current.stopCapture()
+                                                    this.setState({stop: true})
+                                                    this.context.setRecording(false)
+                                                }}
+                                            >
+                                                <StopIcon width="20" height="20"/>
+                                            </ToolTipButtonWrap>
+                                        </div>
+                                    )}
+
                                     <div className="ToolbarRecordingTime">
                                         {/*{timestamp}*/}
                                     </div>
@@ -138,6 +170,10 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                     <ToolTipButtonWrap
                                         title={"重新开始录制"}
                                         buttonClassName={`${toolbarButton} ${buttonCanUseClass}`}
+                                        buttonClickHandler={() => {
+                                            this.captureRef.current.redoCapture()
+                                            this.context.setRecording(true)
+                                        }}
                                     >
                                         <RestartIcon/>
                                     </ToolTipButtonWrap>
@@ -145,15 +181,25 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                     <div>
                                         {!this.state.pause ? (
                                             <ToolTipButtonWrap
+                                                key={`${this.state.pause}`}
                                                 title={"暂停录制"}
                                                 buttonClassName={`${toolbarButton} ${buttonCanUseClass}`}
+                                                buttonClickHandler={() => {
+                                                    this.captureRef.current.pauseCapture()
+                                                    this.setState({pause: true})
+                                                }}
                                             >
                                                 <PauseIcon/>
                                             </ToolTipButtonWrap>
                                         ) : (
                                             <ToolTipButtonWrap
+                                                key={`${this.state.pause}`}
                                                 title={"继续录制"}
                                                 buttonClassName={`${toolbarButton} ${buttonCanUseClass}`}
+                                                buttonClickHandler={() => {
+                                                    this.captureRef.current.resumeCapture()
+                                                    this.setState({pause: false})
+                                                }}
                                             >
                                                 <ResumeIcon/>
                                             </ToolTipButtonWrap>
@@ -164,6 +210,10 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                         <ToolTipButtonWrap
                                             title={"取消录制"}
                                             buttonClassName={`${toolbarButton} ${buttonCanUseClass}`}
+                                            buttonClickHandler={() => {
+                                                this.captureRef.current.cancelCapture()
+                                                this.context.setRecording(false)
+                                            }}
                                         >
                                             <DiscardIcon/>
                                         </ToolTipButtonWrap>
@@ -178,6 +228,7 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                         this.renderCloseTool()
                                     ) : (
                                         <ToolTipButtonWrap
+                                            key={`${this.state.openDraw}`}
                                             title={"切换绘图工具"}
                                             buttonClassName={`${toolbarButton}`}
                                         >
@@ -192,6 +243,7 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                         this.renderCloseTool()
                                     ) : (
                                         <ToolTipButtonWrap
+                                            key={`${this.state.openBlur}`}
                                             title={"切换模糊工具"}
                                             buttonClassName={`${toolbarButton}`}
                                         >
@@ -235,6 +287,8 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                         </Root>
                     </div>
                 </Rnd>
+
+                <ScreenCapture ref={this.captureRef}/>
             </div>
         )
     }

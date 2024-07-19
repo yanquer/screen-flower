@@ -1,6 +1,6 @@
-appId: com.example.nextron
-productName: My Nextron App
-copyright: Copyright © 2018 Yoshihide Shiono
+appId: com.yq.flower
+productName: Screen Flower
+copyright: Copyright © 2024 YanQue
 directories:
   output: dist
   buildResources: resources
@@ -10,3 +10,37 @@ files:
       - package.json
       - app
 publish: null
+
+afterSign: "electron-builder-notarize"
+dmg: {
+  icon: 'resources/icon_512x512.png',
+  background: 'resources/icon_512x512.png',
+  contents: [
+    { # 这个是右边图标及内容
+      x: 410,
+      y: 190,
+      type: 'link',
+      path: '/Applications'
+    },
+    { # 你左边的图标
+      x: 130,
+      y: 190,
+      type: 'file'
+    }
+  ],
+  window: { # 这里是整个窗口的大小
+    height: 380,
+    width: 540
+  }
+}
+
+mac: {
+  # 应用程序图标
+  icon: 'resources/icon_512x512.png',
+  # 应用程序包名
+  artifactName: '${productName}-${platform}-${arch}-${version}.${ext}',
+  target: [ # 要打的包的格式类型设置
+            'dmg',
+            'zip' # 这里注意更新的时候，mac只认zip格式的包
+  ],
+}

@@ -3,7 +3,6 @@ import Head from 'next/head'
 import Link from 'next/link'
 import Image from 'next/image'
 import {DragBox, DragBoxInner, DragDialog} from "../common/components/drag-box";
-import {CTree} from "../common/components/c-tree";
 
 export default function HomePage() {
   return (

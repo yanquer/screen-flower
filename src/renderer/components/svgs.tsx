@@ -20,6 +20,15 @@ export const GrabIcon = (props: SvgProps) => {
     );
 };
 
+export const PlayIcon = (props: SvgProps) => {
+    return (
+        <ReactSVG
+            src={"/images/components/action-tool-bar/play-icon.svg"}
+            width={props.width ?? defaultSize.width}
+            height={props.height ?? defaultSize.height}
+        />
+    );
+};
 
 export const StopIcon = (props: SvgProps) => {
     return (
