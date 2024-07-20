@@ -183,6 +183,27 @@ export const AudioIcon = (props: SvgProps) => {
 };
 
 
+export const TransformIcon = (props: SvgProps) => {
+    return (
+        <ReactSVG
+            src={"/images/components/action-tool-bar/transform-icon.svg"}
+            width={props.width}
+            height={props.height}
+        />
+    );
+};
+
+
+export const TrashIcon = (props: SvgProps) => {
+    return (
+        <ReactSVG
+            src={"/images/components/action-tool-bar/trash-icon.svg"}
+            width={props.width}
+            height={props.height}
+        />
+    );
+};
+
 
 
 

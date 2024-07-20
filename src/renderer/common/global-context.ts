@@ -9,9 +9,23 @@ export enum MovieQuality{
     S2 = "240p",
 }
 
+// bar 额外工具
+export type BarVideoMode = 'draw' | 'blur' | 'cursor' | 'none'
+
+// 光标模式
+export type CursorMode =
+    "none" |
+    "target" |
+    "highlight" |
+    "spotlight"
+
+
+
 export interface IRecordContext{
     recording: boolean
     setRecording?(recording: boolean): void
+    pause: boolean
+    setPause?(pause: boolean): void
 
     qualityValue: MovieQuality
     setQualityValue?: (qualityVal: MovieQuality) => void
@@ -32,12 +46,23 @@ export interface IRecordContext{
     setPreviewBlob?: (previewBlob?: Blob) => void
 
     toPage?: (pageUrl: string) => void
+
+    barMode: BarVideoMode,
+    setBarMode?: (mode: BarVideoMode) => void
+    cursorMode: CursorMode,
+    setCursorMode?: (mode: CursorMode) => void
+    blurView: boolean | string[]
+    setBlurView?: (blurView: boolean | string[]) => void
 }
 
 export const RecordContext = createContext<IRecordContext>({
     recording: false,
+    pause: false,
     qualityValue: MovieQuality.HD,
     useAudio: false,
     useVideo: false,
     canPreview: false,
+    barMode: 'none',
+    cursorMode: 'none',
+    blurView: false,
 })

@@ -12,10 +12,75 @@
   .btn-blue {
     @apply text-white font-bold px-4 py-2 rounded bg-blue-600 hover:bg-blue-500;
   }
+
+  .tool-every-button{
+    @apply size-8 content-center justify-center
+    flex items-center rounded-full tool-button
+    active:bg-blue-100
+  }
+
+  .tool-button{
+    background-color: rgba(124, 139, 165, 0);
+  }
+
+  .toolbar-separator {
+    width: 1px;
+    height: 19px;
+    background-color: #E8E8E8;
+    margin: 0 8px;
+  }
+
+  svg {
+    color: #9797A4;
+  }
+  .tool-button-active{
+    @apply bg-blue-400
+  }
+  .tool-button-active svg{
+    @apply text-white
+  }
+
+
+  .tool-sub-group::before{
+    content: "";
+    display: block;
+    width: 100%;
+    height: 50%;
+    border-radius: 80px 80px 0% 0%;
+    /* box-sizing: border-box; */
+    position: absolute;
+    top: -16px;
+     transition: transform 0.25s cubic-bezier(0.61, 0.11, 0.08, 0.96), opacity 0.25s ease-in-out;
+     transform: translateY(8px) scale(0);
+    /* border-right: 3px solid white; */
+    border-top: 9px solid white;
+    border-left: 3px solid white;
+  }
+  .tool-sub-group-active::before{
+    transform: translateY(0px) scale(1);
+  }
+
+  .tool-sub-group-body{
+    transform: translateX(40%);
+    z-index: -1;
+  }
+  .tool-sub-group-body::before{
+    backdrop-filter: blur(5px);
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 85%);
+    width: 40px;
+    height: 40px;
+    border-radius: 99px;
+    background-color: #ccc;
+  }
+
+
+
 }
 
-.tool-button{
-  background-color: rgba(124, 139, 165, 0);
-}
+
 
 

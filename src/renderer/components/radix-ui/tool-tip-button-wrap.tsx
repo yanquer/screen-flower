@@ -1,6 +1,7 @@
 import {Component, ReactNode} from "react";
-import {Root, Button, Separator, ToggleGroup, } from '@radix-ui/react-toolbar';
+import * as Toolbar from '@radix-ui/react-toolbar';
 import {ToolTipWrap} from "./tool-tip-wrap";
+import {IRecordContext, RecordContext} from "../../common/global-context";
 
 interface ToolTipProps {
     // 用key保证diff算法生效
@@ -11,9 +12,12 @@ interface ToolTipProps {
     buttonClassName?: string;
     buttonMouseDownHandler?: () => void;
     buttonClickHandler?: () => void;
+    buttonDisable?: boolean
 }
 
 export class ToolTipButtonWrap extends Component<ToolTipProps, any> {
+    static contextType = RecordContext
+    context: IRecordContext
 
     constructor(props: ToolTipProps) {
         super(props);
@@ -22,15 +26,17 @@ export class ToolTipButtonWrap extends Component<ToolTipProps, any> {
     render() {
         return (
             <ToolTipWrap title={this.props.title}>
-                <Button
-                    className={this.props.buttonClassName + ` size-8 content-center justify-center 
-                        flex items-center rounded-full tool-button 
-                        hover:bg-gray-200 hover:scale-95 active:bg-blue-100`}
+                <Toolbar.Button
+                    className={this.props.buttonClassName + ` tool-every-button
+                        hover:bg-gray-200 hover:scale-95 
+                        ${this.props.buttonDisable ? "cursor-not-allowed" : ""}
+                        `}
                     onMouseDown={() => this.props?.buttonMouseDownHandler?.()}
                     onClick={() => this.props.buttonClickHandler?.()}
+                    disabled={this.props.buttonDisable ?? false}
                 >
                     {this.props.children}
-                </Button>
+                </Toolbar.Button>
             </ToolTipWrap>
         );
     }

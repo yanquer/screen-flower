@@ -6,6 +6,7 @@ import {DraggableData, DraggableEvent} from "react-draggable";
 import {resizeHandle, topLeft, topRight, top, right, left, bottomRight, bottom, bottomLeft, boxShadowFull
 } from '../styles/components/capture-win.module.scss'
 import {IRecordContext, RecordContext} from "../common/global-context";
+import CursorModes from "./action-bar/tool/cursor-modes";
 
 export class CaptureWin extends Component<any, any>{
     static contextType = RecordContext
@@ -64,10 +65,13 @@ export class CaptureWin extends Component<any, any>{
                     }}
                     ref={this.dragRef}
                 >
-                    <div className={`popup-container w-full h-full ${boxShadowFull}`}>
+                    <div className={`popup-container w-full h-full ${boxShadowFull}
+                        ${this.context.blurView ? "blur-sm" : ""}
+                    `}>
                         <canvas className={'w-full h-full'} ref={this.popupRef}></canvas>
                     </div>
                 </Rnd>
+                <CursorModes/>
             </div>
     )
     }

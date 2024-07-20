@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import {IRecordContext, RecordContext} from "../../common/global-context";
-import {MovieStream} from "../../common/movie-stream";
+import {IRecordContext, RecordContext} from "../../../common/global-context";
+import {MovieStream} from "../../../common/movie-stream";
 
 interface ScreenCaptureProps {
     onStart?: (stream: MediaStream) => void;
@@ -12,17 +12,20 @@ interface ScreenCaptureState {
     mediaRecorder?: MediaRecorder;
     recordedChunks: Blob[];
     liveStream?: MediaStream;
+    cancel?: boolean
 }
 
-export class ScreenCapture extends Component<ScreenCaptureProps, ScreenCaptureState> {
+export class ScreenCaptureBrowser extends Component<ScreenCaptureProps, ScreenCaptureState> {
     static contextType = RecordContext
     context: IRecordContext
 
-    state: ScreenCaptureState = {
+    // 与渲染无关
+    stateSync: ScreenCaptureState = {
         isRecording: false,
         mediaRecorder: null,
         recordedChunks: [],
         liveStream: null,
+        cancel: false,
     };
 
     protected getBitAndMimeType(){
@@ -34,7 +37,7 @@ export class ScreenCapture extends Component<ScreenCaptureProps, ScreenCaptureSt
         try {
             const {useAudio, useVideo, areaElement} = this.context
             let stream: MediaStream
-            if (!this.state.liveStream) {
+            if (!this.stateSync.liveStream) {
 
                 const [width, height] = MovieStream.getVideoSize(this.context.qualityValue)
                 const fps = 30
@@ -55,9 +58,21 @@ export class ScreenCapture extends Component<ScreenCaptureProps, ScreenCaptureSt
 
                 // 会请求屏幕录制权限
                 stream = await navigator.mediaDevices.getDisplayMedia(reqStreamOption ?? {
+                // stream = await navigator.mediaDevices.getUserMedia(reqStreamOption ?? {
                     video: useVideo,
                     audio: useAudio,
                 });
+
+                const track: MediaStreamTrack = stream.getVideoTracks()[0]
+
+                // 裁剪好像无效?
+                // @ts-ignore
+                // track.cropTo({
+                //     x: 100,
+                //     y: 100,
+                //     width: 100,
+                //     height: 100
+                // })
 
                 // if (areaElement){
                 //     console.log(">> 区域录制")
@@ -81,52 +96,55 @@ export class ScreenCapture extends Component<ScreenCaptureProps, ScreenCaptureSt
                 //         audio: useAudio,
                 //     });
                 // }
-                this.setState({liveStream: stream})
+                this.stateSync.liveStream = stream
             } else {
-                stream = this.state.liveStream
+                stream = this.stateSync.liveStream
             }
             if (this.props.onStart) {
-                this.props.onStart(this.state.liveStream);
+                this.props.onStart(this.stateSync.liveStream);
             }
 
             const [mimeType, audioBits, videoBits] = this.getBitAndMimeType()
 
-            if (!this.state.mediaRecorder) {
+            if (!this.stateSync.mediaRecorder) {
                 const mediaRecorder = new MediaRecorder(stream, {
                     mimeType: mimeType,
                     audioBitsPerSecond: audioBits,
                     videoBitsPerSecond: videoBits,
                 });
-                this.setState({mediaRecorder});
+                this.stateSync.mediaRecorder = mediaRecorder;
 
                 // 录制时候, 数据块更新
                 mediaRecorder.ondataavailable = (event) => {
-                    if (event.data.size > 0) {
-                        this.setState((prevState) => ({
-                            recordedChunks: [...prevState.recordedChunks, event.data],
-                        }));
+                    if (event.data.size > 0 && !this.stateSync.cancel) {
+                        this.stateSync.recordedChunks = [
+                            ...this.stateSync.recordedChunks,
+                            event.data,
+                        ]
                     }
+                    this.stateSync.cancel = false
                 };
 
                 mediaRecorder.onstop = () => {
-                    // const blob = new Blob(this.state.recordedChunks, { type: 'video/webm' });
-                    if (!this.state.recordedChunks || this.state.recordedChunks.length === 0){
+                    if (!this.stateSync.recordedChunks || this.stateSync.recordedChunks.length === 0){
                         console.log('>> 没有获取到blob...')
                         return
                     }
-                    const blob = new Blob(this.state.recordedChunks, {type: mimeType});
+                    const blob = new Blob(this.stateSync.recordedChunks, {type: mimeType});
                     // 默认直接到预览界面
                     this.preview(blob)
                     // const blobUrl = URL.createObjectURL(blob);
                     // if (this.props.onStop) {
                     //     this.props.onStop(blobUrl);
                     // }
-                    this.setState({recordedChunks: []});
+                    this.stateSync.recordedChunks = []
                 };
+                return mediaRecorder
             }
 
         } catch (err) {
-            this.setState({liveStream: null, mediaRecorder: null});
+            this.stateSync.liveStream = null
+            this.stateSync.mediaRecorder = null
             console.error('>>> Error capturing screen initMediaRecorder:', err);
         }
     }
@@ -158,7 +176,7 @@ export class ScreenCapture extends Component<ScreenCaptureProps, ScreenCaptureSt
 
     protected setRecording(recording: boolean) {
         const {setRecording} = this.context
-        this.setState({ isRecording: recording });
+        this.stateSync.isRecording = recording
         // 更新全局状态
         setRecording(recording);
     }
@@ -167,58 +185,60 @@ export class ScreenCapture extends Component<ScreenCaptureProps, ScreenCaptureSt
     startCapture = async () => {
         console.log(">> 开始录制")
         await this.initMediaRecorder()
-        if (this.state.mediaRecorder){
-            this.state.mediaRecorder.start()
-            this.setRecording(true)
-        }
+        this.stateSync.mediaRecorder.start()
+        this.setRecording(true)
     };
 
     // 停止, 完全结束, 不可恢复
     stopCapture = () => {
         console.log(">> 停止录制")
-        if (this.state.mediaRecorder) {
-            this.state.mediaRecorder.stop();
+        if (this.stateSync.mediaRecorder) {
+            this.stateSync.mediaRecorder.stop();
             this.setRecording(false)
-            this.setState({liveStream: null, mediaRecorder: null})
+
+            // 测试的时候就不清除了
+            // this.setState({recordedChunks: []})
+            this.stateSync.liveStream = null
+            this.stateSync.mediaRecorder = null
         }
     };
 
     // 暂停, 可以恢复
     pauseCapture = () => {
         console.log(">> 暂停录制")
-        if (this.state.mediaRecorder) {
-            this.state.mediaRecorder.pause();
+        if (this.stateSync.mediaRecorder) {
+            this.stateSync.mediaRecorder.pause();
         }
     };
 
     // 继续
     resumeCapture = () => {
         console.log(">> 继续录制")
-        if (this.state.mediaRecorder){
-            this.state.mediaRecorder.resume()
+        if (this.stateSync.mediaRecorder){
+            this.stateSync.mediaRecorder.resume()
         }
     };
 
     // 重新开始录制, 仅清理chunk即可
     redoCapture = () => {
         console.log(">> 重新录制")
-        this.setState({recordedChunks: []})
+        this.stateSync.recordedChunks = []
     }
 
     // 取消录制
     cancelCapture = () => {
         console.log(">> 取消录制")
+        this.stateSync.cancel = true
         this.pauseCapture()
-        this.setState({recordedChunks: []})
+        this.stateSync.recordedChunks = []
+        this.stopCapture()
     }
 
     protected clear(){
-        this.setState({
-            // isRecording: false,
-            mediaRecorder: null,
-            recordedChunks: [],
-            liveStream: null,
-        })
+        this.stateSync.mediaRecorder = null
+        this.stateSync.recordedChunks = []
+        this.stateSync.liveStream = null
+
         this.setRecording(false)
     }
 

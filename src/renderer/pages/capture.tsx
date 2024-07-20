@@ -1,6 +1,6 @@
 
 import {CaptureWin} from "../components/capture-win";
-import {ActionToolBar} from "../components/action-tool-bar";
+import {ActionToolBar} from "../components/action-bar/action-tool-bar";
 
 
 export default function Capture() {

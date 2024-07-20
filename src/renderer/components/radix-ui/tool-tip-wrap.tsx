@@ -1,5 +1,5 @@
 import {Component, ReactNode} from "react";
-import {Content, Trigger, Portal, Arrow, Provider, Root } from '@radix-ui/react-tooltip';
+import  * as Tooltip from '@radix-ui/react-tooltip';
 
 // @ts-ignore
 import {tooltipContent} from '../../styles/components/radix-ui/tool-tip-wrap.module.scss'
@@ -21,15 +21,15 @@ export class ToolTipWrap extends Component<ToolTipProps, any> {
 
     render() {
         return (
-            <Provider>
-                <Root>
+            <Tooltip.Provider>
+                <Tooltip.Root>
 
-                    <Trigger asChild>
+                    <Tooltip.Trigger asChild>
                         {this._props.children}
-                    </Trigger>
+                    </Tooltip.Trigger>
 
-                    <Portal>
-                        <Content
+                    <Tooltip.Portal>
+                        <Tooltip.Content
                             className={`rounded-full text-xs 
                                 pl-4 pr-4 pt-2.5 pb-2.5 
                                 mb-2.5 bg-gray-900
@@ -41,11 +41,11 @@ export class ToolTipWrap extends Component<ToolTipProps, any> {
                             sideOffset={5}
                         >
                             {this._props.title}
-                            <Arrow className="TooltipArrow" />
-                        </Content>
-                    </Portal>
-                </Root>
-            </Provider>
+                            <Tooltip.Arrow className="TooltipArrow" />
+                        </Tooltip.Content>
+                    </Tooltip.Portal>
+                </Tooltip.Root>
+            </Tooltip.Provider>
         );
     }
 }
