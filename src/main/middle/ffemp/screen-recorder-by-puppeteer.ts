@@ -5,6 +5,7 @@ import {PuppeteerScreenRecorder} from 'puppeteer-screen-recorder';
 import {IRecordService} from "../../../common/service";
 import {injectable, postConstruct} from "inversify";
 import {Page} from "puppeteer";
+import {CaptureArea} from "../../../common/models";
 
 const ffmpegPath = fixPathForAsarUnpack(ffmpeg);
 
@@ -74,7 +75,7 @@ export class ScreenRecorderByPuppeteer implements IRecordService{
         this.initPageAndRec().then()
     }
 
-    async startRecord(recordPath?: string, visUrl?: string){
+    async startRecord(area: CaptureArea, savePath?: string,){
         console.log('>> Starting record... ')
         await this.waitInit
         await this.recorder.start('./report/video/simple.mp4')

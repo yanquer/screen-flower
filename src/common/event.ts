@@ -48,7 +48,7 @@ export class Emitter<T> {
     if (!this._event) {
       this._event = (listener: (e: T) => any, thisArgs?: any) => {
         if (this._callbacks.has(listener)) return
-        console.log(thisArgs, 'event...')
+        // console.log(thisArgs, 'event...')
         this._callbacks.add(listener)
       }
     }

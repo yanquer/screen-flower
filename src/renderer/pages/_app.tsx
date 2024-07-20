@@ -47,7 +47,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   }
 
   useEffect(() => {
-    switchBodyPointer(recording)
+    // 有鼠标穿透就, 没用...
+    // switchBodyPointer(recording)
   }, [recording]);
 
 

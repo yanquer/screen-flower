@@ -2,6 +2,7 @@ import {BrowserWindow, BrowserWindowConstructorOptions, screen} from "electron";
 import {createWindow} from "../helpers";
 import {getHostUrl, WindowNames} from "../common/defines";
 import {injectable, postConstruct} from "inversify";
+import {WindowsUtils} from "./windows-utils";
 
 
 export const IBaseWindow = Symbol("IBaseWindow");
@@ -14,6 +15,8 @@ export interface IBaseWindow {
     open(): Promise<void>;
     initWindow(): BrowserWindow
     loadWindow(): Promise<void>
+    // 是否允许点击穿透
+    setAllowPenetrate(allow: boolean): Promise<void>
 }
 
 
@@ -92,6 +95,10 @@ export class BaseSFWindow implements IBaseWindow{
     hide() {
         console.log('>>> hide window')
         this.win?.hide()
+    }
+
+    async setAllowPenetrate(allow: boolean): Promise<void> {
+        WindowsUtils.clickPenetrateWindow(this.win, allow)
     }
 
 }

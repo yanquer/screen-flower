@@ -23,7 +23,7 @@ import {RecordedTimer} from "../movie-stream/record-timer";
 import {CursorToolbar} from "./layout/cursor-toolbar";
 import {BlurToolbar} from "./layout/blur-toolbar";
 import {getServiceBySymbol} from "../../../common/container/inject-container";
-import {IRecordService} from "../../../common/service";
+import {IRecordService, IUtilService} from "../../../common/service";
 
 
 interface ActionToolBarState {
@@ -93,11 +93,28 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
         }
     }
 
+    protected async visScreenWhenRecording(vis: boolean){
+        const utilService: IUtilService = getServiceBySymbol(IUtilService)
+        const {recording} = this.context
+        if (recording){
+            await utilService.setClickPenetrate(vis)
+        }
+    }
+    // protected addDocCursorMove(){
+    //     document.addEventListener('mousemove', this.visScreenWhenRecording.bind(this))
+    // }
+    // protected removeDocCursorMove(){
+    //     document.removeEventListener('mousemove', this.visScreenWhenRecording.bind(this))
+    // }
+
     render() {
         const {stop} = this.state
 
         return (
-            <div className={"bg-white pointer-events-auto"}>
+            <div className={"bg-white pointer-events-auto"}
+                 onMouseEnter={() => this.visScreenWhenRecording(false)}
+                 onMouseLeave={() => this.visScreenWhenRecording(true)}
+            >
                 <Rnd
                     // className={"fixed"}
                     // default={{x: 200, y: 500, width: 400, height: 50}}

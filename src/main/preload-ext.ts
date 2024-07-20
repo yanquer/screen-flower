@@ -4,6 +4,7 @@ import {HandlerStr} from "../common/defines";
 const handler = {
   fileService: (...args: []) => ipcRenderer.invoke(HandlerStr.serviceFileService, ...args),
   recordService: (...args: []) => ipcRenderer.invoke(HandlerStr.serviceRecordService, ...args),
+  utilService: (...args: []) => ipcRenderer.invoke(HandlerStr.utilService, ...args),
 
 }
 

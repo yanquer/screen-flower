@@ -7,6 +7,7 @@ export enum PathStat {
 export enum HandlerStr {
   serviceFileService = 'service:FileService',
   serviceRecordService = 'service:RecordService',
+  utilService = 'service:utilService',
 
   openRightContextMenu = 'onService:openRightContextMenu',
 

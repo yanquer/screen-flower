@@ -2,6 +2,7 @@
 import { MenuItem, MenuItemConstructorOptions } from 'electron'
 import { ContextMenuNames } from "./defines";
 import {CaptureArea} from "./models";
+import {Event} from "./event";
 
 export const IFileService = Symbol('IFileService')
 export interface IFileService {
@@ -38,10 +39,18 @@ export interface IContextMenuTemplate {
 
 export const IRecordService = Symbol.for('IRecordService')
 export interface IRecordService {
+  recordingRunEmitterEvent?: Event<boolean>
+
   startRecord(area: CaptureArea, savePath?: string,): Promise<void>
   pauseRecord(): Promise<void>
   resumeRecord(): Promise<void>
   restartRecord(): Promise<void>
   stopRecord(): Promise<void>
   cancelRecord(): Promise<void>
+}
+
+export const IUtilService = Symbol.for('IUtilService')
+export interface IUtilService {
+  // 设置鼠标穿透
+  setClickPenetrate(penetrate: boolean): Promise<void>
 }

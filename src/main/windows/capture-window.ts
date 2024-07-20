@@ -2,7 +2,7 @@
 
 import {BaseSFWindow} from "./base";
 import {WindowNames} from "../common/defines";
-import {injectable} from "inversify";
+import {inject, injectable, postConstruct} from "inversify";
 import {Input, Event, screen, Display, BrowserWindowConstructorOptions} from "electron";
 import {
     getCurrentScreenArea,
@@ -12,6 +12,8 @@ import {
 } from "../common/electron/display";
 import {setNoMenuDock} from "../common/electron/menu";
 import path from "path";
+import {IRecordService} from "../../common/service";
+import {getServiceBySymbol} from "../../common/container/inject-container";
 
 @injectable()
 export class CaptureWindow extends BaseSFWindow{
@@ -41,6 +43,20 @@ export class CaptureWindow extends BaseSFWindow{
                 preload: path.join(__dirname, 'preload.js'),
             }
         } as BrowserWindowConstructorOptions
+    }
+
+    @postConstruct()
+    protected init() {
+        super.init();
+
+        setTimeout(() => {
+            const recordService: IRecordService = getServiceBySymbol(IRecordService);
+            recordService.recordingRunEmitterEvent(
+                (isRecording: boolean) => {
+                    this.setAllowPenetrate(isRecording).then()
+                }
+            )
+        }, 1000)
     }
 
     async extOperation(){

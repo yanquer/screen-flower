@@ -8,4 +8,8 @@ export namespace ServiceFactory {
     export const recordService = async (...args: []) => {
         return await window.ipcInvoke.recordService(...args)
     }
+
+    export const utilService = async (...args: []) => {
+        return await window.ipcInvoke.utilService(...args)
+    }
 }

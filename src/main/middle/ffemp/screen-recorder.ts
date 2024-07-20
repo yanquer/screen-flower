@@ -9,6 +9,7 @@ const ffmpegPath = fixPathForAsarUnpack(ffmpeg);
 import FfmpegCommand from 'fluent-ffmpeg';
 import {CaptureArea} from "../../../common/models";
 import {getCropAreaStr} from "../../common/electron/display";
+import {Emitter, Event} from "../../../common/event";
 
 FfmpegCommand.setFfmpegPath(ffmpegPath)
 
@@ -16,6 +17,8 @@ FfmpegCommand.setFfmpegPath(ffmpegPath)
 export class ScreenRecorder implements IRecordService{
 
     protected currentCmd: FluentFfmpegApi
+    protected recordingRunEmitter = new Emitter<boolean>()
+    recordingRunEmitterEvent: Event<boolean> = this.recordingRunEmitter.event
 
     protected ffmpegCommand = (input?: any): FluentFfmpegApi => {
         if (input) this.currentCmd = new FfmpegCommand(input);
@@ -57,6 +60,7 @@ export class ScreenRecorder implements IRecordService{
 
 
         // console.log(this.currentCmd)
+        this.recordingRunEmitter.fire(true)
     }
 
     async stopRecord(){
@@ -64,6 +68,8 @@ export class ScreenRecorder implements IRecordService{
 
         this.currentCmd.kill('SIGTERM')
         // this.currentCmd.ffmpegProc.stdin.write('q')
+
+        this.recordingRunEmitter.fire(false)
 
     }
 

@@ -4,8 +4,11 @@ import {BrowserWindow} from "electron";
 export namespace WindowsUtils {
 
     // 设置窗口支持点击穿透
-    export const clickPenetrateWindow = (win: BrowserWindow) => {
+    export const clickPenetrateWindow = (win: BrowserWindow, allow: boolean) => {
 
+        console.log(`>>> clickPenetrateWindow: ${allow}`);
+        allow ? win.setIgnoreMouseEvents(true, {forward: true}) :
+            win.setIgnoreMouseEvents(false)
     }
 
 }
