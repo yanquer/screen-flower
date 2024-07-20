@@ -1,11 +1,17 @@
-import React, {useState} from 'react'
+// for inject
+import 'reflect-metadata'
+// bind
+import '../middle'
+
+import React, {useEffect, useRef, useState} from 'react'
 import type { AppProps } from 'next/app'
 
 import '@radix-ui/themes/styles.css';
 import '../styles/globals.css'
 import '../styles/drag-box.scss'
-import {BarVideoMode, CursorMode, MovieQuality, RecordContext} from "../common/global-context";
+import {BarVideoMode, CursorMode, DefaultCapArea, MovieQuality, RecordContext} from "../common/global-context";
 import {useRouter} from "next/router";
+import {CaptureArea} from "../../common/models";
 
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -22,10 +28,31 @@ function MyApp({ Component, pageProps }: AppProps) {
     const [cursorMode, setCursorMode] = useState<CursorMode>('none')
     const [blurView, setBlurView] = useState<boolean | string[]>(false)
 
+    const [capArea, setCapArea] = useState<CaptureArea>(DefaultCapArea())
+
     const router = useRouter()
     const toPage = (pageUrl: string) => {
       router.push({ pathname: `${pageUrl}` }).then()
     }
+
+  const switchBodyPointer = (penetrate: boolean) => {
+    const body = document.body;
+    // body.toggleAttribute('pointer-events-none')
+    if (penetrate) {
+      body.classList.add('pointer-events-none')
+    } else {
+      body.classList.remove('pointer-events-none')
+    }
+    console.log(body.className)
+  }
+
+  useEffect(() => {
+    switchBodyPointer(recording)
+  }, [recording]);
+
+
+  // console.log('re render app...')
+  //   console.log(capArea)
 
   return (
       <RecordContext.Provider value={{
@@ -41,6 +68,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           barMode, setBarMode,
           cursorMode, setCursorMode,
           blurView, setBlurView,
+          capArea, setCapArea,
       }}>
         <Component {...pageProps} />
       </RecordContext.Provider>

@@ -15,13 +15,15 @@ import {
 } from "../svgs";
 
 // @ts-ignore
-import {toolbarSeparator, toolbarButton} from "../../styles/components/action-tool-bar.module.scss"
+import {toolbarButton} from "../../styles/components/action-tool-bar.module.scss"
 import {ToolTipButtonWrap} from "../radix-ui/tool-tip-button-wrap";
 import {BarVideoMode, IRecordContext, RecordContext} from "../../common/global-context";
 import {ScreenCaptureBrowser} from "../movie-stream/browser/screen-capture-browser";
 import {RecordedTimer} from "../movie-stream/record-timer";
 import {CursorToolbar} from "./layout/cursor-toolbar";
 import {BlurToolbar} from "./layout/blur-toolbar";
+import {getServiceBySymbol} from "../../../common/container/inject-container";
+import {IRecordService} from "../../../common/service";
 
 
 interface ActionToolBarState {
@@ -43,6 +45,8 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
         pause: false,
         stop: true,
     }
+
+    protected readonly recordService: IRecordService = getServiceBySymbol<IRecordService>(IRecordService)
 
     protected captureRef = createRef<ScreenCaptureBrowser | undefined>()
 
@@ -93,7 +97,7 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
         const {stop} = this.state
 
         return (
-            <div className={"bg-white"}>
+            <div className={"bg-white pointer-events-auto"}>
                 <Rnd
                     // className={"fixed"}
                     // default={{x: 200, y: 500, width: 400, height: 50}}
@@ -134,7 +138,11 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                                 title={"开始录制"}
                                                 buttonClassName={`${toolbarButton}`}
                                                 buttonClickHandler={() => {
-                                                    this.captureRef.current.startCapture().then()
+                                                    // this.captureRef.current.startCapture().then()
+                                                    const {capArea, setCapArea} = this.context
+                                                    console.log(`>>> use area: ${capArea}`)
+                                                    console.log(capArea)
+                                                    this.recordService.startRecord(capArea).then()
                                                     this.setState({stop: false})
                                                     this.context.setRecording(true)
                                                 }}
@@ -149,7 +157,8 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                                 title={"结束录制"}
                                                 buttonClassName={`${toolbarButton}`}
                                                 buttonClickHandler={() => {
-                                                    this.captureRef.current.stopCapture()
+                                                    // this.captureRef.current.stopCapture()
+                                                    this.recordService.stopRecord().then()
                                                     this.setState({stop: true})
                                                     this.context.setRecording(false)
                                                 }}
@@ -167,7 +176,8 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                         title={"重新开始录制"}
                                         buttonClassName={`${toolbarButton} `}
                                         buttonClickHandler={() => {
-                                            this.captureRef.current.redoCapture()
+                                            // this.captureRef.current.redoCapture()
+                                            this.recordService.restartRecord().then()
                                             this.context.setRecording(true)
                                         }}
                                         key={`${this.context.recording}`}
@@ -183,7 +193,8 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                                 title={"暂停录制"}
                                                 buttonClassName={`${toolbarButton} `}
                                                 buttonClickHandler={() => {
-                                                    this.captureRef.current.pauseCapture()
+                                                    // this.captureRef.current.pauseCapture()
+                                                    this.recordService.pauseRecord().then()
                                                     this.setState({pause: true})
                                                 }}
                                                 buttonDisable={!this.context.recording}
@@ -196,7 +207,8 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                                 title={"继续录制"}
                                                 buttonClassName={`${toolbarButton} `}
                                                 buttonClickHandler={() => {
-                                                    this.captureRef.current.resumeCapture()
+                                                    // this.captureRef.current.resumeCapture()
+                                                    this.recordService.resumeRecord().then()
                                                     this.setState({pause: false})
                                                 }}
                                                 buttonDisable={!this.context.recording}
@@ -211,7 +223,8 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                             title={"取消录制"}
                                             buttonClassName={`${toolbarButton} `}
                                             buttonClickHandler={() => {
-                                                this.captureRef.current.cancelCapture()
+                                                // this.captureRef.current.cancelCapture()
+                                                this.recordService.cancelRecord().then()
                                                 this.context.setRecording(false)
                                                 this.setState({stop: true})
                                             }}

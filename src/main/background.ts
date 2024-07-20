@@ -40,7 +40,14 @@ if (isProd) {
 ;(async () => {
   await app.whenReady()
   initAll()
+
+  // 开发环境不检查权限
+  // if (isProd) {
+  // }
+
+  // Mac 开发模式下应该是开发工具授权, 比如 vscode / webStrom
   getPermission()
+
 })()
 
 app.on('window-all-closed', () => {

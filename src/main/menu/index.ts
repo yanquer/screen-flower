@@ -1,6 +1,6 @@
 import {Menu, Tray, MenuItemConstructorOptions, MenuItem, app} from 'electron';
 import {getMenuTemplate} from "../common/menu/template";
-import {getServiceBySymbol} from "../../common/inject-container";
+import {getServiceBySymbol} from "../../common/container/inject-container";
 import {IWindowsManager} from "../windows/base";
 import {WindowNames} from "../common/defines";
 import { nativeImage } from 'electron';

@@ -1,5 +1,5 @@
 import {Component, createRef} from "react";
-import {Rnd} from "react-rnd";
+import {Position, Rnd} from "react-rnd";
 import {DraggableData, DraggableEvent} from "react-draggable";
 
 // @ts-ignore
@@ -14,15 +14,20 @@ export class CaptureWin extends Component<any, any>{
 
     protected dragRef = createRef<Rnd | undefined>()
     protected popupRef = createRef<HTMLCanvasElement | undefined>()
-    state = {
-        x: 0,
-        y: 0,
-        width: 600,
-        height: 300,
-    }
+    // state = {
+    //     x: 0,
+    //     y: 0,
+    //     width: 600,
+    //     height: 300,
+    // }
 
     protected handleDragDrop(e: DraggableEvent, d: DraggableData){
-        this.setState({x: d.x, y: d.y})
+        const {capArea, setCapArea} = this.context
+        setCapArea((preArea) => ({
+            ...preArea,
+            x: d.x,
+            y: d.y
+        }))
     }
 
     componentDidMount() {
@@ -36,19 +41,27 @@ export class CaptureWin extends Component<any, any>{
     }
 
     render() {
+        const {capArea, setCapArea, recording} = this.context
+        // console.log("re render")
+        // console.log(capArea)
         return (
             <div className={"overflow-hidden"}>
                 <Rnd
+                    enableResizing={!recording}
+                    dragAxis={!recording ? "both" : "none"}
                     className={"border-dotted border-blue-50 border-2"}
-                    size={{width: this.state.width, height: this.state.height}}
-                    // position={{x: this.state.x, y: this.state.y}}
+                    size={{width: capArea.width, height: capArea.height}}
+                    position={{x: capArea.x, y: capArea.y}}
                     onDragStop={this.handleDragDrop.bind(this)}
-                    onResizeStop={(e, direction, ref, delta, position) => {
-                        this.setState({
+                    onResizeStop={(e, direction, ref, delta, position: Position) => {
+                        const newArea = {
                             width: ref.style.width,
                             height: ref.style.height,
                             ...position,
-                        });
+                        }
+                        setCapArea(newArea);
+                        console.log(`>>> area1: ${capArea}`)
+                        console.log(newArea)
                     }}
                     bounds="window"
                     // bounds="parent"

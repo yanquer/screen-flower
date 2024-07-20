@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
+import './preload-ext'
 
 const handler = {
   send(channel: string, value: unknown) {

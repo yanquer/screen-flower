@@ -3,6 +3,13 @@ import { isPromise } from 'inversify/lib/utils/async'
 
 export const InjectContainer = new Container()
 
+// export function bindToDefaultContainer<T>(
+//     serviceIdentifier: interfaces.ServiceIdentifier<T>,
+//     implementation: interfaces.Newable<T>
+// ){
+//   InjectContainer.bind<T>(serviceIdentifier).to(implementation).inSingletonScope()
+// }
+
 export const bindToDefaultContainer = <T>(
   serviceIdentifier: interfaces.ServiceIdentifier<T>,
   implementation: interfaces.Newable<T>

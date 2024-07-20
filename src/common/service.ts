@@ -1,6 +1,7 @@
 
 import { MenuItem, MenuItemConstructorOptions } from 'electron'
 import { ContextMenuNames } from "./defines";
+import {CaptureArea} from "./models";
 
 export const IFileService = Symbol('IFileService')
 export interface IFileService {
@@ -33,4 +34,14 @@ export interface IContextMenuTemplate {
   commonArgs: {
     curEvent: any
   }
+}
+
+export const IRecordService = Symbol.for('IRecordService')
+export interface IRecordService {
+  startRecord(area: CaptureArea, savePath?: string,): Promise<void>
+  pauseRecord(): Promise<void>
+  resumeRecord(): Promise<void>
+  restartRecord(): Promise<void>
+  stopRecord(): Promise<void>
+  cancelRecord(): Promise<void>
 }

@@ -4,8 +4,14 @@ import {BaseSFWindow} from "./base";
 import {WindowNames} from "../common/defines";
 import {injectable} from "inversify";
 import {Input, Event, screen, Display, BrowserWindowConstructorOptions} from "electron";
-import {getCurrentScreenPoint, getCurrentScreenSize, moveToFoucScreen} from "../common/electron/display";
+import {
+    getCurrentScreenArea,
+    getCurrentScreenPoint,
+    getCurrentScreenSize,
+    moveToFoucScreen
+} from "../common/electron/display";
 import {setNoMenuDock} from "../common/electron/menu";
+import path from "path";
 
 @injectable()
 export class CaptureWindow extends BaseSFWindow{
@@ -28,11 +34,12 @@ export class CaptureWindow extends BaseSFWindow{
             opacity: 0,
             titleBarStyle: 'hidden',
             autoHideMenuBar: true,
-            // webPreferences: {
-            //     nodeIntegration: true,
-            //     // enableRemoteModule: true,
-            //     contextIsolation: false
-            // }
+            webPreferences: {
+                // nodeIntegration: true,
+                // enableRemoteModule: true,
+                // contextIsolation: false,
+                preload: path.join(__dirname, 'preload.js'),
+            }
         } as BrowserWindowConstructorOptions
     }
 
@@ -41,7 +48,7 @@ export class CaptureWindow extends BaseSFWindow{
         // this.win.maximize()
 
         // 设置全屏可见
-        this.win.setVisibleOnAllWorkspaces(true, {visibleOnFullScreen: true})
+        // this.win.setVisibleOnAllWorkspaces(true, {visibleOnFullScreen: true})
 
         // 隐藏滚动条
         this.win.webContents.insertCSS(`
@@ -56,7 +63,7 @@ export class CaptureWindow extends BaseSFWindow{
         // 兼容桌面切换
         // screen.on('display-metrics-changed', this.displayChange.bind(this));
 
-        this.win.webContents.openDevTools()
+        // this.win.webContents.openDevTools()
     }
 
     protected handleKeydown(event: Event, input: Input) {

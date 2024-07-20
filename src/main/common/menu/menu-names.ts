@@ -1,3 +1,4 @@
+import {forceQuit} from "./menu-items";
 
 export enum MenuNames {
     exportHistory = 'exportHistory',
@@ -16,5 +17,8 @@ export enum MenuNames {
     stopRecording = 'stopRecording',
     pauseRecording = 'pauseRecording',
     resumeRecording = 'resumeRecording',
-    duration = 'duration'
+    duration = 'duration',
+
+    // custom
+    forceQuit = 'forceQuit'
 }

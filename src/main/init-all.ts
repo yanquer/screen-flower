@@ -5,6 +5,7 @@ import {initializeMenu} from "./menu";
 import {bindWindows} from "./windows";
 import {join} from "path";
 import {ensureScreenCapturePermissions} from "./common/permissions";
+import {bindMiddle} from "./middle";
 
 export const initAll = () => {
     bindWindows()
@@ -14,6 +15,8 @@ export const initAll = () => {
     const img = join(__dirname, "../resources/icon_16x16.png")
     // console.log(">> ", img)
     initializeMenu(img)
+
+    bindMiddle()
 }
 
 export const getPermission = () => {

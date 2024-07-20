@@ -1,4 +1,5 @@
 import {createContext} from "react";
+import {CaptureArea} from "../../common/models";
 
 export enum MovieQuality{
     FourK = "4k",
@@ -53,7 +54,17 @@ export interface IRecordContext{
     setCursorMode?: (mode: CursorMode) => void
     blurView: boolean | string[]
     setBlurView?: (blurView: boolean | string[]) => void
+
+    capArea: CaptureArea,
+    setCapArea?: (areaArea: CaptureArea | ((preArea: CaptureArea) => CaptureArea)) => void
 }
+
+export const DefaultCapArea = () => ({
+    width: 300,
+    height: 200,
+    x: 0,
+    y: 0,
+})
 
 export const RecordContext = createContext<IRecordContext>({
     recording: false,
@@ -65,4 +76,5 @@ export const RecordContext = createContext<IRecordContext>({
     barMode: 'none',
     cursorMode: 'none',
     blurView: false,
+    capArea: DefaultCapArea(),
 })
