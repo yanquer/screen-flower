@@ -9,10 +9,17 @@ export class CursorToolbar extends Component<any, any>{
     static contextType = RecordContext
     context: IRecordContext
 
+    protected setPos(){
+        const {setAllowPenetrate, setIsInActionBar, recording} = this.context
+        recording && setAllowPenetrate(true)
+        setIsInActionBar(false)
+    }
+
     render() {
         return <Toolbar.Root
             className={`absolute bg-gray-50 rounded-full bottom-14 h-11  
-                pl-2 pr-2 right-0 tool-sub-group-body`}
+                pl-2 pr-2 right-0 tool-sub-group-body
+                `}
             aria-label="Cursor options"
             tabIndex={0}
         >
@@ -25,6 +32,7 @@ export class CursorToolbar extends Component<any, any>{
                         this.context.setCursorMode(value)
                     }
                     this.context.setBarMode('none')
+                    this.setPos()
                 }}
             >
                 <ToolTipWrap title="默认光标">

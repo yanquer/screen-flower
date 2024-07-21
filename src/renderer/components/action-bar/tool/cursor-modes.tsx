@@ -4,7 +4,7 @@ import {getServiceBySymbol} from "../../../../common/container/inject-container"
 import {IUtilService} from "../../../../common/service";
 
 const CursorModes = () => {
-  const {cursorMode, recording, setAllowPenetrate} = useContext(RecordContext);
+  const {cursorMode, recording, setAllowPenetrate, isInActionBar} = useContext(RecordContext);
   const modeRef = useRef(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
@@ -117,6 +117,7 @@ const CursorModes = () => {
       <div
         className="cursor-highlight"
         ref={highlightRef}
+        // onMouseDown={() => recording && !isInActionBar && setAllowPenetrate(true)}
         // onMouseEnter={() => setAllowPenetrate(true)}
         // onMouseLeave={() => setAllowPenetrate(true)}
         style={{
@@ -139,6 +140,7 @@ const CursorModes = () => {
       ></div>
       <div
         className="cursor-click-target"
+        // onMouseDown={() => recording && !isInActionBar && setAllowPenetrate(true)}
         // onMouseEnter={() => visScreenWhenRecording(true)}
         // onMouseLeave={() => visScreenWhenRecording(true)}
         ref={clickTargetRef}
@@ -165,6 +167,7 @@ const CursorModes = () => {
       ></div>
       <div
         className="spotlight"
+        // onMouseDown={() => recording && !isInActionBar && setAllowPenetrate(true)}
         // onMouseEnter={() => visScreenWhenRecording(true)}
         // onMouseLeave={() => visScreenWhenRecording(true)}
         // onMouseOver={() => visScreenWhenRecording(true)}

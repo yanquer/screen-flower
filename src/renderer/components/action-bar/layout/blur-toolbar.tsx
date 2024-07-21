@@ -15,6 +15,12 @@ export class BlurToolbar extends Component<BlurToolbarProps, any>{
     static contextType = RecordContext
     context: IRecordContext
 
+    protected setPos(){
+        const {setAllowPenetrate, setIsInActionBar, recording} = this.context
+        recording && setAllowPenetrate(true)
+        setIsInActionBar(false)
+    }
+
     render() {
         return <Toolbar.Root
             className={`${this.props.className} absolute bg-gray-50 rounded-full bottom-14 h-11  
@@ -41,6 +47,8 @@ export class BlurToolbar extends Component<BlurToolbarProps, any>{
                              this.context.setBlurView(true)
                              this.context.setBarMode('none')
 
+                             this.setPos()
+
                          }}
                     >
                         <Toolbar.ToggleItem className="ToolbarToggleItem" value="none">
@@ -56,6 +64,9 @@ export class BlurToolbar extends Component<BlurToolbarProps, any>{
                          onClick={() => {
                              this.context.setBarMode('none')
                              this.context.setBlurView(false)
+
+                             this.setPos()
+
                          }}
                     >
                         <Toolbar.ToggleItem className="ToolbarToggleItem" value="target">

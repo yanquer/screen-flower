@@ -38,8 +38,8 @@ export class RecordService extends BaseToElectron implements IRecordService{
         return this._backendService('cancelRecord')
     }
 
-    async recordBgImage(area: CaptureArea, savePath?: string): Promise<Buffer | undefined> {
-        return await this._backendService('recordBgImage', area, savePath)
+    async recordBgImage(area: CaptureArea, savePath?: string, relative?: boolean): Promise<Buffer | undefined> {
+        return await this._backendService('recordBgImage', area, savePath, relative)
     }
 
 }

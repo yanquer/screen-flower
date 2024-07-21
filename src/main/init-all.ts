@@ -7,6 +7,15 @@ import {join} from "path";
 import {ensureScreenCapturePermissions} from "./common/permissions";
 import {bindMiddle} from "./middle";
 import {bindBackend} from "./backend";
+import {app} from "electron";
+import {getNeedCleanDispose, IDispose} from "../common/container/dispose";
+
+const cleanUp = () => {
+    const needClean = getNeedCleanDispose()
+    needClean.map(((disposeIns: IDispose) => {
+        disposeIns.dispose?.();
+    }))
+}
 
 export const initAll = () => {
     bindWindows()
@@ -19,6 +28,10 @@ export const initAll = () => {
 
     bindBackend()
     bindMiddle()
+
+    app.on('quit', () => {
+        cleanUp()
+    })
 }
 
 export const getPermission = () => {

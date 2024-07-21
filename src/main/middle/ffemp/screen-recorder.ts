@@ -14,11 +14,12 @@ import {join} from "path";
 import {getHomeDir} from "../../common/dynamic-defines";
 import {getRandomStr} from "../../../renderer/common/common";
 import {spawn} from "node:child_process";
+import {Dispose} from "../../../common/container/dispose";
 
 FfmpegCommand.setFfmpegPath(ffmpegPath)
 
 @injectable()
-export class ScreenRecorder implements IRecordService{
+export class ScreenRecorder extends Dispose implements IRecordService{
 
     protected currentCmd: FluentFfmpegApi
     protected recordingRunEmitter = new Emitter<boolean>()
@@ -35,14 +36,34 @@ export class ScreenRecorder implements IRecordService{
         this.fileService.isExists(this.saveDir).then(async (exists) => {
             !exists && await this.fileService.mkDir(this.saveDir)
         })
+
+        this.addServiceToCleanUp(this)
     }
 
-    protected ffmpegCommand = (input?: any): FluentFfmpegApi => {
-        if (input) this.currentCmd = new FfmpegCommand(input);
-        else this.currentCmd = new FfmpegCommand();
-        return this.currentCmd
+    protected ffmpegCommand = (input?: any, record: boolean = true): FluentFfmpegApi => {
+        if (record) {
+            if (input) this.currentCmd = new FfmpegCommand(input);
+            else this.currentCmd = new FfmpegCommand();
+            return this.currentCmd
+        } else {
+            return new FfmpegCommand(input);
+        }
     }
     // protected ffmpegCommand = () => Ffmpeg('./report/video/simple.mp4');
+
+    protected cmdCommonDo(cmd: FluentFfmpegApi, desc?: string){
+        return cmd
+            .on('start', function (commandLine) {
+                console.log('Spawned Ffmpeg with command: ' + commandLine);
+            })
+            .on('end', () => {
+                console.log(`${desc} finished!`);
+            })
+            .on('error', (err: Error) => {
+                console.error(`Error ${desc}`, err);
+            })
+            .run()
+    }
 
     async startRecord(area: CaptureArea, savePath?: string,){
 
@@ -58,7 +79,7 @@ export class ScreenRecorder implements IRecordService{
 
         // this.ffmpegCommand
         // this.ffmpegCommand({source: "1"})
-        this.ffmpegCommand("2")
+        const cmd = this.ffmpegCommand("2")
             .inputFormat('avfoundation')
             // .native()
             .noAudio()
@@ -66,23 +87,11 @@ export class ScreenRecorder implements IRecordService{
             .videoCodec('libx264')
             .format('matroska')
             .output(output)
-            // .setDuration(18)
-            .on('start', function (commandLine) {
-                console.log('Spawned Ffmpeg with command: ' + commandLine);
-            })
-            .on('end', () => {
-                console.log('Screen recording finished!');
-            })
-            .on('error', (err: Error) => {
-                console.error('Error recording screen:', err);
-            })
-            .run()
 
-        // 时长不兼容所有软件...
+        this.cmdCommonDo(cmd, "startRecord")
 
-
-        // console.log(this.currentCmd)
-        this.recordingRunEmitter.fire(true)
+        // todo: 后续考虑只给前端触发
+        // this.recordingRunEmitter.fire(true)
     }
 
     async stopRecord(){
@@ -113,20 +122,60 @@ export class ScreenRecorder implements IRecordService{
         return Promise.resolve(undefined);
     }
 
-    async recordBgImage(area: CaptureArea, savePath?: string,): Promise<Buffer | undefined>{
+    // area     200:200:0:0
+    protected async cropImage(inputImg: string, outputImg: string, area: string){
+        let waitResolve: any
+        const wait = new Promise(resolve => waitResolve = resolve);
+
+        let iImg = inputImg,
+            oImg = outputImg
+        if (inputImg === outputImg){
+            iImg += '1.png'
+            await this.fileService.move(oImg, iImg)
+        }
+
+        this.ffmpegCommand(iImg, false)
+            .videoFilter(`crop=${area}`)
+            // .outputOptions([
+            //     `-vf "crop=${cropArea}"`,
+            // ])
+            .output(oImg)
+            .on('start', function (commandLine) {
+                console.log('Spawned Ffmpeg with command: ' + commandLine);
+            })
+            .on('end', () => {
+                console.log('Cropping finished!');
+                waitResolve()
+            })
+            .on('error', (err) => {
+                console.error('An error occurred: ' + err.message);
+            })
+            .run();
+
+        await wait
+        return outputImg
+    }
+
+    async recordBgImage(area: CaptureArea, savePath?: string, relative?: boolean): Promise<Buffer | undefined>{
         const cropArea = getCropAreaStr(area)
         console.log(`>> Starting recordBgImage...  area: ${cropArea}`)
 
         let newSavePath: string = savePath
+        console.log(`>> recordBgImage...  newSavePath: ${newSavePath}`)
+
         if (!savePath){
             newSavePath = join(this.saveDir, getRandomStr() + '.jpg')
+        } else {
+            relative && (newSavePath = join(this.saveDir, savePath))
+            console.log(`>> recordBgImage...  newSavePath: ${newSavePath}`)
+
         }
 
         let waitResolve: any
         const wait = new Promise(resolve => waitResolve = resolve);
 
         // ffmpeg -f avfoundation -i "2" -vframes 1 -s 1920x1080 screenshot.png
-        this.ffmpegCommand("2")
+        this.ffmpegCommand("2", false)
             .inputFormat('avfoundation')
             .outputOptions([
                 // `-vf "crop=${cropArea}"`,
@@ -151,28 +200,8 @@ export class ScreenRecorder implements IRecordService{
 
         await wait
 
-        const wait2 = new Promise(resolve => waitResolve = resolve);
-
         // staic 是 6.0 的, 不能直接 crop, 需要再转一遍
-        this.ffmpegCommand(newSavePath)
-            .videoFilter(`crop=${cropArea}`)
-            // .outputOptions([
-            //     `-vf "crop=${cropArea}"`,
-            // ])
-            .output(newSavePath)
-            .on('start', function (commandLine) {
-                console.log('Spawned Ffmpeg with command: ' + commandLine);
-            })
-            .on('end', () => {
-                console.log('Cropping finished!');
-                waitResolve()
-            })
-            .on('error', (err) => {
-                console.error('An error occurred: ' + err.message);
-            })
-            .run();
-
-
+        await this.cropImage(newSavePath, newSavePath, cropArea)
 
         // // 插件有bug, 还是直接调用命令吧.
         // const args = `-f avfoundation -i 2 -y -vf "crop=${cropArea}" -vframes 1 ${newSavePath}`
@@ -194,8 +223,6 @@ export class ScreenRecorder implements IRecordService{
         // child.stderr.on('data', (chunk) => {
         //     console.log(`child process stderr: ${chunk}`);
         // })
-
-        await wait2
 
         console.log(`>> recordBgImage...  img: ${newSavePath}`)
 

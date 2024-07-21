@@ -61,6 +61,9 @@ export interface IRecordContext{
     // 是否允许点击穿透
     allowPenetrate: boolean
     setAllowPenetrate?: (allowPenetrate: boolean) => void
+    // 是不是在小工具区域
+    isInActionBar: boolean
+    setIsInActionBar?: (isInActionBar: boolean) => void
 }
 
 export const DefaultCapArea = () => ({
@@ -82,4 +85,5 @@ export const RecordContext = createContext<IRecordContext>({
     blurView: false,
     capArea: DefaultCapArea(),
     allowPenetrate: false,
+    isInActionBar: false
 })

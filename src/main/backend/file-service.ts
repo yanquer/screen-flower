@@ -1,6 +1,6 @@
-import { stat, readFile, readdirSync, writeFileSync, existsSync, mkdirSync } from 'fs'
+import { stat, readFile, readdirSync, writeFileSync, existsSync, mkdirSync, renameSync } from 'fs'
 import { dump, load } from 'js-yaml'
-import { join, dirname } from 'path'
+import path, { join, dirname } from 'path'
 
 import { IFileService } from '../../common/service'
 import { PathStat } from '../../common/defines'
@@ -138,4 +138,15 @@ export class FileService implements IFileService {
 
     return true
   }
+
+  async move(originPath: string, newPath: string): Promise<boolean>{
+    if ((await this.isExists(originPath))) {
+      renameSync(originPath, newPath)
+    }
+
+    return false
+
+  }
+
+
 }

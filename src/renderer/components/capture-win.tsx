@@ -65,7 +65,7 @@ export class CaptureWin extends Component<any, CaptureWinState>{
 
     protected async getBackgroundImg(){
         const recodeService: IRecordService = getServiceBySymbol(IRecordService)
-        const buffer = await recodeService.recordBgImage(this.context.capArea)
+        const buffer = await recodeService.recordBgImage(this.context.capArea, 'bg-win.png', true)
         if (!buffer) return undefined
         const backgroundBlob = new Blob(
             [buffer],
@@ -127,6 +127,6 @@ export class CaptureWin extends Component<any, CaptureWinState>{
                 </Rnd>
                 <CursorModes/>
             </div>
-    )
+        )
     }
-    }
+}

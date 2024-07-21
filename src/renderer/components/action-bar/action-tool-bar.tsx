@@ -104,19 +104,35 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
 
     render() {
         const {stop} = this.state
-        const {setAllowPenetrate} = this.context
+        const {setAllowPenetrate, setIsInActionBar, barMode} = this.context
 
         return (
             <div className={"bg-white pointer-events-auto"}
-                 onMouseEnter={() => setAllowPenetrate(false)}
-                 onMouseLeave={() => setAllowPenetrate(true)}
+                 onMouseEnter={() => {
+                     console.log('onMouseEnter --')
+                     setAllowPenetrate(false)
+                     setIsInActionBar(true)
+                 }}
+                 onMouseLeave={() => {
+                     console.log('onMouseLeave --')
+                     setAllowPenetrate(true)
+                     setIsInActionBar(false)
+                 }}
                  // onMouseOver={() => this.visScreenWhenRecording(false)}
                  // onMouseOut={() => this.visScreenWhenRecording(true)}
+                // 兼容工具栏收起时,
                 // onMouseUp={(e) => {
+                //     // 加个延时, barMode要稍后才变化
+                //     console.log('onMouseUp --')
+                //
                 //     const boxTop = this.boxRef.current?.getBoundingClientRect().y
-                //     console.log(`>> ${boxTop}, ${e.clientY}`)
-                //     if (e.clientY < boxTop) {
+                //     console.log(`>> ${boxTop}, ${e.clientY}, ${barMode}`)
+                //     // 关闭bar工具栏组后, 才检查
+                //     // todo: barMode 不是预期的值, 暂时使用相反的判断
+                //     //      待想想怎么判断, 点击后, 但是
+                //     if (e.clientY < boxTop && barMode !== 'none') {
                 //         setAllowPenetrate(true)
+                //         setIsInActionBar(false)
                 //     }
                 // }}
             >

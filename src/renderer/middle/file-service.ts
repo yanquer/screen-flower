@@ -45,6 +45,10 @@ export class FileService extends BaseToElectron implements IFileService {
   }
 
   async openBuffer(path: string): Promise<Buffer | undefined> {
-    return  await this._backendService('openBuffer', path)
+    return await this._backendService('openBuffer', path)
+  }
+
+  async move(originPath: string, newPath: string): Promise<boolean> {
+    return await this._backendService('move', originPath, newPath)
   }
 }

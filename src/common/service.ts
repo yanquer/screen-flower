@@ -19,6 +19,8 @@ export interface IFileService {
 
   readDir(path: string, recursive?: boolean | number): Promise<string[]>
   mkDir(path: string, recursive?: boolean | number): Promise<boolean>
+
+  move(originPath: string, newPath: string): Promise<boolean>
 }
 
 
@@ -51,7 +53,7 @@ export interface IRecordService {
   stopRecord(): Promise<void>
   cancelRecord(): Promise<void>
 
-  recordBgImage(area: CaptureArea, savePath?: string,): Promise<Buffer | undefined>
+  recordBgImage(area: CaptureArea, savePath?: string, relative?: boolean): Promise<Buffer | undefined>
 }
 
 export const IUtilService = Symbol.for('IUtilService')

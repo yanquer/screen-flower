@@ -53,7 +53,7 @@ export class CaptureWindow extends BaseSFWindow{
             const recordService: IRecordService = getServiceBySymbol(IRecordService);
             recordService.recordingRunEmitterEvent(
                 (isRecording: boolean) => {
-                    this.setAllowPenetrate(isRecording, true).then()
+                    this.setAllowPenetrate(isRecording).then()
                 }
             )
         }, 1000)

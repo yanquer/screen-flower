@@ -33,6 +33,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     const [capArea, setCapArea] = useState<CaptureArea>(DefaultCapArea())
 
     const [allowPenetrate, setAllowPenetrate] = useState<boolean>(false)
+    const [isInActionBar, setIsInActionBar] = useState<boolean>(false)
 
     const router = useRouter()
     const toPage = (pageUrl: string) => {
@@ -64,12 +65,14 @@ function MyApp({ Component, pageProps }: AppProps) {
     const utilService: IUtilService = getServiceBySymbol<IUtilService>(IUtilService)
 
     if (recording){
+      console.log(`>> recording ${allowPenetrate}`)
       if (allowPenetrate){
         utilService.setClickPenetrate(true).then()
       } else {
         utilService.setClickPenetrate(false).then()
       }
     } else {
+      console.log(`>> no recording ${allowPenetrate}`)
       // 没有录制时就不允许变
       allowPenetrate || utilService.setClickPenetrate(false).then()
     }
@@ -79,9 +82,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   // 点击穿透初始化时候全局事件
   useEffect(() => {
     // document 检测鼠标抬起时, 一律不允许穿透
-    document.addEventListener('mouseup', () =>  setAllowPenetrate(false))
-
-    return () => document.removeEventListener('mouseup', () =>  setAllowPenetrate(false))
+    // document.addEventListener('mouseup', () =>  setAllowPenetrate(false))
+    //
+    // return () => document.removeEventListener('mouseup', () =>  setAllowPenetrate(false))
   }, []);
 
   return (
@@ -100,6 +103,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           blurView, setBlurView,
           capArea, setCapArea,
           allowPenetrate, setAllowPenetrate,
+        isInActionBar, setIsInActionBar,
       }}>
         <Component {...pageProps} />
       </RecordContext.Provider>
