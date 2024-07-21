@@ -11,4 +11,8 @@ export class UtilService implements IUtilService{
         await this._backendService('setClickPenetrate', penetrate)
     }
 
+    async getCursorScreenPoint(): Promise<{ x: number; y: number }> {
+        return await this._backendService('getCursorScreenPoint')
+    }
+
 }

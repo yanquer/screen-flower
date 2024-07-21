@@ -23,7 +23,8 @@ import {RecordedTimer} from "../movie-stream/record-timer";
 import {CursorToolbar} from "./layout/cursor-toolbar";
 import {BlurToolbar} from "./layout/blur-toolbar";
 import {getServiceBySymbol} from "../../../common/container/inject-container";
-import {IRecordService, IUtilService} from "../../../common/service";
+import {IRecordService} from "../../../common/service";
+import {toNumber} from "lodash";
 
 
 interface ActionToolBarState {
@@ -49,6 +50,7 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
     protected readonly recordService: IRecordService = getServiceBySymbol<IRecordService>(IRecordService)
 
     protected captureRef = createRef<ScreenCaptureBrowser | undefined>()
+    protected boxRef = createRef<HTMLDivElement | undefined>()
 
     protected setCanDrag(can: boolean){this.setState({canDrag: can});}
     protected handleDocMouseUp(){this.setCanDrag(false)}
@@ -93,13 +95,6 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
         }
     }
 
-    protected async visScreenWhenRecording(vis: boolean){
-        const utilService: IUtilService = getServiceBySymbol(IUtilService)
-        const {recording} = this.context
-        if (recording){
-            await utilService.setClickPenetrate(vis)
-        }
-    }
     // protected addDocCursorMove(){
     //     document.addEventListener('mousemove', this.visScreenWhenRecording.bind(this))
     // }
@@ -109,11 +104,21 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
 
     render() {
         const {stop} = this.state
+        const {setAllowPenetrate} = this.context
 
         return (
             <div className={"bg-white pointer-events-auto"}
-                 onMouseEnter={() => this.visScreenWhenRecording(false)}
-                 onMouseLeave={() => this.visScreenWhenRecording(true)}
+                 onMouseEnter={() => setAllowPenetrate(false)}
+                 onMouseLeave={() => setAllowPenetrate(true)}
+                 // onMouseOver={() => this.visScreenWhenRecording(false)}
+                 // onMouseOut={() => this.visScreenWhenRecording(true)}
+                // onMouseUp={(e) => {
+                //     const boxTop = this.boxRef.current?.getBoundingClientRect().y
+                //     console.log(`>> ${boxTop}, ${e.clientY}`)
+                //     if (e.clientY < boxTop) {
+                //         setAllowPenetrate(true)
+                //     }
+                // }}
             >
                 <Rnd
                     // className={"fixed"}
@@ -126,6 +131,7 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                 >
                     <div className={"bg-white rounded-full cursor-auto pl-2 pr-2 " +
                         (this.state.canDrag ? "scale-105" : "")}
+                         ref={this.boxRef}
                     >
                         <Root className={"h-12"}>
                             <Flex className={'h-full'} direction="row"
@@ -339,7 +345,7 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                     </div>
                 </Rnd>
 
-                <ScreenCaptureBrowser ref={this.captureRef}/>
+                {/*<ScreenCaptureBrowser ref={this.captureRef}/>*/}
             </div>
         )
     }

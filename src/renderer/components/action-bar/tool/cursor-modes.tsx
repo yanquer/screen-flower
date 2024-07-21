@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import {RecordContext} from "../../../common/global-context";
-
+import {getServiceBySymbol} from "../../../../common/container/inject-container";
+import {IUtilService} from "../../../../common/service";
 
 const CursorModes = () => {
-  const {cursorMode} = useContext(RecordContext);
+  const {cursorMode, recording, setAllowPenetrate} = useContext(RecordContext);
   const modeRef = useRef(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const [size, setSize] = useState<{x: number, y: number} | undefined>()
 
   const clickTargetRef = useRef<HTMLDivElement>(null);
   const highlightRef = useRef<HTMLDivElement>(null);
@@ -84,11 +87,38 @@ const CursorModes = () => {
     };
   }, []);
 
+    const sizeRef = useRef(null);
+
+    useEffect(() => {
+        const utilService: IUtilService = getServiceBySymbol(IUtilService)
+        if (recording){
+            sizeRef.current = setInterval(async () => {
+                const {x, y} = await utilService.getCursorScreenPoint();
+                if (x != size?.x || y != size.y){
+                    setSize({x, y});
+                }
+            }, 10)
+        } else {
+            if (sizeRef.current) clearInterval(sizeRef.current);
+        }
+
+    }, [recording]);
+
+    useEffect(() => {
+        setLastMousePosition({ ...size });
+        updateCursorPosition();
+    }, [size]);
+
   return (
-    <div>
+    <div
+        // onMouseEnter={() => visScreenWhenRecording(true)}
+        // onMouseLeave={() => visScreenWhenRecording(true, false)}
+    >
       <div
         className="cursor-highlight"
         ref={highlightRef}
+        // onMouseEnter={() => setAllowPenetrate(true)}
+        // onMouseLeave={() => setAllowPenetrate(true)}
         style={{
           display: "block",
           visibility:
@@ -109,6 +139,8 @@ const CursorModes = () => {
       ></div>
       <div
         className="cursor-click-target"
+        // onMouseEnter={() => visScreenWhenRecording(true)}
+        // onMouseLeave={() => visScreenWhenRecording(true)}
         ref={clickTargetRef}
         style={{
           display: "block",
@@ -133,6 +165,10 @@ const CursorModes = () => {
       ></div>
       <div
         className="spotlight"
+        // onMouseEnter={() => visScreenWhenRecording(true)}
+        // onMouseLeave={() => visScreenWhenRecording(true)}
+        // onMouseOver={() => visScreenWhenRecording(true)}
+        // onMouseOut={() => visScreenWhenRecording(true, false)}
         ref={spotlightRef}
         style={{
           position: "absolute",

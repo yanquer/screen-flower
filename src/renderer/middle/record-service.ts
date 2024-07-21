@@ -3,6 +3,7 @@ import {BaseToElectron} from "./base-model";
 import {ServiceFactory} from "./service-factory";
 import {injectable} from "inversify";
 import {CaptureArea} from "../../common/models";
+import {Blob} from "node:buffer";
 
 
 @injectable()
@@ -35,6 +36,10 @@ export class RecordService extends BaseToElectron implements IRecordService{
 
     async cancelRecord(): Promise<void> {
         return this._backendService('cancelRecord')
+    }
+
+    async recordBgImage(area: CaptureArea, savePath?: string): Promise<Buffer | undefined> {
+        return await this._backendService('recordBgImage', area, savePath)
     }
 
 }

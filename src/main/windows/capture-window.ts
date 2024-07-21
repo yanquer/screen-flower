@@ -3,7 +3,7 @@
 import {BaseSFWindow} from "./base";
 import {WindowNames} from "../common/defines";
 import {inject, injectable, postConstruct} from "inversify";
-import {Input, Event, screen, Display, BrowserWindowConstructorOptions} from "electron";
+import {Input, Event, screen, Display, BrowserWindowConstructorOptions, app, ipcMain} from "electron";
 import {
     getCurrentScreenArea,
     getCurrentScreenPoint,
@@ -53,7 +53,7 @@ export class CaptureWindow extends BaseSFWindow{
             const recordService: IRecordService = getServiceBySymbol(IRecordService);
             recordService.recordingRunEmitterEvent(
                 (isRecording: boolean) => {
-                    this.setAllowPenetrate(isRecording).then()
+                    this.setAllowPenetrate(isRecording, true).then()
                 }
             )
         }, 1000)
@@ -64,7 +64,7 @@ export class CaptureWindow extends BaseSFWindow{
         // this.win.maximize()
 
         // 设置全屏可见
-        // this.win.setVisibleOnAllWorkspaces(true, {visibleOnFullScreen: true})
+        this.win.setVisibleOnAllWorkspaces(true, {visibleOnFullScreen: true})
 
         // 隐藏滚动条
         this.win.webContents.insertCSS(`
@@ -80,6 +80,7 @@ export class CaptureWindow extends BaseSFWindow{
         // screen.on('display-metrics-changed', this.displayChange.bind(this));
 
         // this.win.webContents.openDevTools()
+
     }
 
     protected handleKeydown(event: Event, input: Input) {

@@ -16,7 +16,8 @@
     "jsx": "preserve",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "types": ["reflect-metadata"]
+    "types": ["reflect-metadata"],
+    "sourceMap": true,
   },
   "exclude": ["node_modules",
     "src/renderer/next.config.js", "app", "dist"]

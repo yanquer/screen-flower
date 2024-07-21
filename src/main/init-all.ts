@@ -6,6 +6,7 @@ import {bindWindows} from "./windows";
 import {join} from "path";
 import {ensureScreenCapturePermissions} from "./common/permissions";
 import {bindMiddle} from "./middle";
+import {bindBackend} from "./backend";
 
 export const initAll = () => {
     bindWindows()
@@ -16,6 +17,7 @@ export const initAll = () => {
     // console.log(">> ", img)
     initializeMenu(img)
 
+    bindBackend()
     bindMiddle()
 }
 

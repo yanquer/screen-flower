@@ -12,6 +12,8 @@ import '../styles/drag-box.scss'
 import {BarVideoMode, CursorMode, DefaultCapArea, MovieQuality, RecordContext} from "../common/global-context";
 import {useRouter} from "next/router";
 import {CaptureArea} from "../../common/models";
+import {getServiceBySymbol} from "../../common/container/inject-container";
+import {IUtilService} from "../../common/service";
 
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -29,6 +31,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     const [blurView, setBlurView] = useState<boolean | string[]>(false)
 
     const [capArea, setCapArea] = useState<CaptureArea>(DefaultCapArea())
+
+    const [allowPenetrate, setAllowPenetrate] = useState<boolean>(false)
 
     const router = useRouter()
     const toPage = (pageUrl: string) => {
@@ -55,6 +59,31 @@ function MyApp({ Component, pageProps }: AppProps) {
   // console.log('re render app...')
   //   console.log(capArea)
 
+  // 是否允许点击穿透
+  useEffect(() => {
+    const utilService: IUtilService = getServiceBySymbol<IUtilService>(IUtilService)
+
+    if (recording){
+      if (allowPenetrate){
+        utilService.setClickPenetrate(true).then()
+      } else {
+        utilService.setClickPenetrate(false).then()
+      }
+    } else {
+      // 没有录制时就不允许变
+      allowPenetrate || utilService.setClickPenetrate(false).then()
+    }
+
+  }, [allowPenetrate]);
+
+  // 点击穿透初始化时候全局事件
+  useEffect(() => {
+    // document 检测鼠标抬起时, 一律不允许穿透
+    document.addEventListener('mouseup', () =>  setAllowPenetrate(false))
+
+    return () => document.removeEventListener('mouseup', () =>  setAllowPenetrate(false))
+  }, []);
+
   return (
       <RecordContext.Provider value={{
         recording, setRecording,
@@ -70,6 +99,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           cursorMode, setCursorMode,
           blurView, setBlurView,
           capArea, setCapArea,
+          allowPenetrate, setAllowPenetrate,
       }}>
         <Component {...pageProps} />
       </RecordContext.Provider>

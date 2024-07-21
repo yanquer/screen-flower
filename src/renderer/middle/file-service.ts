@@ -3,6 +3,7 @@ import { ServiceFactory } from './service-factory'
 import {BaseToElectron} from "./base-model";
 import {IFileService} from "../../common/service";
 
+
 @injectable()
 export class FileService extends BaseToElectron implements IFileService {
   _backendService: any = ServiceFactory.fileService
@@ -33,5 +34,17 @@ export class FileService extends BaseToElectron implements IFileService {
 
   async writeYaml(path: string, data: any): Promise<void> {
     return await this._backendService('writeYaml', path, data)
+  }
+
+  async isExists(path: string): Promise<boolean> {
+    return await this._backendService('isExists', path)
+  }
+
+  async mkDir(path: string, recursive?: boolean | number): Promise<boolean> {
+    return await this._backendService('mkDir', path, recursive)
+  }
+
+  async openBuffer(path: string): Promise<Buffer | undefined> {
+    return  await this._backendService('openBuffer', path)
   }
 }

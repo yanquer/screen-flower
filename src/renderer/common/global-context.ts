@@ -57,6 +57,10 @@ export interface IRecordContext{
 
     capArea: CaptureArea,
     setCapArea?: (areaArea: CaptureArea | ((preArea: CaptureArea) => CaptureArea)) => void
+
+    // 是否允许点击穿透
+    allowPenetrate: boolean
+    setAllowPenetrate?: (allowPenetrate: boolean) => void
 }
 
 export const DefaultCapArea = () => ({
@@ -77,4 +81,5 @@ export const RecordContext = createContext<IRecordContext>({
     cursorMode: 'none',
     blurView: false,
     capArea: DefaultCapArea(),
+    allowPenetrate: false,
 })

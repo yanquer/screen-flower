@@ -162,6 +162,14 @@ export interface FluentFfmpegApi{
     // 默认 是 SIGKILL,  kill any running ffmpeg process
     kill(signal?: CmdSignal): FluentFfmpegApi,
 
+    // 设置zhen
+    frames(count: number): FluentFfmpegApi,
+    takeFrames(count: number): FluentFfmpegApi,
+    withFrames(count: number): FluentFfmpegApi,
+
+    //
+    outputOptions(option: string | string[]): FluentFfmpegApi,
+
     // // 设置视频码率, 比如 3Mbps 就是 3000000
     // withVideoBitrate(bit: number): FluentFfmpegApi,
     // // 设置视频编码器, 比如 libx264

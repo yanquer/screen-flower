@@ -6,7 +6,9 @@ import {Event} from "./event";
 
 export const IFileService = Symbol('IFileService')
 export interface IFileService {
+  isExists(path: string): Promise<boolean>
   open(path: string): Promise<string>
+  openBuffer(path: string): Promise<Buffer | undefined>
   openYaml<T>(path: string): Promise<T>
 
   write(path: string, data: any): Promise<void>
@@ -16,6 +18,7 @@ export interface IFileService {
   isDir(name: string): Promise<boolean>
 
   readDir(path: string, recursive?: boolean | number): Promise<string[]>
+  mkDir(path: string, recursive?: boolean | number): Promise<boolean>
 }
 
 
@@ -47,10 +50,14 @@ export interface IRecordService {
   restartRecord(): Promise<void>
   stopRecord(): Promise<void>
   cancelRecord(): Promise<void>
+
+  recordBgImage(area: CaptureArea, savePath?: string,): Promise<Buffer | undefined>
 }
 
 export const IUtilService = Symbol.for('IUtilService')
 export interface IUtilService {
   // 设置鼠标穿透
   setClickPenetrate(penetrate: boolean): Promise<void>
+
+  getCursorScreenPoint(): Promise<{ x: number, y: number }>
 }

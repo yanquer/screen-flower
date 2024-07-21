@@ -7,20 +7,22 @@ import {resizeHandle, topLeft, topRight, top, right, left, bottomRight, bottom, 
 } from '../styles/components/capture-win.module.scss'
 import {IRecordContext, RecordContext} from "../common/global-context";
 import CursorModes from "./action-bar/tool/cursor-modes";
+import {getServiceBySymbol} from "../../common/container/inject-container";
+import {IRecordService} from "../../common/service";
 
+interface CaptureWinState{
+    bgUrl: string
+}
 
-export class CaptureWin extends Component<any, any>{
+export class CaptureWin extends Component<any, CaptureWinState>{
     static contextType = RecordContext
     context: IRecordContext
 
     protected dragRef = createRef<Rnd | undefined>()
     protected popupRef = createRef<HTMLCanvasElement | undefined>()
-    // state = {
-    //     x: 0,
-    //     y: 0,
-    //     width: 600,
-    //     height: 300,
-    // }
+    state: CaptureWinState = {
+        bgUrl: 'unset',
+    }
 
     protected handleDragDrop(e: DraggableEvent, d: DraggableData){
         const {capArea, setCapArea} = this.context
@@ -41,8 +43,42 @@ export class CaptureWin extends Component<any, any>{
         setAreaElement(undefined)
     }
 
+    componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any) {
+        const {blurView} = this.context
+
+        if (blurView){
+            console.log('>>> blurView', blurView)
+            if (prevState.bgUrl === 'unset'){
+                this.getBackgroundImg().then(
+                    img => {
+                        console.log('>>> blurView', img)
+                        img && this.setState({bgUrl: img})
+                    }
+                )
+            }
+        } else {
+            if (prevState.bgUrl !== 'unset') {
+                this.setState({bgUrl: 'unset'})
+            }
+        }
+    }
+
+    protected async getBackgroundImg(){
+        const recodeService: IRecordService = getServiceBySymbol(IRecordService)
+        const buffer = await recodeService.recordBgImage(this.context.capArea)
+        if (!buffer) return undefined
+        const backgroundBlob = new Blob(
+            [buffer],
+            { type: 'image/png' }
+            )
+        const img = URL.createObjectURL(backgroundBlob);
+        // return img
+        return `url(${img})`
+    }
+
     render() {
         const {capArea, setCapArea, recording} = this.context
+
         // console.log("re render")
         // console.log(capArea)
         return (
@@ -80,11 +116,13 @@ export class CaptureWin extends Component<any, any>{
                     ref={this.dragRef}
                 >
                     <div className={`popup-container w-full h-full ${boxShadowFull}
-                        ${this.context.blurView ? "blur-sm" : ""}
+                        ${this.context.blurView ? " container-blur " : ""}
                     `}
-
+                         style={{
+                             backgroundImage: `${this.state.bgUrl}`
+                         }}
                     >
-                        <canvas className={'w-full h-full'} ref={this.popupRef}></canvas>
+                        {/*<canvas className={'w-full h-full'} ref={this.popupRef}></canvas>*/}
                     </div>
                 </Rnd>
                 <CursorModes/>
