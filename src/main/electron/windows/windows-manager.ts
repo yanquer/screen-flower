@@ -1,5 +1,5 @@
-import {IBaseWindow, IWindowsManager} from "./base";
-import {WindowNames} from "../common/defines";
+import {IBaseWindow, IWindowsManager} from "../service";
+import {WindowNames} from "../../common/defines";
 import {injectable, multiInject, postConstruct} from "inversify";
 
 

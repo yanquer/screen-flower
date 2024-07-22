@@ -1,27 +1,11 @@
-import {BrowserWindow, BrowserWindowConstructorOptions, screen} from "electron";
-import {createWindow} from "../helpers";
-import {getHostUrl, WindowNames} from "../common/defines";
-import {injectable, postConstruct} from "inversify";
+import {inject, injectable, postConstruct} from "inversify";
+import {getHostUrl, WindowNames} from "../../common/defines";
+import {BrowserWindow, BrowserWindowConstructorOptions} from "electron";
+import {Emitter} from "../../../common/event";
+import {createWindow} from "../../helpers";
+import {HandlerStr} from "../../../common/defines";
 import {WindowsUtils} from "./windows-utils";
-import {Emitter, Event} from "../../common/event";
-import {HandlerStr} from "../../common/defines";
-
-
-export const IBaseWindow = Symbol("IBaseWindow");
-export interface IBaseWindow {
-    id: WindowNames
-    url: string
-    options?: BrowserWindowConstructorOptions
-    win?: BrowserWindow;
-
-    windowHideEmitterEvent: Event<WindowNames>
-
-    open(): Promise<void>;
-    initWindow(): BrowserWindow
-    loadWindow(): Promise<void>
-    // 是否允许点击穿透
-    setAllowPenetrate(allow: boolean): Promise<void>
-}
+import {IBaseWindow, IScreenManager} from "../service";
 
 
 @injectable()
@@ -43,6 +27,9 @@ export class BaseSFWindow implements IBaseWindow{
     preLoad: boolean
     // 是否是第一次show窗口, 支持close后
     firstInit: boolean = true;
+
+    @inject(IScreenManager)
+    protected screenManager: IScreenManager;
 
     protected windowHideEmitter = new Emitter<WindowNames>()
     windowHideEmitterEvent = this.windowHideEmitter.event
@@ -111,12 +98,5 @@ export class BaseSFWindow implements IBaseWindow{
         WindowsUtils.clickPenetrateWindow(this.win, allow)
     }
 
-}
-
-
-export const IWindowsManager = Symbol.for("IWindowsManager");
-export interface IWindowsManager{
-    registerWin(id: WindowNames, win: IBaseWindow): void
-    getWinById(id: WindowNames): IBaseWindow
 }
 

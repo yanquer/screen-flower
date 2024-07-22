@@ -1,15 +1,12 @@
 
 
-import {BaseSFWindow} from "./base";
-import {WindowNames} from "../common/defines";
+import {BaseSFWindow} from "./base-window";
+import {WindowNames} from "../../common/defines";
 import {injectable, postConstruct} from "inversify";
-import {Input, Event, Display, BrowserWindowConstructorOptions, app, ipcMain} from "electron";
-import {
-    getCurrentScreenSize,
-} from "../common/electron/display";
+import {Input, Event, Display, BrowserWindowConstructorOptions} from "electron";
 import path from "path";
-import {IRecordService} from "../../common/service";
-import {getServiceBySymbol} from "../../common/container/inject-container";
+import {IRecordService} from "../../../common/service";
+import {getServiceBySymbol} from "../../../common/container/inject-container";
 
 @injectable()
 export class CaptureWindow extends BaseSFWindow{
@@ -18,9 +15,10 @@ export class CaptureWindow extends BaseSFWindow{
     url: string = '/capture'
     name = 'capture-win'
     preLoad = true
+
     get options(): BrowserWindowConstructorOptions  {
         return {
-            ...getCurrentScreenSize(),  // x, y, width, height
+            ...this.screenManager.getCurrentScreenArea(),  // x, y, width, height
             frame: false, // 删除默认窗口边框
             transparent: true, // 设置窗口为透明
             hasShadow: false,

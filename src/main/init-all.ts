@@ -2,13 +2,13 @@
 import 'reflect-metadata'
 
 import {initializeMenu} from "./menu";
-import {bindWindows} from "./windows";
 import {join} from "path";
 import {ensureScreenCapturePermissions} from "./common/permissions";
 import {bindMiddle} from "./middle";
 import {bindBackend} from "./backend";
 import {app} from "electron";
 import {getNeedCleanDispose, IDispose} from "../common/container/dispose";
+import {bindElectron} from "./electron";
 
 const cleanUp = () => {
     const needClean = getNeedCleanDispose()
@@ -18,7 +18,7 @@ const cleanUp = () => {
 }
 
 export const initAll = () => {
-    bindWindows()
+    bindElectron()
 
     // console.log(">> ", __dirname)
     // const img = join(__dirname, "../resources/1.jpg")

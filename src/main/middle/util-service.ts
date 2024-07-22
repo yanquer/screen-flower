@@ -1,8 +1,7 @@
 import {IUtilService} from "../../common/service";
 import {inject, injectable} from "inversify";
-import {IWindowsManager} from "../windows/base";
+import {IScreenManager, IWindowsManager} from "../electron/service";
 import {WindowNames} from "../common/defines";
-import {getFoucScreenPoint} from "../common/electron/display";
 
 
 @injectable()
@@ -10,6 +9,8 @@ export class UtilService implements IUtilService{
 
     @inject(IWindowsManager)
     protected windowsManager: IWindowsManager;
+    @inject(IScreenManager)
+    protected readonly screenManager: IScreenManager;
 
     async setClickPenetrate(penetrate: boolean): Promise<void> {
         const capWin = this.windowsManager.getWinById(WindowNames.CaptureWin)
@@ -19,7 +20,7 @@ export class UtilService implements IUtilService{
     }
 
     async getCursorScreenPoint(): Promise<{ x: number; y: number }> {
-        return getFoucScreenPoint();
+        return this.screenManager.getCursorPosition()
     }
 
 }

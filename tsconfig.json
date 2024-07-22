@@ -20,5 +20,7 @@
     "sourceMap": true,
   },
   "exclude": ["node_modules",
-    "src/renderer/next.config.js", "app", "dist"]
+    "src/renderer/next.config.js",
+    "jest.config.js",
+    "app", "dist"]
 }

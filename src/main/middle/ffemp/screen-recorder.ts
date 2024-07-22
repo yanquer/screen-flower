@@ -5,14 +5,12 @@ import {FluentFfmpegApi} from './fluent-ffmpeg/api'
 
 import FfmpegCommand from 'fluent-ffmpeg';
 import {CaptureArea} from "../../../common/models";
-import {getCropAreaStr, getFoucScreen} from "../../common/electron/display";
 import {Emitter, Event} from "../../../common/event";
 import {join} from "path";
 import {getHomeDir} from "../../common/dynamic-defines";
 import {getRandomStr} from "../../../renderer/common/common";
-import {spawn} from "node:child_process";
 import {Dispose} from "../../../common/container/dispose";
-import {IWindowsManager} from "../../windows/base";
+import {IScreenManager, IWindowsManager} from "../../electron/service";
 import {WindowNames} from "../../common/defines";
 import {isTest} from "../../../common/common";
 import {Process} from "../../common/process";
@@ -43,6 +41,8 @@ export class ScreenRecorder extends Dispose implements IRecordService{
     protected readonly fileService: IFileService
     @inject(IWindowsManager)
     protected readonly windowsManager: IWindowsManager
+    @inject(IScreenManager)
+    protected readonly screenManager: IScreenManager
 
     protected saveDir: string
 
@@ -101,7 +101,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
     async getMacScreens(refresh: boolean=false){
         if (!this.currentScreen || refresh) {
             // @ts-ignore
-            const screenIndex: number = isTest() ? 0 : getFoucScreen(true)
+            const screenIndex: number = isTest() ? 0 : this.screenManager.getCurrentScreenIndex(true)
 
             const out = (await (new Process([
                 isTest() ? ffmpeg : ffmpegPath,
@@ -150,7 +150,11 @@ export class ScreenRecorder extends Dispose implements IRecordService{
 
     async startRecord(area: CaptureArea, savePath?: string,){
         await this.initWait
-        const cropArea = getCropAreaStr(area)
+
+        // 暂时不知怎么接受多显示器变化的通知, 所以多显示器下, 每次都刷新, 避免录制位置错误
+        this.screenManager.mulDisplay && await this.getMacScreens(true)
+
+        const cropArea = this.screenManager.getCropAreaStr(area)
         console.log(`>> Starting record...  area: ${cropArea}`)
 
         let newSavePath: string = savePath
@@ -243,7 +247,10 @@ export class ScreenRecorder extends Dispose implements IRecordService{
     async recordBgImage(area: CaptureArea, savePath?: string, relative?: boolean): Promise<Buffer | undefined>{
         await this.initWait
 
-        const cropArea = getCropAreaStr(area)
+        // 暂时不知怎么接受多显示器变化的通知, 所以多显示器下, 每次都刷新, 避免录制位置错误
+        this.screenManager.mulDisplay && await this.getMacScreens(true)
+
+        const cropArea = this.screenManager.getCropAreaStr(area)
         console.log(`>> Starting recordBgImage...  area: ${cropArea}`)
 
         let newSavePath: string = savePath
