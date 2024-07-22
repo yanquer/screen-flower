@@ -11,4 +11,8 @@ export namespace WindowsUtils {
             win.setIgnoreMouseEvents(false,)
     }
 
+    export const onScreenChange = () => {
+
+    }
+
 }

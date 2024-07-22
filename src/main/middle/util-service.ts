@@ -2,7 +2,7 @@ import {IUtilService} from "../../common/service";
 import {inject, injectable} from "inversify";
 import {IWindowsManager} from "../windows/base";
 import {WindowNames} from "../common/defines";
-import {getCurrentScreenPoint} from "../common/electron/display";
+import {getFoucScreenPoint} from "../common/electron/display";
 
 
 @injectable()
@@ -19,7 +19,7 @@ export class UtilService implements IUtilService{
     }
 
     async getCursorScreenPoint(): Promise<{ x: number; y: number }> {
-        return getCurrentScreenPoint();
+        return getFoucScreenPoint();
     }
 
 }

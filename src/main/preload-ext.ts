@@ -6,6 +6,12 @@ const handler = {
   recordService: (...args: []) => ipcRenderer.invoke(HandlerStr.serviceRecordService, ...args),
   utilService: (...args: []) => ipcRenderer.invoke(HandlerStr.utilService, ...args),
 
+  // main => render
+  onHandleWindowHide: (callback: (...args: []) => any) => {
+    ipcRenderer.on(HandlerStr.onWindowHide, (_event: IpcRendererEvent, ..._args: []) => {
+      callback(..._args)
+    })
+  },
 }
 
 contextBridge.exposeInMainWorld('ipcInvoke', handler)

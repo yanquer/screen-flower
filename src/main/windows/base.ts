@@ -3,6 +3,8 @@ import {createWindow} from "../helpers";
 import {getHostUrl, WindowNames} from "../common/defines";
 import {injectable, postConstruct} from "inversify";
 import {WindowsUtils} from "./windows-utils";
+import {Emitter, Event} from "../../common/event";
+import {HandlerStr} from "../../common/defines";
 
 
 export const IBaseWindow = Symbol("IBaseWindow");
@@ -11,6 +13,8 @@ export interface IBaseWindow {
     url: string
     options?: BrowserWindowConstructorOptions
     win?: BrowserWindow;
+
+    windowHideEmitterEvent: Event<WindowNames>
 
     open(): Promise<void>;
     initWindow(): BrowserWindow
@@ -39,6 +43,9 @@ export class BaseSFWindow implements IBaseWindow{
     preLoad: boolean
     // 是否是第一次show窗口, 支持close后
     firstInit: boolean = true;
+
+    protected windowHideEmitter = new Emitter<WindowNames>()
+    windowHideEmitterEvent = this.windowHideEmitter.event
 
     @postConstruct()
     protected init () {
@@ -86,6 +93,7 @@ export class BaseSFWindow implements IBaseWindow{
         console.log('>>> close window')
         this.win?.close()
         this.win = undefined
+        this.win?.webContents.send(HandlerStr.onWindowHide)
     }
 
     show() {
@@ -94,7 +102,9 @@ export class BaseSFWindow implements IBaseWindow{
 
     hide() {
         console.log('>>> hide window')
+        this.windowHideEmitter.fire(this.id)
         this.win?.hide()
+        this.win?.webContents.send(HandlerStr.onWindowHide)
     }
 
     async setAllowPenetrate(allow: boolean): Promise<void> {

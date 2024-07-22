@@ -2,15 +2,11 @@
 
 import {BaseSFWindow} from "./base";
 import {WindowNames} from "../common/defines";
-import {inject, injectable, postConstruct} from "inversify";
-import {Input, Event, screen, Display, BrowserWindowConstructorOptions, app, ipcMain} from "electron";
+import {injectable, postConstruct} from "inversify";
+import {Input, Event, Display, BrowserWindowConstructorOptions, app, ipcMain} from "electron";
 import {
-    getCurrentScreenArea,
-    getCurrentScreenPoint,
     getCurrentScreenSize,
-    moveToFoucScreen
 } from "../common/electron/display";
-import {setNoMenuDock} from "../common/electron/menu";
 import path from "path";
 import {IRecordService} from "../../common/service";
 import {getServiceBySymbol} from "../../common/container/inject-container";

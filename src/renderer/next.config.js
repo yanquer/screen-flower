@@ -23,9 +23,6 @@ module.exports = {
     // 解决默认的加载器不识别 const bindToDefaultContainer = <T>(arg: T){} 这种泛型语法
     config.module.rules.push({ test: /\.([cm]?ts|tsx)$/, loader: "ts-loader" })
 
-    // required to make Konva & react-konva work
-    config.externals = [...config.externals, { canvas: 'canvas' }];
-
     return config
   },
   sassOptions: {

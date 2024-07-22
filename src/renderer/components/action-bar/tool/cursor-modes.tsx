@@ -107,7 +107,7 @@ const CursorModes = () => {
     useEffect(() => {
         setLastMousePosition({ ...size });
         updateCursorPosition();
-    }, [size]);
+    }, [size?.x, size?.y]);
 
   return (
     <div

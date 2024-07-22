@@ -51,6 +51,13 @@ function MyApp({ Component, pageProps }: AppProps) {
     console.log(body.className)
   }
 
+  // 后端窗口关闭时, 关闭录制
+  useEffect(() => {
+    window.ipcInvoke.onHandleWindowHide(() => {
+      setRecording(false)
+    })
+  }, []);
+
   useEffect(() => {
     // 有鼠标穿透就, 没用...
     // switchBodyPointer(recording)
@@ -86,6 +93,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     //
     // return () => document.removeEventListener('mouseup', () =>  setAllowPenetrate(false))
   }, []);
+
+  console.log('re run')
 
   return (
       <RecordContext.Provider value={{

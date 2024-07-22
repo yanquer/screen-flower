@@ -1,6 +1,6 @@
 import {ReadStream} from "fs";
 
-type FluentFfmpegEventName = 'end' | 'error' | 'start'
+type FluentFfmpegEventName = 'end' | 'error' | 'start' | 'stdout' | 'stderr'
 type CmdSignal =
     // 挂起线程, 可用作暂停
     'SIGSTOP' |

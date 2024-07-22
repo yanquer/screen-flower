@@ -32,7 +32,6 @@ interface ActionToolBarState {
     x: number,
     y: number,
     pause: boolean,
-    stop: boolean
 }
 
 export class ActionToolBar extends Component<any, ActionToolBarState>{
@@ -44,7 +43,6 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
         x: 200,
         y: 500,
         pause: false,
-        stop: true,
     }
 
     protected readonly recordService: IRecordService = getServiceBySymbol<IRecordService>(IRecordService)
@@ -103,8 +101,7 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
     // }
 
     render() {
-        const {stop} = this.state
-        const {setAllowPenetrate, setIsInActionBar, barMode} = this.context
+        const {setAllowPenetrate, setIsInActionBar, barMode, recording, setRecording} = this.context
 
         return (
             <div className={"bg-white pointer-events-auto"}
@@ -170,10 +167,10 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                     className={'bg-gray-100 p-1 rounded-full'}
                                     direction={"row"} gap={"8px"}>
 
-                                    {stop ? (
+                                    {!recording ? (
                                         <div>
                                             <ToolTipButtonWrap
-                                                key={`${stop}`}
+                                                key={`${recording}`}
                                                 title={"开始录制"}
                                                 buttonClassName={`${toolbarButton}`}
                                                 buttonClickHandler={() => {
@@ -182,8 +179,7 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                                     console.log(`>>> use area: ${capArea}`)
                                                     console.log(capArea)
                                                     this.recordService.startRecord(capArea).then()
-                                                    this.setState({stop: false})
-                                                    this.context.setRecording(true)
+                                                    setRecording(true)
                                                 }}
                                             >
                                                 <PlayIcon width="20" height="20"/>
@@ -192,14 +188,13 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                     ) : (
                                         <div>
                                             <ToolTipButtonWrap
-                                                key={`${stop}`}
+                                                key={`${recording}`}
                                                 title={"结束录制"}
                                                 buttonClassName={`${toolbarButton}`}
                                                 buttonClickHandler={() => {
                                                     // this.captureRef.current.stopCapture()
                                                     this.recordService.stopRecord().then()
-                                                    this.setState({stop: true})
-                                                    this.context.setRecording(false)
+                                                    setRecording(false)
                                                 }}
                                             >
                                                 <StopIcon width="20" height="20"/>
@@ -264,8 +259,7 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                             buttonClickHandler={() => {
                                                 // this.captureRef.current.cancelCapture()
                                                 this.recordService.cancelRecord().then()
-                                                this.context.setRecording(false)
-                                                this.setState({stop: true})
+                                                setRecording(false)
                                             }}
                                             key={`${this.context.recording}`}
                                             buttonDisable={!this.context.recording}

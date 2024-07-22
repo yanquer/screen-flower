@@ -79,7 +79,7 @@ export class CaptureWin extends Component<any, CaptureWinState>{
     render() {
         const {capArea, setCapArea, recording} = this.context
 
-        // console.log("re render")
+        console.log("re render win")
         // console.log(capArea)
         return (
             <div className={"overflow-hidden"}>

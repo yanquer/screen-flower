@@ -1,34 +1,52 @@
 import ffmpeg from 'ffmpeg-static';
-import {fixPathForAsarUnpack} from 'electron-util';
 import {IFileService, IRecordService} from "../../../common/service";
 import {inject, injectable, postConstruct} from "inversify";
 import {FluentFfmpegApi} from './fluent-ffmpeg/api'
 
-const ffmpegPath = fixPathForAsarUnpack(ffmpeg);
-
 import FfmpegCommand from 'fluent-ffmpeg';
 import {CaptureArea} from "../../../common/models";
-import {getCropAreaStr} from "../../common/electron/display";
+import {getCropAreaStr, getFoucScreen} from "../../common/electron/display";
 import {Emitter, Event} from "../../../common/event";
 import {join} from "path";
 import {getHomeDir} from "../../common/dynamic-defines";
 import {getRandomStr} from "../../../renderer/common/common";
 import {spawn} from "node:child_process";
 import {Dispose} from "../../../common/container/dispose";
+import {IWindowsManager} from "../../windows/base";
+import {WindowNames} from "../../common/defines";
+import {isTest} from "../../../common/common";
+import {Process} from "../../common/process";
+import ffmpegPath from "ffmpeg-static";
 
-FfmpegCommand.setFfmpegPath(ffmpegPath)
+// import {fixPathForAsarUnpack} from 'electron-util'
+// const {fixPathForAsarUnpack} = require('electron-util');
+// const ffmpegPath = fixPathForAsarUnpack(ffmpeg);
+// FfmpegCommand.setFfmpegPath(ffmpegPath)
+
+if (!isTest()){
+    const util = require('electron-util');
+    const ffmpegPath = util.fixPathForAsarUnpack(ffmpeg);
+    FfmpegCommand.setFfmpegPath(ffmpegPath)
+} else (
+    FfmpegCommand.setFfmpegPath(ffmpeg)
+)
+
 
 @injectable()
 export class ScreenRecorder extends Dispose implements IRecordService{
 
-    protected currentCmd: FluentFfmpegApi
+    protected currentCmd?: FluentFfmpegApi
     protected recordingRunEmitter = new Emitter<boolean>()
     recordingRunEmitterEvent: Event<boolean> = this.recordingRunEmitter.event
 
     @inject(IFileService)
     protected readonly fileService: IFileService
+    @inject(IWindowsManager)
+    protected readonly windowsManager: IWindowsManager
 
     protected saveDir: string
+
+    protected initWait: Promise<any>
 
     @postConstruct()
     protected init(){
@@ -38,6 +56,20 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         })
 
         this.addServiceToCleanUp(this)
+
+        const capWin = this.windowsManager.getWinById(WindowNames.CaptureWin)
+        if (capWin){
+            capWin.windowHideEmitterEvent(
+                (winName: WindowNames) => {
+                    if (winName === WindowNames.CaptureWin){
+                        console.log('>>> close cap win')
+                        this.stopRecord().then()
+                    }
+                }
+            )
+        }
+
+        this.initWait = this.getMacScreens(true)
     }
 
     protected ffmpegCommand = (input?: any, record: boolean = true): FluentFfmpegApi => {
@@ -65,8 +97,59 @@ export class ScreenRecorder extends Dispose implements IRecordService{
             .run()
     }
 
-    async startRecord(area: CaptureArea, savePath?: string,){
+    currentScreen : string
+    async getMacScreens(refresh: boolean=false){
+        if (!this.currentScreen || refresh) {
+            // @ts-ignore
+            const screenIndex: number = isTest() ? 0 : getFoucScreen(true)
 
+            const out = (await (new Process([
+                isTest() ? ffmpeg : ffmpegPath,
+                `-f`, ScreenRecorder.MacScreenSource,
+                '-list_devices', 'true',
+                '-i', '""',
+            ])).run()).stderr
+
+            for (const one of out){
+                const screenRegex = /\[AVFoundation indev @ [0-9a-z]*] \[([0-9]+)] Capture screen [0-9]+/g
+                const screenIndexRegex = /\[AVFoundation indev @ [0-9a-z]*] \[([0-9]+)] Capture screen [0-9]+/
+                if (!one) continue
+                const matches = one.match(screenRegex)
+                if (matches){
+                    // console.log(`>>> match ${matches[1]}`)
+                    console.log(matches)
+                    this.currentScreen = (matches[screenIndex] ?? matches[0]).match(screenIndexRegex)[1]
+                    console.log(`>>> match index ${this.currentScreen}`)
+                }
+            }
+
+            // console.log(out)
+
+            // let waitResolve: any
+            // const wait = new Promise(resolve => waitResolve=resolve)
+
+            // const cmd = this.ffmpegCommand("", false)
+            //     .inputFormat(ScreenRecorder.MacScreenSource)
+            //     .inputOptions([
+            //         // `-f ${ScreenRecorder.MacScreenSource}`,
+            //         '-list_devices true',
+            //         '-i ""'
+            //     ])
+            //     .output('1.txt')
+            //     .on('stdout', function (line) {
+            //         console.log(`ffmpegCommand stdout start`);
+            //         console.log(`${line}`);
+            //         console.log(`ffmpegCommand stdout end`);
+            //         waitResolve()
+            //     })
+            //     .on('end', () => waitResolve())
+            // this.cmdCommonDo(cmd, 'getMacScreens')
+            // await wait
+        }
+    }
+
+    async startRecord(area: CaptureArea, savePath?: string,){
+        await this.initWait
         const cropArea = getCropAreaStr(area)
         console.log(`>> Starting record...  area: ${cropArea}`)
 
@@ -79,8 +162,8 @@ export class ScreenRecorder extends Dispose implements IRecordService{
 
         // this.ffmpegCommand
         // this.ffmpegCommand({source: "1"})
-        const cmd = this.ffmpegCommand("2")
-            .inputFormat('avfoundation')
+        const cmd = this.ffmpegCommand(this.currentScreen)
+            .inputFormat(ScreenRecorder.MacScreenSource)
             // .native()
             .noAudio()
             .videoFilter(`crop=${cropArea}`)
@@ -90,14 +173,15 @@ export class ScreenRecorder extends Dispose implements IRecordService{
 
         this.cmdCommonDo(cmd, "startRecord")
 
-        // todo: 后续考虑只给前端触发
+        // todo: 后续考虑只给前端触发?
+        //      这里, 可能前端在工具栏点击后, 还没有离开工具栏
         // this.recordingRunEmitter.fire(true)
     }
 
     async stopRecord(){
         console.log('>> Stop record... ')
 
-        this.currentCmd.kill('SIGTERM')
+        this.currentCmd?.kill('SIGTERM')
         // this.currentCmd.ffmpegProc.stdin.write('q')
 
         this.recordingRunEmitter.fire(false)
@@ -106,7 +190,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
 
     async pauseRecord(): Promise<void> {
         console.log('>> Pause record... ')
-        this.currentCmd.kill('SIGSTOP')
+        this.currentCmd?.kill('SIGSTOP')
     }
 
     restartRecord(): Promise<void> {
@@ -115,7 +199,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
 
     async resumeRecord(): Promise<void> {
         console.log('>> Resume record... ')
-        this.currentCmd.kill('SIGCONT')
+        this.currentCmd?.kill('SIGCONT')
     }
 
     cancelRecord(): Promise<void> {
@@ -157,6 +241,8 @@ export class ScreenRecorder extends Dispose implements IRecordService{
     }
 
     async recordBgImage(area: CaptureArea, savePath?: string, relative?: boolean): Promise<Buffer | undefined>{
+        await this.initWait
+
         const cropArea = getCropAreaStr(area)
         console.log(`>> Starting recordBgImage...  area: ${cropArea}`)
 
@@ -175,8 +261,8 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         const wait = new Promise(resolve => waitResolve = resolve);
 
         // ffmpeg -f avfoundation -i "2" -vframes 1 -s 1920x1080 screenshot.png
-        this.ffmpegCommand("2", false)
-            .inputFormat('avfoundation')
+        this.ffmpegCommand(this.currentScreen, false)
+            .inputFormat(ScreenRecorder.MacScreenSource)
             .outputOptions([
                 // `-vf "crop=${cropArea}"`,
                 '-vframes 1',
@@ -232,4 +318,8 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         return buffer
     }
 
+}
+
+export namespace ScreenRecorder {
+    export const MacScreenSource = 'avfoundation'
 }
