@@ -34,8 +34,8 @@ const promptSystemPreferences = (options: {message: string; detail: string; syst
 // export const openSystemPreferences = async (path: string) => shell.openExternal(`x-apple.systempreferences:com.apple.preference.security?${path}`);
 
 const screenCaptureFallback = promptSystemPreferences({
-    message: 'screen-flower cannot record the screen.',
-    detail: 'screen-flower requires screen capture access to be able to record the screen. You can grant this in the System Preferences. Afterwards, launch Kap for the changes to take effect.',
+    message: 'screen-flower 无法录屏.',
+    detail: 'screen-flower 需要获取 屏幕录制权限 来录屏. 您可以在系统偏好设置中授予此功能后, 重新启动应用程序以使更改生效.',
     systemPreferencesPath: 'Privacy_ScreenCapture'
 });
 
