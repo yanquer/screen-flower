@@ -8,6 +8,9 @@
   "scripts": {
     "dev": "nextron",
     "build": "export CSC_IDENTITY_AUTO_DISCOVERY=false && nextron build",
+    "build:main": "tsc -p tsconfig.main.json",
+    "build:next": "next build src/renderer",
+    "build:electron": "export CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --config electron-builder.yml",
     "build:prod": "nextron build --config electron-builder.prod.yml",
     "build:mac": "export CSC_IDENTITY_AUTO_DISCOVERY=false ; nextron build --mac --x64",
     "build:mac:universal": "nextron build --mac --universal",

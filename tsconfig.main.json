@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["next-env.d.ts", "src/main/**/*.ts", "src/main/**/*.tsx"],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "app"
+  }
+}
