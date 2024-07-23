@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "nextron",
     "build": "export CSC_IDENTITY_AUTO_DISCOVERY=false && nextron build",
+    "build:webpack": "tsc -p tsconfig.webpack.json",
     "build:main": "tsc -p tsconfig.main.json",
     "build:next": "next build src/renderer",
     "build:electron": "export CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --config electron-builder.yml",
