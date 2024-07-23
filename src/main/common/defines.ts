@@ -4,7 +4,7 @@ export enum WindowNames {
 
 }
 
-const isProd = process.env.NODE_ENV === 'production'
+export const isProd = process.env.NODE_ENV === 'production'
 export const getHostUrl = (url: string) => {
     if (isProd) {
         return 'app://./home'

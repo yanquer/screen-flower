@@ -9,12 +9,33 @@ files:
     filter:
       - package.json
       - app
+  # 排除 .vscode 目录下的所有文件
+  - '!**/.vscode/*'
+  # 排除 src 目录下的所有文件
+  - '!src/*'
+  # 排除配置文件
+  - '!electron.vite.config.{js,ts,mjs,cjs}'
+  - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
+  # 排除环境变量文件和 npm 配置文件
+  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+
 publish: null
 
-afterSign: "electron-builder-notarize"
+extraResources:
+#  - resources
+  - from: resources
+    to: resources
+
+## 指定从asar归档中解压的文件或文件夹
+#asarUnpack:
+#  # 解压 resources 目录下的所有内容
+#  - resources/**
+
+# 不需要签名公证
+#afterSign: "electron-builder-notarize"
 dmg: {
-  icon: 'resources/icon_512x512.png',
-  background: 'resources/icon_512x512.png',
+  icon: 'resources/icons/screen-flower.icns',
+  background: 'resources/icons/bg.jpg',
   contents: [
     { # 这个是右边图标及内容
       x: 410,
@@ -36,11 +57,17 @@ dmg: {
 
 mac: {
   # 应用程序图标
-  icon: 'resources/icon_512x512.png',
+  icon: 'resources/icons/screen-flower.icns',
   # 应用程序包名
   artifactName: '${productName}-${platform}-${arch}-${version}.${ext}',
   target: [ # 要打的包的格式类型设置
             'dmg',
             'zip' # 这里注意更新的时候，mac只认zip格式的包
   ],
+  # 是否进行苹果官方的签名
+  notarize: false,
 }
+
+
+
+
