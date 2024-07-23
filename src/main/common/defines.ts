@@ -1,3 +1,4 @@
+import {Logger} from "./logger";
 
 export enum WindowNames {
     CaptureWin = 'capture-window'
@@ -6,13 +7,16 @@ export enum WindowNames {
 
 export const isProd = process.env.NODE_ENV === 'production'
 export const getHostUrl = (url: string) => {
+    let ret: string
     if (isProd) {
-        return 'app://./home'
+        ret = `app://./${url}`
     } else {
         const port = process.argv[2]
-        return `http://localhost:${port}/${url}`
+        ret = `http://localhost:${port}/${url}`
         // mainWindow.webContents.openDevTools()
     }
+    Logger.info('>> getHostUrl: ', ret)
+    return ret
 }
 
 

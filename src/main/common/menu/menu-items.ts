@@ -14,7 +14,7 @@ export const getAboutMenuItem = () => ({
 
 export const forceQuit = () => ({
     id: MenuNames.forceQuit,
-    label: `强制退出 ${app.name}`,
+    label: `强制退出`,
     click: () => {
         app.quit()
     }

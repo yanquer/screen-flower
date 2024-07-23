@@ -21,6 +21,8 @@ files:
 
 publish: null
 
+#asar: false
+
 extraResources:
 #  - resources
   - from: resources

@@ -6,10 +6,11 @@ import {dirname, join} from "path";
 import {ensureScreenCapturePermissions} from "./common/permissions";
 import {bindMiddle} from "./middle";
 import {bindBackend} from "./backend";
-import {app} from "electron";
+import {app, ipcMain} from "electron";
 import {getNeedCleanDispose, IDispose} from "../common/container/dispose";
 import {bindElectron} from "./electron";
 import {isProd} from "./common/defines";
+import {Logger} from "./common/logger";
 
 const cleanUp = () => {
     const needClean = getNeedCleanDispose()
@@ -21,24 +22,47 @@ const cleanUp = () => {
 export const initAll = () => {
     bindElectron()
 
-    // console.log(">> ", __dirname)
+    // Logger.info(">> ", __dirname)
     // const img = join(__dirname, "../resources/1.jpg")
     // const img = join(__dirname, "../resources/icon_16x16.png")
 
+    const curExecPath = dirname(app.getPath('exe'))
+    Logger.info(">> exec root:", curExecPath)
+
     // 只支持png和jpeg
     const img = isProd ?
-        join(dirname(app.getPath('exe')), 'resources/icons/icon_16x16.png') :
+        join(curExecPath, '../Resources/resources/icons/icon_16x16.png') :
         join(__dirname, "../resources/icons/icon_16x16.png")
-    console.log(">> ", img)
-    console.log(">> ", isProd)
+    Logger.info(">> use menu image:", img)
+    Logger.info(">> is dev:", !isProd)
     initializeMenu(img)
 
     bindBackend()
     bindMiddle()
 
+    process.on('uncaughtException', (err) => {
+        Logger.error('>>> Uncaught Exception in Main Process:', err);
+    });
+
+    process.on('unhandledRejection', (reason, p) => {
+        // 处理rejection
+        Logger.error('>>> unhandledRejection in Main Process:', reason, p);
+
+    });
+
     app.on('quit', () => {
+        Logger.info('>> app quit...', );
         cleanUp()
     })
+
+    app.on('render-process-gone', (event, webContents, details) => {
+        Logger.error('>> Render process crashed:', details);
+    });
+
+    ipcMain.on('app-route-ready', () => {
+        Logger.info('App route loaded successfully');
+    })
+
 }
 
 export const getPermission = () => {

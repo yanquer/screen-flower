@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {IRecordContext, RecordContext} from "../../../common/global-context";
 import {MovieStream} from "../../../common/movie-stream";
+import {Logger} from "../../../common/logger";
 
 interface ScreenCaptureProps {
     onStart?: (stream: MediaStream) => void;
@@ -75,7 +76,7 @@ export class ScreenCaptureBrowser extends Component<ScreenCaptureProps, ScreenCa
                 // })
 
                 // if (areaElement){
-                //     console.log(">> 区域录制")
+                //     Logger.info(">> 区域录制")
                 //
                 //     // 不行, 只有当 canvas 有绘制行为的时候 才可以录制, 而且没发当作正常的录屏使用
                 //
@@ -90,7 +91,7 @@ export class ScreenCaptureBrowser extends Component<ScreenCaptureProps, ScreenCa
                 //     )
                 // } else {
                 //     // 全屏录制
-                //     console.log(">> 全屏录制")
+                //     Logger.info(">> 全屏录制")
                 //     stream = await navigator.mediaDevices.getDisplayMedia({
                 //         video: useVideo,
                 //         audio: useAudio,
@@ -127,7 +128,7 @@ export class ScreenCaptureBrowser extends Component<ScreenCaptureProps, ScreenCa
 
                 mediaRecorder.onstop = () => {
                     if (!this.stateSync.recordedChunks || this.stateSync.recordedChunks.length === 0){
-                        console.log('>> 没有获取到blob...')
+                        Logger.info('>> 没有获取到blob...')
                         return
                     }
                     const blob = new Blob(this.stateSync.recordedChunks, {type: mimeType});
@@ -145,7 +146,7 @@ export class ScreenCaptureBrowser extends Component<ScreenCaptureProps, ScreenCa
         } catch (err) {
             this.stateSync.liveStream = null
             this.stateSync.mediaRecorder = null
-            console.error('>>> Error capturing screen initMediaRecorder:', err);
+            Logger.error('>>> Error capturing screen initMediaRecorder:', err);
         }
     }
 
@@ -164,7 +165,7 @@ export class ScreenCaptureBrowser extends Component<ScreenCaptureProps, ScreenCa
     protected async saveToLocal(blob: Blob){
         const buffer = Buffer.from( await blob.arrayBuffer() );
 
-        // fs.writeFile('video.webm', buffer, () => console.log('video saved!') );
+        // fs.writeFile('video.webm', buffer, () => Logger.info('video saved!') );
     }
 
     componentDidMount() {
@@ -183,7 +184,7 @@ export class ScreenCaptureBrowser extends Component<ScreenCaptureProps, ScreenCa
 
     // 开始
     startCapture = async () => {
-        console.log(">> 开始录制")
+        Logger.info(">> 开始录制")
         await this.initMediaRecorder()
         this.stateSync.mediaRecorder.start()
         this.setRecording(true)
@@ -191,7 +192,7 @@ export class ScreenCaptureBrowser extends Component<ScreenCaptureProps, ScreenCa
 
     // 停止, 完全结束, 不可恢复
     stopCapture = () => {
-        console.log(">> 停止录制")
+        Logger.info(">> 停止录制")
         if (this.stateSync.mediaRecorder) {
             this.stateSync.mediaRecorder.stop();
             this.setRecording(false)
@@ -205,7 +206,7 @@ export class ScreenCaptureBrowser extends Component<ScreenCaptureProps, ScreenCa
 
     // 暂停, 可以恢复
     pauseCapture = () => {
-        console.log(">> 暂停录制")
+        Logger.info(">> 暂停录制")
         if (this.stateSync.mediaRecorder) {
             this.stateSync.mediaRecorder.pause();
         }
@@ -213,7 +214,7 @@ export class ScreenCaptureBrowser extends Component<ScreenCaptureProps, ScreenCa
 
     // 继续
     resumeCapture = () => {
-        console.log(">> 继续录制")
+        Logger.info(">> 继续录制")
         if (this.stateSync.mediaRecorder){
             this.stateSync.mediaRecorder.resume()
         }
@@ -221,13 +222,13 @@ export class ScreenCaptureBrowser extends Component<ScreenCaptureProps, ScreenCa
 
     // 重新开始录制, 仅清理chunk即可
     redoCapture = () => {
-        console.log(">> 重新录制")
+        Logger.info(">> 重新录制")
         this.stateSync.recordedChunks = []
     }
 
     // 取消录制
     cancelCapture = () => {
-        console.log(">> 取消录制")
+        Logger.info(">> 取消录制")
         this.stateSync.cancel = true
         this.pauseCapture()
         this.stateSync.recordedChunks = []

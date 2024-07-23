@@ -25,6 +25,7 @@ import {BlurToolbar} from "./layout/blur-toolbar";
 import {getServiceBySymbol} from "../../../common/container/inject-container";
 import {IRecordService} from "../../../common/service";
 import {toNumber} from "lodash";
+import {Logger} from "../../common/logger";
 
 
 interface ActionToolBarState {
@@ -106,12 +107,12 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
         return (
             <div className={"bg-white pointer-events-auto"}
                  onMouseEnter={() => {
-                     console.log('onMouseEnter --')
+                     Logger.info('onMouseEnter --')
                      setAllowPenetrate(false)
                      setIsInActionBar(true)
                  }}
                  onMouseLeave={() => {
-                     console.log('onMouseLeave --')
+                     Logger.info('onMouseLeave --')
                      setAllowPenetrate(true)
                      setIsInActionBar(false)
                  }}
@@ -120,10 +121,10 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                 // 兼容工具栏收起时,
                 // onMouseUp={(e) => {
                 //     // 加个延时, barMode要稍后才变化
-                //     console.log('onMouseUp --')
+                //     Logger.info('onMouseUp --')
                 //
                 //     const boxTop = this.boxRef.current?.getBoundingClientRect().y
-                //     console.log(`>> ${boxTop}, ${e.clientY}, ${barMode}`)
+                //     Logger.info(`>> ${boxTop}, ${e.clientY}, ${barMode}`)
                 //     // 关闭bar工具栏组后, 才检查
                 //     // todo: barMode 不是预期的值, 暂时使用相反的判断
                 //     //      待想想怎么判断, 点击后, 但是
@@ -176,8 +177,8 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                                 buttonClickHandler={() => {
                                                     // this.captureRef.current.startCapture().then()
                                                     const {capArea, setCapArea} = this.context
-                                                    console.log(`>>> use area: ${capArea}`)
-                                                    console.log(capArea)
+                                                    Logger.info(`>>> use area: ${capArea}`)
+                                                    Logger.info(capArea)
                                                     this.recordService.startRecord(capArea).then()
                                                     setRecording(true)
                                                 }}

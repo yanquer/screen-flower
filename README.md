@@ -21,5 +21,10 @@
 - 录制后预览/保存
 - 通过桌面图标可以打开设置界面
 
+日志
+========
 
+默认位置::
+
+  ~/Library/Logs/screen-flower/main.log
 

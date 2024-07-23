@@ -3,12 +3,13 @@
 // const {execa} = require('execa');
 
 import {spawn} from "node:child_process";
+import {Logger} from "./logger";
 
 export class Process {
 
     constructor(protected cmd: string[]) {
-        // console.info(`>> will exec ${this.cmd}`);
-        // console.info(this.cmd);
+        // Logger.info(`>> will exec ${this.cmd}`);
+        // Logger.info(this.cmd);
 
         this.stderr = []
         this.stdout = []
@@ -19,36 +20,45 @@ export class Process {
     retCode: number
     async run(sync: boolean = true): Promise<Process>{
 
-        let waitResolve: any
-        const _wait = new Promise(resolve => waitResolve = resolve)
+        try {
 
-        // spawn
-        const [_exec, ...args] = this.cmd
-        console.log("====run cmd====")
-        console.log(_exec)
-        console.log(args)
-        console.log("====run cmd====")
-        const pro = spawn(_exec, args)
+            let waitResolve: any
+            const _wait = new Promise(resolve => waitResolve = resolve)
 
-        pro.on('exit', (code) => {
-            console.log(`>> exit code: ${code}`)
-            this.retCode = code
-            waitResolve(code)
-        })
-        pro.stdout.on('data', (data: Buffer) => {
-            // console.log('>> stdout: ')
-            // console.log(data.toString())
-            this.stdout.push(data.toString())
-        })
-        pro.stderr.on('data', (data: Buffer) => {
-            // console.error('>> stderr: ')
-            // console.error(data.toString())
-            this.stderr.push(data.toString())
-        })
+            // spawn
+            const [_exec, ...args] = this.cmd
+            Logger.info("====run cmd====")
+            Logger.info(_exec)
+            Logger.info(args)
+            Logger.info("====run cmd====")
+            const pro = spawn(_exec, args)
 
-        if (!sync) waitResolve()
+            pro.on('exit', (code) => {
+                Logger.info(`>> exit code: ${code}`)
+                this.retCode = code
+                waitResolve(code)
+            })
+            pro.stdout.on('data', (data: Buffer) => {
+                Logger.info('>> stdout: ')
+                Logger.info(data.toString())
+                this.stdout.push(data.toString())
+            })
+            pro.stderr.on('data', (data: Buffer) => {
+                Logger.error('>> stderr: ')
+                Logger.error(data.toString())
+                this.stderr.push(data.toString())
+            })
 
-        await _wait
+            if (!sync) waitResolve()
+
+            Logger.info(`>> wait cmd end`)
+
+            await _wait
+
+            Logger.info(`>> cmd run end`)
+        } catch (e) {
+            Logger.error(`>> cm run error: ${e}`)
+        }
 
         // execa
 

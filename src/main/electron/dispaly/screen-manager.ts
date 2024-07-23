@@ -4,6 +4,7 @@ import {injectable, postConstruct} from "inversify";
 import {Display, screen} from "electron";
 import {CaptureArea, CursorPosition, ScreenArea} from "../../../common/models";
 import {toNumber} from "lodash";
+import {Logger} from "../../common/logger";
 
 
 @injectable()
@@ -107,7 +108,7 @@ export class ScreenManager implements IScreenManager{
             this.needRefreshInfo()
         })
         screen.on('display-metrics-changed', (event, display, changedMetrics) => {
-            console.log('>> display metrics changed', changedMetrics)
+            Logger.info('>> display metrics changed', changedMetrics)
         })
     }
 
@@ -141,7 +142,7 @@ export class ScreenManager implements IScreenManager{
             this._PPI = Math.sqrt(size.width * size.width + size.height * size.height) /
                 Math.sqrt(physicalWidth * physicalWidth + physicalHeight * physicalHeight);
 
-            console.log(`>>> ${size.width} -- ${size.height} -- ${physicalWidth} -- ${physicalHeight}`)
+            Logger.info(`>>> ${size.width} -- ${size.height} -- ${physicalWidth} -- ${physicalHeight}`)
         }
         return this._PPI
     }
@@ -149,9 +150,9 @@ export class ScreenManager implements IScreenManager{
     // 获取 ffmpeg 使用区域
     //  需要将前端传过来的CSS像素, 转换为物理像素
     getCropAreaStr(area: CaptureArea): string{
-        console.log('>>> prep convert size...')
+        Logger.info('>>> prep convert size...')
         const curPpi = this.getPpi()
-        console.log(area, curPpi)
+        Logger.info(area, curPpi)
         const width = toNumber(`${area.width}`.replace('px', ''))
         const height = toNumber(`${area.height}`.replace('px', ''))
         // 剪去边框

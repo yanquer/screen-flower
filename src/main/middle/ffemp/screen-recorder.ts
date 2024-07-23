@@ -11,23 +11,36 @@ import {getHomeDir} from "../../common/dynamic-defines";
 import {getRandomStr} from "../../../renderer/common/common";
 import {Dispose} from "../../../common/container/dispose";
 import {IScreenManager, IWindowsManager} from "../../electron/service";
-import {WindowNames} from "../../common/defines";
+import {isProd, WindowNames} from "../../common/defines";
 import {isTest} from "../../../common/common";
 import {Process} from "../../common/process";
 import ffmpegPath from "ffmpeg-static";
+import {Logger} from "../../common/logger";
+import util from "electron-util";
 
 // import {fixPathForAsarUnpack} from 'electron-util'
 // const {fixPathForAsarUnpack} = require('electron-util');
 // const ffmpegPath = fixPathForAsarUnpack(ffmpeg);
 // FfmpegCommand.setFfmpegPath(ffmpegPath)
 
-if (!isTest()){
-    const util = require('electron-util');
-    const ffmpegPath = util.fixPathForAsarUnpack(ffmpeg);
-    FfmpegCommand.setFfmpegPath(ffmpegPath)
-} else (
-    FfmpegCommand.setFfmpegPath(ffmpeg)
-)
+Logger.info(`>> origin ffmpeg path: ${ffmpeg}`)
+
+const truthFfmpegPath = isProd ?
+    ffmpeg.replace('app.asar', 'app.asar.unpacked') :
+    // ffmpeg:
+    ffmpeg;
+
+Logger.info(`>> truth ffmpeg path: ${truthFfmpegPath}`)
+
+// fixPathForAsarUnpack 不知道为什么无效... 暂时注释
+// if (!isTest()) {
+//     const util = require('electron-util');
+//     const ffmpegPath = util.fixPathForAsarUnpack(truthFfmpegPath);
+//     Logger.info(`>> production ffmpeg path: ${ffmpegPath}`)
+//     FfmpegCommand.setFfmpegPath(ffmpegPath)
+// } else (
+//     FfmpegCommand.setFfmpegPath(truthFfmpegPath)
+// )
 
 
 @injectable()
@@ -62,7 +75,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
             capWin.windowHideEmitterEvent(
                 (winName: WindowNames) => {
                     if (winName === WindowNames.CaptureWin){
-                        console.log('>>> close cap win')
+                        Logger.info('>>> close cap win')
                         this.stopRecord().then()
                     }
                 }
@@ -86,13 +99,13 @@ export class ScreenRecorder extends Dispose implements IRecordService{
     protected cmdCommonDo(cmd: FluentFfmpegApi, desc?: string){
         return cmd
             .on('start', function (commandLine) {
-                console.log('Spawned Ffmpeg with command: ' + commandLine);
+                Logger.info('Spawned Ffmpeg with command: ' + commandLine);
             })
             .on('end', () => {
-                console.log(`${desc} finished!`);
+                Logger.info(`${desc} finished!`);
             })
             .on('error', (err: Error) => {
-                console.error(`Error ${desc}`, err);
+                Logger.error(`Error ${desc}`, err);
             })
             .run()
     }
@@ -104,7 +117,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
             const screenIndex: number = isTest() ? 0 : this.screenManager.getCurrentScreenIndex(true)
 
             const out = (await (new Process([
-                isTest() ? ffmpeg : ffmpegPath,
+                truthFfmpegPath,
                 `-f`, ScreenRecorder.MacScreenSource,
                 '-list_devices', 'true',
                 '-i', '""',
@@ -116,14 +129,14 @@ export class ScreenRecorder extends Dispose implements IRecordService{
                 if (!one) continue
                 const matches = one.match(screenRegex)
                 if (matches){
-                    // console.log(`>>> match ${matches[1]}`)
-                    console.log(matches)
+                    // Logger.info(`>>> match ${matches[1]}`)
+                    Logger.info(matches)
                     this.currentScreen = (matches[screenIndex] ?? matches[0]).match(screenIndexRegex)[1]
-                    console.log(`>>> match index ${this.currentScreen}`)
+                    Logger.info(`>>> match index ${this.currentScreen}`)
                 }
             }
 
-            // console.log(out)
+            // Logger.info(out)
 
             // let waitResolve: any
             // const wait = new Promise(resolve => waitResolve=resolve)
@@ -137,9 +150,9 @@ export class ScreenRecorder extends Dispose implements IRecordService{
             //     ])
             //     .output('1.txt')
             //     .on('stdout', function (line) {
-            //         console.log(`ffmpegCommand stdout start`);
-            //         console.log(`${line}`);
-            //         console.log(`ffmpegCommand stdout end`);
+            //         Logger.info(`ffmpegCommand stdout start`);
+            //         Logger.info(`${line}`);
+            //         Logger.info(`ffmpegCommand stdout end`);
             //         waitResolve()
             //     })
             //     .on('end', () => waitResolve())
@@ -155,7 +168,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         this.screenManager.mulDisplay && await this.getMacScreens(true)
 
         const cropArea = this.screenManager.getCropAreaStr(area)
-        console.log(`>> Starting record...  area: ${cropArea}`)
+        Logger.info(`>> Starting record...  area: ${cropArea}`)
 
         let newSavePath: string = savePath
         if (!savePath){
@@ -183,7 +196,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
     }
 
     async stopRecord(){
-        console.log('>> Stop record... ')
+        Logger.info('>> Stop record... ')
 
         this.currentCmd?.kill('SIGTERM')
         // this.currentCmd.ffmpegProc.stdin.write('q')
@@ -193,7 +206,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
     }
 
     async pauseRecord(): Promise<void> {
-        console.log('>> Pause record... ')
+        Logger.info('>> Pause record... ')
         this.currentCmd?.kill('SIGSTOP')
     }
 
@@ -202,7 +215,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
     }
 
     async resumeRecord(): Promise<void> {
-        console.log('>> Resume record... ')
+        Logger.info('>> Resume record... ')
         this.currentCmd?.kill('SIGCONT')
     }
 
@@ -229,14 +242,14 @@ export class ScreenRecorder extends Dispose implements IRecordService{
             // ])
             .output(oImg)
             .on('start', function (commandLine) {
-                console.log('Spawned Ffmpeg with command: ' + commandLine);
+                Logger.info('Spawned Ffmpeg with command: ' + commandLine);
             })
             .on('end', () => {
-                console.log('Cropping finished!');
+                Logger.info('Cropping finished!');
                 waitResolve()
             })
             .on('error', (err) => {
-                console.error('An error occurred: ' + err.message);
+                Logger.error('An error occurred: ' + err.message);
             })
             .run();
 
@@ -251,16 +264,16 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         this.screenManager.mulDisplay && await this.getMacScreens(true)
 
         const cropArea = this.screenManager.getCropAreaStr(area)
-        console.log(`>> Starting recordBgImage...  area: ${cropArea}`)
+        Logger.info(`>> Starting recordBgImage...  area: ${cropArea}`)
 
         let newSavePath: string = savePath
-        console.log(`>> recordBgImage...  newSavePath: ${newSavePath}`)
+        Logger.info(`>> recordBgImage...  newSavePath: ${newSavePath}`)
 
         if (!savePath){
             newSavePath = join(this.saveDir, getRandomStr() + '.jpg')
         } else {
             relative && (newSavePath = join(this.saveDir, savePath))
-            console.log(`>> recordBgImage...  newSavePath: ${newSavePath}`)
+            Logger.info(`>> recordBgImage...  newSavePath: ${newSavePath}`)
 
         }
 
@@ -281,13 +294,13 @@ export class ScreenRecorder extends Dispose implements IRecordService{
             // .size('1920x1080')
             .output(newSavePath)
             .on('start', function (commandLine) {
-                console.log('Spawned Ffmpeg with command: ' + commandLine);
+                Logger.info('Spawned Ffmpeg with command: ' + commandLine);
             })
             .on('end', () => {
                 waitResolve()
             })
             .on('error', (err: Error) => {
-                console.error('Error recording screen:', err);
+                Logger.error('Error recording screen:', err);
             })
             .run()
 
@@ -300,24 +313,24 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         // const args = `-f avfoundation -i 2 -y -vf "crop=${cropArea}" -vframes 1 ${newSavePath}`
         //     .split(' ')
         // const child = spawn(ffmpegPath, args)
-        // console.log(`>> - ${ffmpegPath}`)
+        // Logger.info(`>> - ${ffmpegPath}`)
         //
         // child.on('close', (code) => {
-        //     console. log(`child process close with code ${code}`);
+        //     Logger.info(`child process close with code ${code}`);
         //     waitResolve()
         // });
         // child.on('exit', (code) => {
-        //     console. log(`child process exited with code ${code}`);
+        //     Logger.info(`child process exited with code ${code}`);
         //     waitResolve()
         // });
         // child.on('error', (err: Error) => {
-        //     console.error(`child process error with: ${err}`);
+        //     Logger.error(`child process error with: ${err}`);
         // })
         // child.stderr.on('data', (chunk) => {
-        //     console.log(`child process stderr: ${chunk}`);
+        //     Logger.info(`child process stderr: ${chunk}`);
         // })
 
-        console.log(`>> recordBgImage...  img: ${newSavePath}`)
+        Logger.info(`>> recordBgImage...  img: ${newSavePath}`)
 
         const buffer = await this.fileService.openBuffer(newSavePath)
         // const blob = new Blob([buffer], { type: 'image/png' })

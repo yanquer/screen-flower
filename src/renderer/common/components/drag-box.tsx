@@ -2,6 +2,7 @@ import {Component, useEffect, useId, useRef} from "react";
 import {asyncSleep, getRandomStr} from "../common";
 import { throttle } from 'lodash';
 import Draggable from 'react-draggable'
+import {Logger} from "../logger";
 
 
 // 为了使用 useId 换成函数组件
@@ -14,7 +15,7 @@ export const DragBox = () => {
     const setIds = () => {
         // const randStr = getRandomStr()
         const randStr = useId()
-        console.log(">> set ids ", randStr)
+        Logger.info(">> set ids ", randStr)
         boxId = 'drag-box-' + randStr
         dialogId = 'dialog-box-' + randStr
     }
@@ -66,8 +67,8 @@ export const DragBox = () => {
                 cy = window.innerHeight - _h;
             }
 
-            // console.log(height, width)
-            console.log('>> move...')
+            // Logger.info(height, width)
+            Logger.info('>> move...')
             // 拖动的是标题部分, 移动的是整个dialog
             // _box.style.left = cx  + 'px';
             // _box.style.top = cy + 'px';
@@ -189,7 +190,7 @@ export const DragBoxInner = () => {
     const setIds = () => {
         // const randStr = getRandomStr()
         const randStr = useId()
-        console.log(">> set ids ", randStr)
+        Logger.info(">> set ids ", randStr)
         boxId = 'drag-box-' + randStr
         dialogId = 'dialog-box-' + randStr
     }
@@ -241,8 +242,8 @@ export const DragBoxInner = () => {
                 cy = window.innerHeight - _h;
             }
 
-            // console.log(height, width)
-            console.log('>> move...')
+            // Logger.info(height, width)
+            Logger.info('>> move...')
             // 拖动的是标题部分, 移动的是整个dialog
             // _box.style.left = cx  + 'px';
             // _box.style.top = cy + 'px';

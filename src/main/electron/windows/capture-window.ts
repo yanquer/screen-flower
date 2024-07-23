@@ -12,7 +12,7 @@ import {getServiceBySymbol} from "../../../common/container/inject-container";
 export class CaptureWindow extends BaseSFWindow{
     id = WindowNames.CaptureWin
 
-    url: string = '/capture'
+    url: string = 'capture'
     name = 'capture-win'
     preLoad = true
 
@@ -87,7 +87,7 @@ export class CaptureWindow extends BaseSFWindow{
     }
 
     protected displayChange(event: Event, display: Display, changedMetrics: string[]) {
-        // console.log('>>> Active display changed:', display);
+        // Logger.info('>>> Active display changed:', display);
         // 切换桌面时 变更大小
         // this.win.setBounds(display.bounds)
         // if (this.win) moveToFoucScreen(this.win)

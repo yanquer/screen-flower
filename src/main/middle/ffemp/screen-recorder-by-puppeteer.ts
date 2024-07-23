@@ -76,14 +76,14 @@
 //     }
 //
 //     async startRecord(area: CaptureArea, savePath?: string,){
-//         console.log('>> Starting record... ')
+//         Logger.info('>> Starting record... ')
 //         await this.waitInit
 //         await this.recorder.start('./report/video/simple.mp4')
 //         await this.page.goto('http://localhost:8888/capture')
 //     }
 //
 //     async stopRecord(){
-//         console.log('>> Stop record... ')
+//         Logger.info('>> Stop record... ')
 //         await this.waitInit
 //         await this.recorder.stop()
 //         this.reInitRec()

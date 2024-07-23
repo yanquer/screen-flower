@@ -6,6 +6,7 @@ import {createWindow} from "../../helpers";
 import {HandlerStr} from "../../../common/defines";
 import {WindowsUtils} from "./windows-utils";
 import {IBaseWindow, IScreenManager} from "../service";
+import {Logger} from "../../common/logger";
 
 
 @injectable()
@@ -36,23 +37,22 @@ export class BaseSFWindow implements IBaseWindow{
 
     @postConstruct()
     protected init () {
-        console.log('>>> init base...', this.preLoad, this.id)
+        Logger.info('>>> init base window...', this.preLoad, this.id)
         if (this.preLoad){
-            console.log('>>> preload init ...')
+            Logger.info('>>> preload init ...')
             this.open().then()
         }
     }
 
     async open(): Promise<void> {
         if (this.win) {
-            console.log('>>> already has win...')
+            Logger.info('>>> already has win...')
             this.show()
             this.firstInit = false
             return
         }
 
         this.firstInit = true
-        console.log('>>> init win...')
         this.win = this.initWindow()
         await this.loadWindow()
         await this.extOperation()
@@ -62,22 +62,28 @@ export class BaseSFWindow implements IBaseWindow{
     }
 
     initWindow(): BrowserWindow{
-        return createWindow(
+        Logger.info('>>> init win...')
+        const ret = createWindow(
             this.name,
             this.options ?? {}
         )
+        this.setAllowPenetrate(true).then()
+        return ret
     }
 
     async loadWindow(): Promise<void> {
+        Logger.info(`>>> loadURL ${this.url}`)
         await this.win.loadURL(getHostUrl(this.url))
+        await this.setAllowPenetrate(false)
     }
 
     async extOperation(): Promise<void>{
+        Logger.info(`>>> loadURL extOperation`)
 
     }
 
     close(){
-        console.log('>>> close window')
+        Logger.info('>>> close window')
         this.win?.close()
         this.win = undefined
         this.win?.webContents.send(HandlerStr.onWindowHide)
@@ -88,7 +94,7 @@ export class BaseSFWindow implements IBaseWindow{
     }
 
     hide() {
-        console.log('>>> hide window')
+        Logger.info('>>> hide window')
         this.windowHideEmitter.fire(this.id)
         this.win?.hide()
         this.win?.webContents.send(HandlerStr.onWindowHide)

@@ -5,6 +5,7 @@ import path, { join, dirname } from 'path'
 import { IFileService } from '../../common/service'
 import { PathStat } from '../../common/defines'
 import { injectable } from 'inversify'
+import {Logger} from "../common/logger";
 
 
 @injectable()
@@ -22,7 +23,7 @@ export class FileService implements IFileService {
     await new Promise((resolve) => {
       readFile(path, 'utf8', (err, data) => {
         if (err) {
-          console.log(err)
+          Logger.info(err)
         }
         ret = data
         resolve(ret)
@@ -41,7 +42,7 @@ export class FileService implements IFileService {
       readFile(path, {
       }, (err, data) => {
         if (err) {
-          console.log(err)
+          Logger.info(err)
         }
         ret = data
         resolve(ret)
@@ -52,7 +53,7 @@ export class FileService implements IFileService {
 
   async openYaml<T>(path: string): Promise<T> {
     if (!(await this.isFile(path))) {
-      console.log('yaml不存在')
+      Logger.info('yaml不存在')
       return {} as T
     }
     const data = await this.open(path)
@@ -70,7 +71,7 @@ export class FileService implements IFileService {
     const tmp = await new Promise((resolve) => {
       stat(path, (err, stat) => {
         if (err) {
-          console.error(err)
+          Logger.error(err)
         }
         if (stat?.isDirectory()) {
           ret = PathStat.dir
@@ -81,7 +82,7 @@ export class FileService implements IFileService {
         resolve(ret)
       })
     })
-    // console.log("tmp... ", tmp)
+    // Logger.info("tmp... ", tmp)
     return ret
   }
 

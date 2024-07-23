@@ -7,8 +7,8 @@ export const getRandomStr = () => {
     const randomStr = Math.random()
         .toString(36)
         .substring(2);
-    // console.log(nowDate)
-    // console.log(randomStr)
+    // Logger.info(nowDate)
+    // Logger.info(randomStr)
     return `${nowDate}${randomStr}`;
 }
 

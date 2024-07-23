@@ -4006,6 +4006,11 @@ electron-is-dev@^1.1.0:
   resolved "https://registry.npmmirror.com/electron-is-dev/-/electron-is-dev-1.2.0.tgz#2e5cea0a1b3ccf1c86f577cee77363ef55deb05e"
   integrity sha512-R1oD5gMBPS7PVU8gJwH6CtT0e6VSoD0+SzSnYpNm+dBkcijgA+K7VAMHDfnRq/lkKPZArpzplTW6jfiMYosdzw==
 
+electron-log@^5.1.6:
+  version "5.1.6"
+  resolved "https://registry.yarnpkg.com/electron-log/-/electron-log-5.1.6.tgz#a44209410bae799d84a949eb4f933b5747ed8ac7"
+  integrity sha512-o7+gNnlth67wexW7ym4niGAghXE5GZ7J1bhdNBSnqGeiMQwJ0Mhr7/HtDw2m/2thCngaOsvfjU5FDZs81TCcXw==
+
 electron-publish@24.13.1:
   version "24.13.1"
   resolved "https://registry.npmmirror.com/electron-publish/-/electron-publish-24.13.1.tgz#57289b2f7af18737dc2ad134668cdd4a1b574a0c"

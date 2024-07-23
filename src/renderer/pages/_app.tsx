@@ -14,7 +14,9 @@ import {useRouter} from "next/router";
 import {CaptureArea} from "../../common/models";
 import {getServiceBySymbol} from "../../common/container/inject-container";
 import {IUtilService} from "../../common/service";
+import {Logger} from "../common/logger";
 
+Logger.info('>> start _app...')
 
 function MyApp({ Component, pageProps }: AppProps) {
 
@@ -48,13 +50,20 @@ function MyApp({ Component, pageProps }: AppProps) {
     } else {
       body.classList.remove('pointer-events-none')
     }
-    console.log(body.className)
+    Logger.info(body.className)
   }
 
   // 后端窗口关闭时, 关闭录制
   useEffect(() => {
     window.ipcInvoke.onHandleWindowHide(() => {
       setRecording(false)
+    })
+    window.addEventListener('error', (error) => {
+      // 处理渲染进程错误
+      Logger.error(error)
+    });
+    router.events.on('routeChangeError', (err) => {
+      Logger.error('>> Error loading route', err)
     })
   }, []);
 
@@ -64,22 +73,22 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [recording]);
 
 
-  // console.log('re render app...')
-  //   console.log(capArea)
+  // Logger.info('re render app...')
+  //   Logger.info(capArea)
 
   // 是否允许点击穿透
   useEffect(() => {
     const utilService: IUtilService = getServiceBySymbol<IUtilService>(IUtilService)
 
     if (recording){
-      console.log(`>> recording ${allowPenetrate}`)
+      Logger.info(`>> recording ${allowPenetrate}`)
       if (allowPenetrate){
         utilService.setClickPenetrate(true).then()
       } else {
         utilService.setClickPenetrate(false).then()
       }
     } else {
-      console.log(`>> no recording ${allowPenetrate}`)
+      Logger.info(`>> no recording ${allowPenetrate}`)
       // 没有录制时就不允许变
       allowPenetrate || utilService.setClickPenetrate(false).then()
     }
@@ -94,7 +103,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     // return () => document.removeEventListener('mouseup', () =>  setAllowPenetrate(false))
   }, []);
 
-  console.log('re run')
+  Logger.info('re run')
 
   return (
       <RecordContext.Provider value={{

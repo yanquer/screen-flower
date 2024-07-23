@@ -9,6 +9,7 @@ import {IRecordContext, RecordContext} from "../common/global-context";
 import CursorModes from "./action-bar/tool/cursor-modes";
 import {getServiceBySymbol} from "../../common/container/inject-container";
 import {IRecordService} from "../../common/service";
+import {Logger} from "../common/logger";
 
 interface CaptureWinState{
     bgUrl: string
@@ -47,11 +48,11 @@ export class CaptureWin extends Component<any, CaptureWinState>{
         const {blurView} = this.context
 
         if (blurView){
-            console.log('>>> blurView', blurView)
+            Logger.info('>>> blurView', blurView)
             if (prevState.bgUrl === 'unset'){
                 this.getBackgroundImg().then(
                     img => {
-                        console.log('>>> blurView', img)
+                        Logger.info('>>> blurView', img)
                         img && this.setState({bgUrl: img})
                     }
                 )
@@ -79,8 +80,8 @@ export class CaptureWin extends Component<any, CaptureWinState>{
     render() {
         const {capArea, setCapArea, recording} = this.context
 
-        console.log("re render win")
-        // console.log(capArea)
+        Logger.info("re render win")
+        // Logger.info(capArea)
         return (
             <div className={"overflow-hidden"}>
                 <Rnd
@@ -97,8 +98,8 @@ export class CaptureWin extends Component<any, CaptureWinState>{
                             ...position,
                         }
                         setCapArea(newArea);
-                        console.log(`>>> area1: ${capArea}`)
-                        console.log(newArea)
+                        Logger.info(`>>> area1: ${capArea}`)
+                        Logger.info(newArea)
                     }}
                     bounds="window"
                     // bounds="parent"
