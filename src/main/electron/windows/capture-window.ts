@@ -28,12 +28,10 @@ export class CaptureWindow extends BaseSFWindow{
             show: false,
             alwaysOnTop: true,
             opacity: 0,
-            titleBarStyle: 'hidden',
+            // 设置 titleBarStyle 反而可以看到, `退出-最大化-最小化` 的按钮了
+            // titleBarStyle: 'hidden',
             autoHideMenuBar: true,
             webPreferences: {
-                // nodeIntegration: true,
-                // enableRemoteModule: true,
-                // contextIsolation: false,
                 preload: path.join(__dirname, 'preload.js'),
             }
         } as BrowserWindowConstructorOptions
@@ -56,6 +54,9 @@ export class CaptureWindow extends BaseSFWindow{
     async extOperation(){
         // this.win.setAlwaysOnTop(true)
         // this.win.maximize()
+
+        // 允许覆盖菜单栏
+        this.win.setAlwaysOnTop(true, 'screen-saver', 1)
 
         // 设置全屏可见
         this.win.setVisibleOnAllWorkspaces(true, {visibleOnFullScreen: true})

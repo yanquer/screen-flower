@@ -20,5 +20,7 @@ export enum MenuNames {
     duration = 'duration',
 
     // custom
-    forceQuit = 'forceQuit'
+    forceQuit = 'forceQuit',
+    startRecordPage = 'startRecordPage',
+    settingView = 'settingView',
 }
