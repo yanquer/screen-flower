@@ -14,8 +14,8 @@ export class SettingService implements ISettingService{
         return await this._backendService('getLogPath');
     }
 
-    async setCachePath(cachePath: string): Promise<void> {
-        return await this._backendService('setCachePath', cachePath);
+    async setOrSelectCachePath(cachePath?: string): Promise<string | undefined> {
+        return await this._backendService('setOrSelectCachePath', cachePath);
     }
 
     async setDockShow(show: boolean): Promise<void> {

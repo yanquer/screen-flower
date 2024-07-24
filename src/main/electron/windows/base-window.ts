@@ -45,6 +45,8 @@ export class BaseSFWindow implements IBaseWindow{
         }
     }
 
+    get originWin(){ return this.win }
+
     async open(showNow: boolean=false): Promise<void> {
         if (this.win) {
             Logger.info('>>> already has win...')

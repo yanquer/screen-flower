@@ -12,6 +12,7 @@ export interface IBaseWindow {
 
     windowHideEmitterEvent: Event<WindowNames>
 
+    originWin: BrowserWindow | undefined
     open(showNow?: boolean): Promise<void>;
     hide(): void;
     initWindow(): BrowserWindow
@@ -43,6 +44,41 @@ export interface IScreenManager {
     getCropAreaStr(area: CaptureArea): string
 }
 
+export interface DialogOptions{
+    title?: string,
+    defaultPath?: string,
+    // 确认按钮的自定义标签
+    buttonLabel?: string,
+    filters: {name: string, extensions: string[]}[],
+    properties: (
+        // 允许选择文件
+        "openFile" |
+        // 允许选择文件夹
+        "openDirectory" |
+        // 允许多选
+        "multiSelections" |
+        // 显示对话框中的隐藏文件
+        "showHiddenFiles" |
+        // macOS -允许你通过对话框的形式创建新的目录
+        "createDirectory" |
+        // Windows-如果输入的文件路径在对话框中不存在, 则提示创建。 这并不是真的在路径上创建一个文件，而是允许返回一些不存在的地址交由应用程序去创建。
+        "promptToCreate" |
+        // macOS-禁用自动的别名路径(符号链接) 解析。 所选别名现在将会返回别名路径而非其目标路径。
+        "noResolveAliases" |
+        //  macOS -将包 (如 .app 文件夹) 视为目录而不是文件。
+        "treatPackageAsDirectory"
+        )[],
+    // macOS -显示在输入框上方的消息
+    message?: string,
+    //  (可选) macOS MAS - 在打包提交到Mac App Store时创建 security scoped bookmarks
+    securityScopedBookmarks?: boolean,
+}
+export const ISysDialogService = Symbol.for("ISysDialogService");
+export interface ISysDialogService{
+    openSelectFileDialog(win: BrowserWindow, defaultPath?: string): Promise<string | undefined>;
+    openSelectDirDialog(win: BrowserWindow, defaultPath?: string): Promise<string | undefined>;
+    openSaveFileDialog(win: BrowserWindow, defaultPath?: string): Promise<string | undefined>;
+}
 
 
 

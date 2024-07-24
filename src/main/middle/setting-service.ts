@@ -1,9 +1,12 @@
 import {ISettingService} from "../../common/service";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import {dockShow} from "../common/electron/menu";
 import {join} from "path";
 import {getHomeDir} from "../common/dynamic-defines";
 import {DefaultLogFile} from "../common/logger";
+import {ISysDialogService, IWindowsManager} from "../electron/service";
+import {WindowNames} from "../common/defines";
+import {Emitter, Event} from "../../common/event";
 
 @injectable()
 export class SettingService implements ISettingService{
@@ -13,6 +16,14 @@ export class SettingService implements ISettingService{
     protected cacheDir: string
     protected logPath: string
 
+    @inject(ISysDialogService)
+    protected readonly sysDialogService: ISysDialogService;
+    @inject(IWindowsManager)
+    protected readonly windowsManager: IWindowsManager;
+
+    protected cachePathChangeEmitter = new Emitter<string>()
+    cachePathChangeEvent: Event<string> = this.cachePathChangeEmitter.event
+
     async getCachePath(): Promise<string>{
         return this.getCachePathSync()
     }
@@ -21,8 +32,24 @@ export class SettingService implements ISettingService{
         return this.cacheDir ?? this.defaultCacheDir
     }
 
-    async setCachePath(cachePath: string): Promise<void> {
-        this.cacheDir = cachePath;
+    protected async setCachePathAndFire(cachePath: string): Promise<void> {
+        if (cachePath && cachePath !== this.cacheDir) {
+            this.cacheDir = cachePath
+            this.cachePathChangeEmitter.fire(cachePath)
+        }
+    }
+
+    async setOrSelectCachePath(cachePath?: string): Promise<string | undefined> {
+        if (!cachePath){
+            const setWin = this.windowsManager.getWinById(WindowNames.SettingWin)
+            const selectPath = await this.sysDialogService.openSelectDirDialog(setWin.originWin)
+            if (selectPath){
+                await this.setCachePathAndFire(selectPath)
+                return selectPath
+            }
+        } else {
+            await this.setCachePathAndFire(cachePath)
+        }
     }
 
     async setDockShow(show: boolean): Promise<void> {
@@ -36,4 +63,5 @@ export class SettingService implements ISettingService{
     async getLogPath(): Promise<string> {
         return this.logPath ?? this.defaultLogPath;
     }
+
 }

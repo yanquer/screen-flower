@@ -68,10 +68,13 @@ export interface IUtilService {
 
 export const ISettingService = Symbol.for('ISettingService')
 export interface ISettingService {
+  cachePathChangeEvent?: Event<string>
+
   setDockShow(show: boolean): Promise<void>
   getLogPath(): Promise<string>
   setLogPath(logPath: string): Promise<void>
   getCachePath(): Promise<string>
   getCachePathSync?(): string
-  setCachePath(cachePath: string): Promise<void>
+  // cachePath 为空就表示, 弹出一个选择dialog
+  setOrSelectCachePath(cachePath?: string): Promise<string | undefined>
 }

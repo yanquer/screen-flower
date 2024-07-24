@@ -85,6 +85,10 @@ export class ScreenRecorder extends Dispose implements IRecordService{
             )
         }
 
+        this.settingService.cachePathChangeEvent?.((cacheDir: string) => {
+            this.saveDir = cacheDir
+        })
+
         this.initWait = this.getMacScreens(true)
     }
 

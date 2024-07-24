@@ -4,7 +4,8 @@ import {IRecordContext, RecordContext} from "../common/global-context";
 import {ToolTipWrap} from "./radix-ui/tool-tip-wrap";
 import {invokeElectronHandlerAsync} from "../common/common";
 import {getServiceBySymbol} from "../../common/container/inject-container";
-import {IUtilService} from "../../common/service";
+import {ISettingService, IUtilService} from "../../common/service";
+import {set} from "lodash";
 
 
 export class SettingView extends Component<any, any>{
@@ -49,7 +50,15 @@ export class SettingView extends Component<any, any>{
                         </ToolTipWrap>
                     </Box>
                     <Box>
-                        <Button size={'1'} color={'bronze'}>选择文件夹</Button>
+                        <Button
+                            size={'1'} color={'bronze'}
+                            onClick={(e) => {
+                                const setService: ISettingService = getServiceBySymbol(ISettingService);
+                                setService.setOrSelectCachePath().then(
+                                    (retPath) => retPath && setCachePath(retPath)
+                                )
+                            }}
+                        >选择文件夹</Button>
                     </Box>
 
                     <Box>
