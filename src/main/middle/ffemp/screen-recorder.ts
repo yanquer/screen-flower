@@ -25,12 +25,15 @@ import util from "electron-util";
 
 Logger.info(`>> origin ffmpeg path: ${ffmpeg}`)
 
+// fix Asar path
 const truthFfmpegPath = isProd ?
     ffmpeg.replace('app.asar', 'app.asar.unpacked') :
     // ffmpeg:
     ffmpeg;
 
 Logger.info(`>> truth ffmpeg path: ${truthFfmpegPath}`)
+
+FfmpegCommand.setFfmpegPath(truthFfmpegPath)
 
 // fixPathForAsarUnpack 不知道为什么无效... 暂时注释
 // if (!isTest()) {
