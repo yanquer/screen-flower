@@ -3,7 +3,7 @@
 import fs from 'fs-extra'
 import path from 'path'
 import { getNextronConfig } from './getNextronConfig'
-import {Logger} from '../logger'
+import {Logger} from './logger'
 
 const cwd = process.cwd()
 const pkgPath = path.join(cwd, 'package.json')

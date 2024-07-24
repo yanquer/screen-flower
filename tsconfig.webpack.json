@@ -1,9 +1,10 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["src-third-modules/configs-from-nextron/webpack.config.production.ts"],
+  "include": ["./webpack-config/**.ts"],
   "exclude": ["node_modules"],
   "compilerOptions": {
-    "rootDir": "./src-third-modules/configs-from-nextron",
-    "outDir": "./webpack-conf"
+    "module": "CommonJS",
+    "rootDir": "./webpack-config",
+    "outDir": "./webpack-config-js"
   }
 }

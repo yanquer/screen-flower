@@ -17,3 +17,5 @@ src/app
 .idea
 .DS_Store
 report
+webpack-config-js
+tsconfig.webpack.tsbuildinfo
