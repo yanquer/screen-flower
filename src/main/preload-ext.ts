@@ -5,6 +5,7 @@ const handler = {
   fileService: (...args: []) => ipcRenderer.invoke(HandlerStr.serviceFileService, ...args),
   recordService: (...args: []) => ipcRenderer.invoke(HandlerStr.serviceRecordService, ...args),
   utilService: (...args: []) => ipcRenderer.invoke(HandlerStr.utilService, ...args),
+  settingService: (...args: []) => ipcRenderer.invoke(HandlerStr.settingService, ...args),
 
   // main => render
   onHandleWindowHide: (callback: (...args: []) => any) => {

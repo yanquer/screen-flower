@@ -8,6 +8,7 @@ export enum HandlerStr {
   serviceFileService = 'service:FileService',
   serviceRecordService = 'service:RecordService',
   utilService = 'service:utilService',
+  settingService = 'service:settingService',
 
 
   onWindowHide = 'onService:onWindowHide',

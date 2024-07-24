@@ -52,6 +52,7 @@ export class CaptureWindow extends BaseSFWindow{
     }
 
     async extOperation(){
+        await super.extOperation()
         // this.win.setAlwaysOnTop(true)
         // this.win.maximize()
 
@@ -61,30 +62,11 @@ export class CaptureWindow extends BaseSFWindow{
         // 设置全屏可见
         this.win.setVisibleOnAllWorkspaces(true, {visibleOnFullScreen: true})
 
-        // 隐藏滚动条
-        this.win.webContents.insertCSS(`
-            body {
-                overflow: hidden;
-            }
-        `).then()
-
-        this.win.webContents.on("before-input-event",
-            (event: Event, input: Input) => this.handleKeydown(event, input))
-
         // 兼容桌面切换
         // screen.on('display-metrics-changed', this.displayChange.bind(this));
 
         // this.win.webContents.openDevTools()
 
-    }
-
-    protected handleKeydown(event: Event, input: Input) {
-        switch (input.key){
-            case 'Escape':
-                this.hide()
-                break
-        }
-        event.preventDefault()
     }
 
     protected displayChange(event: Event, display: Display, changedMetrics: string[]) {
@@ -99,12 +81,4 @@ export class CaptureWindow extends BaseSFWindow{
         // screen.off('display-metrics-changed', this.displayChange.bind(this))
     }
 
-    show(){
-        super.show()
-        if (this.firstInit) {
-            // 首次启动的时候, 先 opacity: 0 , 再 1 , 避免看到首次show browserWindows 白屏
-            //      除了此方案, 貌似还可以先加载一个其他的 browserWindows
-            setTimeout(() => this.win.setOpacity(1), 100)
-        }
-    }
 }

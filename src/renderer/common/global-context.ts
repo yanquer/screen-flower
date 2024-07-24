@@ -64,6 +64,14 @@ export interface IRecordContext{
     // 是不是在小工具区域
     isInActionBar: boolean
     setIsInActionBar?: (isInActionBar: boolean) => void
+
+    // 设置
+    showDock: boolean
+    setShowDock?: (showDock: boolean | ((showDock: boolean) => boolean)) => void
+    cachePath: string
+    setCachePath?: (cachePath: string) => void
+    logPath: string
+    setLogPath?: (logPath: string) => void
 }
 
 export const DefaultCapArea = () => ({
@@ -85,5 +93,8 @@ export const RecordContext = createContext<IRecordContext>({
     blurView: false,
     capArea: DefaultCapArea(),
     allowPenetrate: false,
-    isInActionBar: false
+    isInActionBar: false,
+    showDock: false,
+    cachePath: "~/screen-recorder",
+    logPath: "~/Log",
 })

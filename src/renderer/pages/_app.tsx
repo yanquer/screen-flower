@@ -13,8 +13,9 @@ import {BarVideoMode, CursorMode, DefaultCapArea, MovieQuality, RecordContext} f
 import {useRouter} from "next/router";
 import {CaptureArea} from "../../common/models";
 import {getServiceBySymbol} from "../../common/container/inject-container";
-import {IUtilService} from "../../common/service";
+import {ISettingService, IUtilService} from "../../common/service";
 import {Logger} from "../common/logger";
+import {invokeElectronHandler, invokeElectronHandlerAsync} from "../common/common";
 
 Logger.info('>> start _app...')
 
@@ -37,6 +38,20 @@ function MyApp({ Component, pageProps }: AppProps) {
     const [allowPenetrate, setAllowPenetrate] = useState<boolean>(false)
     const [isInActionBar, setIsInActionBar] = useState<boolean>(false)
 
+  // 设置
+  const [showDock, setShowDock] = useState<boolean>(false)
+  const [cachePath, setCachePath] = useState<string | null>(undefined)
+  const [logPath, setLogPath] = useState<string | null>(undefined)
+
+  // 设置
+  useEffect(() => {
+    invokeElectronHandlerAsync(async () => {
+      const setService = getServiceBySymbol<ISettingService>(ISettingService)
+      setCachePath(await setService.getCachePath())
+      setLogPath(await setService.getLogPath())
+    }).then()
+  }, []);
+
     const router = useRouter()
     const toPage = (pageUrl: string) => {
       router.push({ pathname: `${pageUrl}` }).then()
@@ -55,9 +70,14 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   // 后端窗口关闭时, 关闭录制
   useEffect(() => {
-    window.ipcInvoke.onHandleWindowHide(() => {
-      setRecording(false)
-    })
+
+    invokeElectronHandler(
+        () => {
+          window.ipcInvoke.onHandleWindowHide(() => {
+            setRecording(false)
+          })
+        }
+    )
     window.addEventListener('error', (error) => {
       // 处理渲染进程错误
       Logger.error(error)
@@ -78,20 +98,22 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   // 是否允许点击穿透
   useEffect(() => {
-    const utilService: IUtilService = getServiceBySymbol<IUtilService>(IUtilService)
+    invokeElectronHandler(() => {
+      const utilService: IUtilService = getServiceBySymbol<IUtilService>(IUtilService)
 
-    if (recording){
-      Logger.info(`>> recording ${allowPenetrate}`)
-      if (allowPenetrate){
-        utilService.setClickPenetrate(true).then()
+      if (recording){
+        Logger.info(`>> recording ${allowPenetrate}`)
+        if (allowPenetrate){
+          utilService.setClickPenetrate(true).then()
+        } else {
+          utilService.setClickPenetrate(false).then()
+        }
       } else {
-        utilService.setClickPenetrate(false).then()
+        Logger.info(`>> no recording ${allowPenetrate}`)
+        // 没有录制时就不允许变
+        allowPenetrate || utilService.setClickPenetrate(false).then()
       }
-    } else {
-      Logger.info(`>> no recording ${allowPenetrate}`)
-      // 没有录制时就不允许变
-      allowPenetrate || utilService.setClickPenetrate(false).then()
-    }
+    })
 
   }, [allowPenetrate]);
 
@@ -122,6 +144,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           capArea, setCapArea,
           allowPenetrate, setAllowPenetrate,
         isInActionBar, setIsInActionBar,
+        showDock, setShowDock,
+        cachePath, setCachePath,
+        logPath, setLogPath,
       }}>
         <Component {...pageProps} />
       </RecordContext.Provider>

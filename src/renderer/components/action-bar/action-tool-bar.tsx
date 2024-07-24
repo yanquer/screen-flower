@@ -24,7 +24,6 @@ import {CursorToolbar} from "./layout/cursor-toolbar";
 import {BlurToolbar} from "./layout/blur-toolbar";
 import {getServiceBySymbol} from "../../../common/container/inject-container";
 import {IRecordService} from "../../../common/service";
-import {toNumber} from "lodash";
 import {Logger} from "../../common/logger";
 
 

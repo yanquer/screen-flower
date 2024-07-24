@@ -12,4 +12,8 @@ export namespace ServiceFactory {
     export const utilService = async (...args: []) => {
         return await window.ipcInvoke.utilService(...args)
     }
+
+    export const settingService = async (...args: []) => {
+        return await window.ipcInvoke.settingService(...args)
+    }
 }

@@ -6,5 +6,9 @@ export const setNoMenuDock = () => {
     Menu.setApplicationMenu(null);
 
     // 这个才有效
-    app.dock.hide()
+    dockShow(false)
+}
+
+export const dockShow = (show: boolean) => {
+    show ? app.dock.show() : app.dock.hide()
 }

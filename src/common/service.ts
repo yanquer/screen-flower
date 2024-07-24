@@ -62,4 +62,16 @@ export interface IUtilService {
   setClickPenetrate(penetrate: boolean): Promise<void>
 
   getCursorScreenPoint(): Promise<{ x: number, y: number }>
+
+  showFileInFolder(filePath: string): Promise<void>
+}
+
+export const ISettingService = Symbol.for('ISettingService')
+export interface ISettingService {
+  setDockShow(show: boolean): Promise<void>
+  getLogPath(): Promise<string>
+  setLogPath(logPath: string): Promise<void>
+  getCachePath(): Promise<string>
+  getCachePathSync?(): string
+  setCachePath(cachePath: string): Promise<void>
 }

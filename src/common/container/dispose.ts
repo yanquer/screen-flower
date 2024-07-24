@@ -20,6 +20,10 @@ export const getNeedCleanDispose = (): IDispose[] => CleanUpCollections
 export class Dispose implements IDispose{
     dispose(){}
 
+    constructor() {
+        this.addServiceToCleanUp(this)
+    }
+
     protected addServiceToCleanUp(serviceIns: IDispose){
         addToCleanDispose(serviceIns)
     }

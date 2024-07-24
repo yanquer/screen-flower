@@ -6,11 +6,15 @@ const logInit = () => {
     // Optional, initialize the logger for any renderer process
     log.initialize();
     // log.transports.console.format = '{h}:{i}:{s} {text}';
-    const logFile = log.transports.file.getFile();
-    console.log(`>> log file: ${logFile}`)
 }
 
 logInit()
+
+export const DefaultLogFile = log.transports.file.getFile();
+console.log(`>> log file: ${DefaultLogFile}`)
+export const setLogFile = (logFile: string) => {
+    // log.transports.setFile(logFile);
+}
 
 export const Logger: MainLogger = log
 

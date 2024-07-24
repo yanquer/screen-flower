@@ -1,9 +1,9 @@
 import {app, MenuItem, MenuItemConstructorOptions} from 'electron';
 import {forceQuit, getAboutMenuItem} from "./menu-items";
 import {MenuNames} from "./menu-names";
-import {getServiceBySymbol} from "../../../common/container/inject-container";
-import {IWindowsManager} from "../../electron/service";
-import {WindowNames} from "../defines";
+import {getServiceBySymbol} from "../../common/container/inject-container";
+import {IWindowsManager} from "../electron/service";
+import {WindowNames} from "../common/defines";
 
 
 export const getMenuTemplate = async (): Promise<Array<(MenuItemConstructorOptions) | (MenuItem)>> => [
@@ -23,8 +23,13 @@ export const getMenuTemplate = async (): Promise<Array<(MenuItemConstructorOptio
         id: MenuNames.settingView,
         label: `设置`,
         click: () => {
-            // todo: 设置视图
-            app.focus();
+            const winManager = getServiceBySymbol<IWindowsManager>(IWindowsManager)
+            const setWin = winManager.getWinById(WindowNames.SettingWin)
+            winManager.getWinById(WindowNames.CaptureWin)?.hide()
+            if (setWin) {
+                app.focus();
+                setWin.open(true);
+            }
         }
     },
     getAboutMenuItem(),

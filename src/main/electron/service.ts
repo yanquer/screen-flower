@@ -9,11 +9,11 @@ export interface IBaseWindow {
     id: WindowNames
     url: string
     options?: BrowserWindowConstructorOptions
-    win?: BrowserWindow;
 
     windowHideEmitterEvent: Event<WindowNames>
 
-    open(): Promise<void>;
+    open(showNow?: boolean): Promise<void>;
+    hide(): void;
     initWindow(): BrowserWindow
     loadWindow(): Promise<void>
     // 是否允许点击穿透

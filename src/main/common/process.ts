@@ -2,17 +2,26 @@
 // import {execa} from "execa";
 // const {execa} = require('execa');
 
-import {spawn} from "node:child_process";
+import {ChildProcessWithoutNullStreams, spawn} from "node:child_process";
 import {Logger} from "./logger";
+import {Dispose} from "../../common/container/dispose";
 
-export class Process {
+export class Process extends Dispose{
 
     constructor(protected cmd: string[]) {
+        super();
         // Logger.info(`>> will exec ${this.cmd}`);
         // Logger.info(this.cmd);
 
         this.stderr = []
         this.stdout = []
+    }
+
+    protected _process?: ChildProcessWithoutNullStreams
+
+    dispose() {
+        Logger.info(`>> Process ${this._process.pid} dispose`);
+        this._process?.kill(9)
     }
 
     stdout: string[]
@@ -31,7 +40,8 @@ export class Process {
             Logger.info(_exec)
             Logger.info(args)
             Logger.info("====run cmd====")
-            const pro = spawn(_exec, args)
+            this._process = spawn(_exec, args)
+            const pro = this._process
 
             pro.on('exit', (code) => {
                 Logger.info(`>> exit code: ${code}`)
@@ -44,8 +54,8 @@ export class Process {
                 this.stdout.push(data.toString())
             })
             pro.stderr.on('data', (data: Buffer) => {
-                Logger.error('>> stderr: ')
-                Logger.error(data.toString())
+                Logger.warn('>> stderr: ')
+                Logger.warn(data.toString())
                 this.stderr.push(data.toString())
             })
 

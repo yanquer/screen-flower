@@ -1,7 +1,11 @@
 import {Logger} from "./logger";
+import {UniversalWindow} from "../electron/windows/universal-window";
 
 export enum WindowNames {
-    CaptureWin = 'capture-window'
+    CaptureWin = 'capture-window',
+    UniversalWin = 'universal-window',
+    SettingWin = 'setting-window',
+    PlayerWin = 'player-window',
 
 }
 

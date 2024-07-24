@@ -10,6 +10,7 @@ import CursorModes from "./action-bar/tool/cursor-modes";
 import {getServiceBySymbol} from "../../common/container/inject-container";
 import {IRecordService} from "../../common/service";
 import {Logger} from "../common/logger";
+import {invokeElectronHandler, invokeElectronHandlerAsync} from "../common/common";
 
 interface CaptureWinState{
     bgUrl: string
@@ -59,22 +60,25 @@ export class CaptureWin extends Component<any, CaptureWinState>{
             }
         } else {
             if (prevState.bgUrl !== 'unset') {
+                URL.revokeObjectURL(prevState.bgUrl)
                 this.setState({bgUrl: 'unset'})
             }
         }
     }
 
     protected async getBackgroundImg(){
-        const recodeService: IRecordService = getServiceBySymbol(IRecordService)
-        const buffer = await recodeService.recordBgImage(this.context.capArea, 'bg-win.png', true)
-        if (!buffer) return undefined
-        const backgroundBlob = new Blob(
-            [buffer],
-            { type: 'image/png' }
+        return await invokeElectronHandlerAsync<string>(async () => {
+            const recodeService: IRecordService = getServiceBySymbol(IRecordService)
+            const buffer = await recodeService.recordBgImage(this.context.capArea, 'bg-win.png', true)
+            if (!buffer) return undefined
+            const backgroundBlob = new Blob(
+                [buffer],
+                { type: 'image/png' }
             )
-        const img = URL.createObjectURL(backgroundBlob);
-        // return img
-        return `url(${img})`
+            const img = URL.createObjectURL(backgroundBlob);
+            // return img
+            return `url(${img})`
+        })
     }
 
     render() {

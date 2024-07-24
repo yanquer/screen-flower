@@ -40,6 +40,7 @@ export const invokeInterfaceFun = async <T>(
   const [funName, ...extArgs] = args
   const interface_: any = getServiceBySymbol(serviceIdentifier)
   if (!funName) return interface_
+  console.log(`>> invokeInterfaceFun: ${interface_} -- ${funName}`)
   let ret = interface_[funName](...extArgs)
   if (isPromise(ret)) ret = await ret
   return ret

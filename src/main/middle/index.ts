@@ -1,9 +1,10 @@
 import {bindToDefaultContainer, invokeInterfaceFun} from "../../common/container/inject-container";
-import {IFileService, IRecordService, IUtilService} from "../../common/service";
+import {IFileService, IRecordService, ISettingService, IUtilService} from "../../common/service";
 import {ipcMain} from "electron";
 import {HandlerStr} from "../../common/defines";
 import {ScreenRecorder} from "./ffemp/screen-recorder";
 import {UtilService} from "./util-service";
+import {SettingService} from "./setting-service";
 
 const registerApiFromMain = () => {
 
@@ -19,6 +20,10 @@ const registerApiFromMain = () => {
         return await invokeInterfaceFun<IUtilService>(IUtilService, ...args)
     })
 
+    ipcMain.handle(HandlerStr.settingService, async (_event, ...args: []) => {
+        return await invokeInterfaceFun<ISettingService>(ISettingService, ...args)
+    })
+
 }
 
 export const bindMiddle = () => {
@@ -27,6 +32,7 @@ export const bindMiddle = () => {
     // bindToDefaultContainer(IRecordService, ScreenRecorderByPuppeteer)
     bindToDefaultContainer(IRecordService, ScreenRecorder)
     bindToDefaultContainer(IUtilService, UtilService);
+    bindToDefaultContainer(ISettingService, SettingService);
 
     registerApiFromMain()
 }

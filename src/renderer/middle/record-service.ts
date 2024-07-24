@@ -3,7 +3,6 @@ import {BaseToElectron} from "./base-model";
 import {ServiceFactory} from "./service-factory";
 import {injectable} from "inversify";
 import {CaptureArea} from "../../common/models";
-import {Blob} from "node:buffer";
 
 
 @injectable()

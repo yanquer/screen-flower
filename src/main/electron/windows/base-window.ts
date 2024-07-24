@@ -1,6 +1,6 @@
 import {inject, injectable, postConstruct} from "inversify";
 import {getHostUrl, WindowNames} from "../../common/defines";
-import {BrowserWindow, BrowserWindowConstructorOptions} from "electron";
+import {BrowserWindow, BrowserWindowConstructorOptions, Event, Input} from "electron";
 import {Emitter} from "../../../common/event";
 import {createWindow} from "../../helpers";
 import {HandlerStr} from "../../../common/defines";
@@ -21,7 +21,8 @@ export class BaseSFWindow implements IBaseWindow{
     public set options(value: BrowserWindowConstructorOptions) {
         this._options = value;
     }
-    win?: BrowserWindow;
+
+    protected win?: BrowserWindow;
 
     // 预加载来提高打开截屏窗口的启动速度, 比如每次创建新窗口
     // 需要与 show: false 一起使用
@@ -44,7 +45,7 @@ export class BaseSFWindow implements IBaseWindow{
         }
     }
 
-    async open(): Promise<void> {
+    async open(showNow: boolean=false): Promise<void> {
         if (this.win) {
             Logger.info('>>> already has win...')
             this.show()
@@ -56,9 +57,9 @@ export class BaseSFWindow implements IBaseWindow{
         this.win = this.initWindow()
         await this.loadWindow()
         await this.extOperation()
-        // this.win.once('ready-to-show', () => {
-        //     this.win.show()
-        // })
+        if (showNow) {
+            this.show()
+        }
     }
 
     initWindow(): BrowserWindow{
@@ -80,6 +81,30 @@ export class BaseSFWindow implements IBaseWindow{
     async extOperation(): Promise<void>{
         Logger.info(`>>> loadURL extOperation`)
 
+        // 隐藏滚动条
+        this.win.webContents.insertCSS(`
+            body {
+                overflow: hidden;
+            }
+        `).then()
+
+        this.win.webContents.on("before-input-event",
+            (event: Event, input: Input) => this.handleKeydown(event, input))
+
+        this.win.webContents.on('destroyed', () => {
+            this.close()
+        })
+    }
+
+    protected handleKeydown(event: Event, input: Input) {
+        Logger.info(`>>> click key ${input?.key}`)
+        switch (input.key){
+            case 'Escape':
+                Logger.info(`>>> click Escape`)
+                this.hide()
+                break
+        }
+        event.preventDefault()
     }
 
     close(){
@@ -91,10 +116,15 @@ export class BaseSFWindow implements IBaseWindow{
 
     show() {
         this.win.show()
+        if (this.firstInit) {
+            // 首次启动的时候, 先 opacity: 0 , 再 1 , 避免看到首次show browserWindows 白屏
+            //      除了此方案, 貌似还可以先加载一个其他的 browserWindows
+            setTimeout(() => this.win.setOpacity(1), 100)
+        }
     }
 
     hide() {
-        Logger.info('>>> hide window')
+        Logger.info(`>>> hide window ${this.name}`)
         this.windowHideEmitter.fire(this.id)
         this.win?.hide()
         this.win?.webContents.send(HandlerStr.onWindowHide)

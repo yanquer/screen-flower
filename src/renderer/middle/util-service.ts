@@ -15,4 +15,8 @@ export class UtilService implements IUtilService{
         return await this._backendService('getCursorScreenPoint')
     }
 
+    async showFileInFolder(filePath: string): Promise<void> {
+        return await this._backendService('showFileInFolder', filePath)
+    }
+
 }

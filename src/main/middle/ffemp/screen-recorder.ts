@@ -1,5 +1,5 @@
 import ffmpeg from 'ffmpeg-static';
-import {IFileService, IRecordService} from "../../../common/service";
+import {IFileService, IRecordService, ISettingService} from "../../../common/service";
 import {inject, injectable, postConstruct} from "inversify";
 import {FluentFfmpegApi} from './fluent-ffmpeg/api'
 
@@ -59,6 +59,8 @@ export class ScreenRecorder extends Dispose implements IRecordService{
     protected readonly windowsManager: IWindowsManager
     @inject(IScreenManager)
     protected readonly screenManager: IScreenManager
+    @inject(ISettingService)
+    protected readonly settingService: ISettingService
 
     protected saveDir: string
 
@@ -66,12 +68,10 @@ export class ScreenRecorder extends Dispose implements IRecordService{
 
     @postConstruct()
     protected init(){
-        this.saveDir = join(getHomeDir(), "./screen-recorder");
+        this.saveDir = this.settingService.getCachePathSync() ?? join(getHomeDir(), "./screen-recorder");
         this.fileService.isExists(this.saveDir).then(async (exists) => {
             !exists && await this.fileService.mkDir(this.saveDir)
         })
-
-        this.addServiceToCleanUp(this)
 
         const capWin = this.windowsManager.getWinById(WindowNames.CaptureWin)
         if (capWin){
