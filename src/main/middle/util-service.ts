@@ -30,14 +30,14 @@ export class UtilService implements IUtilService{
         return (await this.fileService.isExists(filePath)) && shell.showItemInFolder(filePath);
     }
 
-    async askSelectAVideoFile(onlyStr: boolean=true, webContentId?: number): Promise<string | Buffer | undefined>{
+    async askSelectAVideoFile(onlyStr: boolean=true, failedCancel: boolean=true, webContentId?: number): Promise<string | Buffer | undefined>{
         const curWin = this.windowsManager.findWinByWebId(webContentId)
         const selectFile = await this.sysDialogService.openSelectFileDialog(
             curWin.originWin, undefined,
             [{name: "video", extensions: ['.mp4', 'avi', ]}]
             )
         Logger.info(`>> askSelectAVideoFile ${selectFile}`)
-        if (onlyStr && !selectFile) {
+        if (onlyStr && !selectFile && failedCancel) {
             Logger.info(`>> askSelectAVideoFile hideAllWindows`)
             this.windowsManager.hideAllWindows().then()
         }
@@ -50,12 +50,16 @@ export class UtilService implements IUtilService{
             Logger.info(`>> askSelectAVideoFile buffer has data ${data && data.length > 0}`)
             if (data) return data
         }
-        this.windowsManager.hideAllWindows().then()
+        failedCancel && this.windowsManager.hideAllWindows().then()
         return undefined
     }
 
     async askOpenPreview(): Promise<void> {
         await this.windowsManager.openWinById(WindowNames.PlayerWin)
+    }
+
+    async askHideWin(): Promise<void>{
+        await this.windowsManager.hideAllWindows()
     }
 
 }

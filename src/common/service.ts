@@ -54,6 +54,8 @@ export interface IRecordService {
   cancelRecord(): Promise<void>
 
   recordBgImage(area: CaptureArea, savePath?: string, relative?: boolean): Promise<Buffer | undefined>
+
+  convertToGif(inputVideo: string, webContentId?: number): Promise<string>
 }
 
 export const IUtilService = Symbol.for('IUtilService')
@@ -65,8 +67,9 @@ export interface IUtilService {
 
   showFileInFolder(filePath: string): Promise<void>
 
-  askSelectAVideoFile(onlyStr?: boolean): Promise<string | Buffer | undefined>
+  askSelectAVideoFile(onlyStr?: boolean, failedCancel?: boolean): Promise<string | Buffer | undefined>
   askOpenPreview(): Promise<void>
+  askHideWin(): Promise<void>
 }
 
 export const ISettingService = Symbol.for('ISettingService')

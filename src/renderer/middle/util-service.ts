@@ -19,12 +19,18 @@ export class UtilService implements IUtilService{
         return await this._backendService('showFileInFolder', filePath)
     }
 
-    async askSelectAVideoFile(onlyStr?: boolean): Promise<string | Buffer | undefined> {
-        return await this._backendService('askSelectAVideoFile', onlyStr);
+    async askSelectAVideoFile(onlyStr?: boolean, failedCancel?: boolean): Promise<string | Buffer | undefined> {
+        return await this._backendService('askSelectAVideoFile', onlyStr, failedCancel);
     }
 
     async askOpenPreview(): Promise<void> {
         return await this._backendService('askOpenPreview');
     }
+
+    async askHideWin(): Promise<void> {
+        return await this._backendService('askHideWin');
+    }
+
+
 
 }

@@ -41,7 +41,8 @@ export class UniversalWindow extends BaseSFWindow {
             // movable: true,
             show: false,
             // alwaysOnTop: true,
-            opacity: 0,
+            // opacity: 0,
+            backgroundColor: 'rgba(0,0,0,0)',
             // 设置 titleBarStyle 确保显示 `退出-最大化-最小化` 按钮
             titleBarStyle: 'hidden',
             // vibrancy: 'window',

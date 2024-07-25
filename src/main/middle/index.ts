@@ -9,11 +9,11 @@ import {SettingService} from "./setting-service";
 const registerApiFromMain = () => {
 
     ipcMain.handle(HandlerStr.serviceFileService, async (_event, ...args: []) => {
-        return await invokeInterfaceFun<IFileService>(IFileService, ...args)
+        return await invokeInterfaceFun<IFileService>(IFileService, ...args, _event.sender.id)
     })
 
     ipcMain.handle(HandlerStr.serviceRecordService, async (_event, ...args: []) => {
-        return await invokeInterfaceFun<IRecordService>(IRecordService, ...args)
+        return await invokeInterfaceFun<IRecordService>(IRecordService, ...args, _event.sender.id)
     })
 
     ipcMain.handle(HandlerStr.utilService, async (_event, ...args: []) => {

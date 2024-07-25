@@ -10,7 +10,7 @@ import {join} from "path";
 import {getHomeDir} from "../../common/dynamic-defines";
 import {getRandomStr} from "../../../renderer/common/common";
 import {Dispose} from "../../../common/container/dispose";
-import {IScreenManager, IWindowsManager} from "../../electron/service";
+import {IScreenManager, ISysDialogService, IWindowsManager} from "../../electron/service";
 import {isProd} from "../../common/defines";
 import {isTest} from "../../../common/common";
 import {Process} from "../../common/process";
@@ -62,6 +62,8 @@ export class ScreenRecorder extends Dispose implements IRecordService{
     protected readonly screenManager: IScreenManager
     @inject(ISettingService)
     protected readonly settingService: ISettingService
+    @inject(ISysDialogService)
+    protected readonly dialogService: ISysDialogService
 
     protected saveDir: string
 
@@ -356,6 +358,25 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         // const blob = new Blob([buffer], { type: 'image/png' })
         // return blob
         return buffer
+    }
+
+    async convertToGif(inputVideo: string, webContentId?: number): Promise<string>{
+        Logger.info(`>> convertToGif(inputVideo: ${inputVideo}`)
+        if (!await this.fileService.isExists(inputVideo)){
+            Logger.info(`>> convertToGif file not exists`)
+            return
+        }
+
+        // const win = this.windowsManager.findWinByWebId(webContentId)
+        // const output = this.dialogService.openSaveFileDialog(
+        //     win.originWin, undefined, )
+
+        const output = inputVideo.replace('.mp4', '') + '.gif'
+
+        const cmd = this.ffmpegCommand(inputVideo, false)
+            .output(output)
+        this.cmdCommonDo(cmd)
+        return output
     }
 
 }

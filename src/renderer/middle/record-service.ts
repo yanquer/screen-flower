@@ -41,4 +41,8 @@ export class RecordService extends BaseToElectron implements IRecordService{
         return await this._backendService('recordBgImage', area, savePath, relative)
     }
 
+    async convertToGif(inputVideo: string): Promise<string> {
+        return await this._backendService('convertToGif', inputVideo)
+    }
+
 }

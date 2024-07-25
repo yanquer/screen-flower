@@ -17,7 +17,7 @@ export class DragTitle extends Component<DragTitleProps, any>{
                 // "-webkit-app-region": "drag",
                 WebkitAppRegion: "drag",
             }}
-            className={'w-full flex items-center justify-center p-2 '}
+            className={'w-full flex items-center justify-center p-2 select-none'}
         >
             {this.props.title}
         </Text>)

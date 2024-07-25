@@ -75,13 +75,13 @@ export class BaseSFWindow implements IBaseWindow{
     }
 
     async loadWindow(): Promise<void> {
-        Logger.info(`>>> loadURL ${this.url}`)
+        Logger.info(`>>> loadURL: ${this.url}`)
         await this.win.loadURL(getHostUrl(this.url))
         await this.setAllowPenetrate(false)
     }
 
     async extOperation(): Promise<void>{
-        Logger.info(`>>> loadURL extOperation`)
+        Logger.info(`>>> extOperation extOperation`)
 
         // 隐藏滚动条
         this.win.webContents.insertCSS(`
@@ -117,8 +117,9 @@ export class BaseSFWindow implements IBaseWindow{
     close(){
         if (!this._isShow) return
         this._isShow = false
-        Logger.info('>>> close window')
-        this.win?.webContents.send(HandlerStr.onWindowClose, this.id)
+        Logger.info(`>>> close window ${this.id}`)
+        // 不能发消息, 因为关了...
+        // this.win?.webContents.send(HandlerStr.onWindowClose, this.id)
         this.win?.close()
         this.win = undefined
     }
