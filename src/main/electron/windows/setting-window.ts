@@ -23,10 +23,12 @@ export class SettingWindow extends UniversalWindow {
 
     get extOption(): BrowserWindowConstructorOptions{
         return {
-            show: false,
             title: "设置",
         }
     }
 
+    async extOperation() {
+        await super.extOperation()
+    }
 }
 

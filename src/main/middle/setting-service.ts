@@ -7,6 +7,7 @@ import {DefaultLogFile} from "../common/logger";
 import {ISysDialogService, IWindowsManager} from "../electron/service";
 import {WindowNames} from "../common/defines";
 import {Emitter, Event} from "../../common/event";
+import {getServiceBySymbol} from "../../common/container/inject-container";
 
 @injectable()
 export class SettingService implements ISettingService{
@@ -16,8 +17,6 @@ export class SettingService implements ISettingService{
     protected cacheDir: string
     protected logPath: string
 
-    @inject(ISysDialogService)
-    protected readonly sysDialogService: ISysDialogService;
     @inject(IWindowsManager)
     protected readonly windowsManager: IWindowsManager;
 
@@ -40,9 +39,11 @@ export class SettingService implements ISettingService{
     }
 
     async setOrSelectCachePath(cachePath?: string): Promise<string | undefined> {
+        // 手动拿, 避免循环依赖
+        const sysDialogService: ISysDialogService = getServiceBySymbol(ISysDialogService)
         if (!cachePath){
             const setWin = this.windowsManager.getWinById(WindowNames.SettingWin)
-            const selectPath = await this.sysDialogService.openSelectDirDialog(setWin.originWin)
+            const selectPath = await sysDialogService.openSelectDirDialog(setWin.originWin)
             if (selectPath){
                 await this.setCachePathAndFire(selectPath)
                 return selectPath

@@ -31,8 +31,8 @@ export class UniversalWindow extends BaseSFWindow {
     get options(): BrowserWindowConstructorOptions  {
         return {
             ...this.winArea,
-            // frame: false, // 删除默认窗口边框
-            // transparent: true, // 设置窗口透明
+            frame: false, // 删除默认窗口边框
+            transparent: true, // 设置窗口透明
             hasShadow: false,
             enableLargerThanScreen: true,
             resizable: false,
@@ -41,7 +41,8 @@ export class UniversalWindow extends BaseSFWindow {
             alwaysOnTop: true,
             opacity: 0,
             // 设置 titleBarStyle 确保显示 `退出-最大化-最小化` 按钮
-            // titleBarStyle: 'hidden',
+            titleBarStyle: 'hidden',
+            vibrancy: 'window',
             autoHideMenuBar: true,
             webPreferences: {
                 preload: path.join(__dirname, 'preload.js'),

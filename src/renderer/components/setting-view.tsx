@@ -5,7 +5,7 @@ import {ToolTipWrap} from "./radix-ui/tool-tip-wrap";
 import {invokeElectronHandlerAsync} from "../common/common";
 import {getServiceBySymbol} from "../../common/container/inject-container";
 import {ISettingService, IUtilService} from "../../common/service";
-import {set} from "lodash";
+import {DragTitle} from "./drag-title";
 
 
 export class SettingView extends Component<any, any>{
@@ -16,8 +16,9 @@ export class SettingView extends Component<any, any>{
         const {logPath, cachePath, setLogPath, setCachePath, setShowDock} = this.context
         return (<div className={'w-screen h-screen flex items-center justify-center overflow-hidden bg-gray-500'}>
             <Theme appearance={'dark'}
-                className={"p-4 pt-10 bg-gray-800"}
+                className={"p-4 pt-1 bg-gray-800"}
             >
+                <DragTitle title={'设置'}/>
                 <Grid columns={"3"} gap="3"
                     className="bg-gray-700 p-4 rounded-lg"
                 >
