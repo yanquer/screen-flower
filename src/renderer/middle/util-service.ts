@@ -1,6 +1,7 @@
 import {IUtilService} from "../../common/service";
 import {ServiceFactory} from "./service-factory";
 import {injectable} from "inversify";
+import * as Buffer from "node:buffer";
 
 
 @injectable()
@@ -29,6 +30,10 @@ export class UtilService implements IUtilService{
 
     async askHideWin(): Promise<void> {
         return await this._backendService('askHideWin');
+    }
+
+    async askLastRecord(alsoSelect?: boolean): Promise<string | undefined> {
+        return await this._backendService('askLastRecord', alsoSelect);
     }
 
 

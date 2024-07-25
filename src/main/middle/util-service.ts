@@ -1,4 +1,4 @@
-import {IFileService, IUtilService} from "../../common/service";
+import {IFileService, IRecordService, IUtilService} from "../../common/service";
 import {inject, injectable} from "inversify";
 import {IScreenManager, ISysDialogService, IWindowsManager} from "../electron/service";
 import {shell} from "electron";
@@ -17,6 +17,8 @@ export class UtilService implements IUtilService{
     protected readonly fileService: IFileService;
     @inject(ISysDialogService)
     protected readonly sysDialogService: ISysDialogService;
+    @inject(IRecordService)
+    protected readonly recordService: IRecordService;
 
     async setClickPenetrate(penetrate: boolean, webContentId?: number): Promise<void> {
         await this.windowsManager.setClickPenetrateById(webContentId, penetrate)
@@ -30,7 +32,17 @@ export class UtilService implements IUtilService{
         return (await this.fileService.isExists(filePath)) && shell.showItemInFolder(filePath);
     }
 
+    async askLastRecord(alsoSelect: boolean = false, webContentId?: number): Promise<string | undefined> {
+        const ret = this.recordService.recentRecordPath
+        if (ret) return ret
+        if (alsoSelect) {
+            return await this.askSelectAVideoFile(true, true, webContentId) as string
+        }
+        return undefined
+    }
+
     async askSelectAVideoFile(onlyStr: boolean=true, failedCancel: boolean=true, webContentId?: number): Promise<string | Buffer | undefined>{
+
         const curWin = this.windowsManager.findWinByWebId(webContentId)
         const selectFile = await this.sysDialogService.openSelectFileDialog(
             curWin.originWin, undefined,

@@ -45,6 +45,7 @@ export interface IContextMenuTemplate {
 export const IRecordService = Symbol.for('IRecordService')
 export interface IRecordService {
   recordingRunEmitterEvent?: Event<boolean>
+  recentRecordPath?: string | undefined
 
   startRecord(area: CaptureArea, savePath?: string,): Promise<void>
   pauseRecord(): Promise<void>
@@ -67,6 +68,8 @@ export interface IUtilService {
 
   showFileInFolder(filePath: string): Promise<void>
 
+  // alsoSelect: false, 如果没有最近打开的文件, 是否打开文件选择器
+  askLastRecord(alsoSelect?: boolean, webContentId?: number): Promise<string | undefined>
   askSelectAVideoFile(onlyStr?: boolean, failedCancel?: boolean): Promise<string | Buffer | undefined>
   askOpenPreview(): Promise<void>
   askHideWin(): Promise<void>

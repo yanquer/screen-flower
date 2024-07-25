@@ -15,17 +15,18 @@ export default function Preview(){
         invokeElectronHandlerAsync(async () => {
             if (!videoUrl && canPreview) {
                 const utilService: IUtilService = getServiceBySymbol(IUtilService);
-                const videoPath: string = await utilService.askSelectAVideoFile() as string
+                const videoPath: string = await utilService.askLastRecord(true) as string
                 setVideoUrl(videoPath)
             }
         }).then()
     }, [canPreview])
 
     return (
-        canPreview ? <div>
-            {/*<Link href={"/capture"}>返回录制</Link>*/}
-
+        canPreview && videoUrl ? <div>
             <PlayerView/>
-        </div> : ""
+        </div> :
+            <div
+                className={"w-full bg-gray-500 h-full"}
+            ></div>
     );
 }

@@ -166,6 +166,9 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         }
     }
 
+    get recentRecordPath(): string | undefined{
+        return this.curRecordPath
+    }
     protected curRecordPath: string
     async startRecord(area: CaptureArea, savePath?: string,){
         await this.initWait
@@ -215,8 +218,8 @@ export class ScreenRecorder extends Dispose implements IRecordService{
 
         setTimeout( () => {
             this.windowsManager.openWinById(WindowNames.PlayerWin)
-            this.curRecordPath = undefined
-        }, 10000)
+            // this.curRecordPath = undefined
+        }, 500)
 
         if (onlyStr) return this.curRecordPath
 

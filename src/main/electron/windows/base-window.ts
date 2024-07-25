@@ -134,7 +134,13 @@ export class BaseSFWindow implements IBaseWindow{
             //      除了此方案, 貌似还可以先加载一个其他的 browserWindows
             setTimeout(() => this.win.setOpacity(1), 100)
         }
-        this.win?.webContents.send(HandlerStr.onWindowShow, this.id)
+        // Logger.info(`>>> send show to front, ${this.id}`)
+        // this.win?.webContents.send(HandlerStr.onWindowShow, this.id)
+        // show 后才发送, 避免太早, 前端还没有加载
+        this.win?.on('show', ()=>{
+            Logger.info(`>>> inner send show to front, ${this.id}`)
+            this.win?.webContents.send(HandlerStr.onWindowShow, this.id)
+        })
     }
 
     hide() {
