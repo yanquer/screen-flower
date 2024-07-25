@@ -23,8 +23,9 @@ import {RecordedTimer} from "../movie-stream/record-timer";
 import {CursorToolbar} from "./layout/cursor-toolbar";
 import {BlurToolbar} from "./layout/blur-toolbar";
 import {getServiceBySymbol} from "../../../common/container/inject-container";
-import {IRecordService} from "../../../common/service";
+import {IRecordService, IUtilService} from "../../../common/service";
 import {Logger} from "../../common/logger";
+import {createBlobByBuffer} from "../../../common/common";
 
 
 interface ActionToolBarState {
@@ -46,6 +47,7 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
     }
 
     protected readonly recordService: IRecordService = getServiceBySymbol<IRecordService>(IRecordService)
+    protected readonly utilService: IUtilService = getServiceBySymbol<IUtilService>(IUtilService)
 
     protected captureRef = createRef<ScreenCaptureBrowser | undefined>()
     protected boxRef = createRef<HTMLDivElement | undefined>()
@@ -101,7 +103,8 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
     // }
 
     render() {
-        const {setAllowPenetrate, setIsInActionBar, barMode, recording, setRecording} = this.context
+        const {setAllowPenetrate, setIsInActionBar, barMode,
+            recording, setRecording, setPreviewBlob, canCapture} = this.context
 
         return (
             <div className={"bg-white pointer-events-auto"}
@@ -193,7 +196,13 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                                 buttonClassName={`${toolbarButton}`}
                                                 buttonClickHandler={() => {
                                                     // this.captureRef.current.stopCapture()
-                                                    this.recordService.stopRecord().then()
+                                                    this.recordService.stopRecord().then(
+                                                        data => {
+                                                            Logger.info(`>> stop record front, get data ${data}`)
+                                                            data && setPreviewBlob(createBlobByBuffer(data))
+                                                            // data && this.utilService.askOpenPreview()
+                                                        }
+                                                    )
                                                     setRecording(false)
                                                 }}
                                             >

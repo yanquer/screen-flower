@@ -41,10 +41,17 @@ export interface IRecordContext{
     areaElement?: HTMLCanvasElement
     setAreaElement?: (areaElement: HTMLCanvasElement) => void
 
+    // 是否show Preview-Window
     canPreview: boolean
     setCanPreview?: (canPreview: boolean) => void
     previewBlob?: Blob
     setPreviewBlob?: (previewBlob?: Blob) => void
+
+    // 是否show Capture-Window
+    canCapture: boolean,
+    setCanCapture?: (canCapture: boolean) => void
+    canSetting: boolean,
+    setCanSetting?: (canSetting: boolean) => void
 
     toPage?: (pageUrl: string) => void
 
@@ -97,4 +104,6 @@ export const RecordContext = createContext<IRecordContext>({
     showDock: false,
     cachePath: "~/screen-recorder",
     logPath: "~/Log",
+    canCapture: false,
+    canSetting: false,
 })

@@ -12,6 +12,7 @@ export enum HandlerStr {
 
 
   onWindowHide = 'onService:onWindowHide',
+  onWindowShow = 'onService:onWindowShow',
 
   openRightContextMenu = 'onService:openRightContextMenu',
 
@@ -23,3 +24,18 @@ export enum HandlerStr {
 export enum ContextMenuNames {
   IRightContextMenuManager = 'IRightContextMenuManager'
 }
+
+export enum WindowNames {
+  CaptureWin = 'capture-window',
+  UniversalWin = 'universal-window',
+  SettingWin = 'setting-window',
+  PlayerWin = 'player-window',
+}
+
+// 为了 electron 加载本地文件用
+//    为了安全性不使用
+//     webPreferences: {
+//      webSecurity: false
+//     }
+export const ProtocolViaLocal = 'protocolViaLocal://';
+

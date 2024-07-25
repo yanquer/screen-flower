@@ -3,7 +3,7 @@ import {forceQuit, getAboutMenuItem} from "./menu-items";
 import {MenuNames} from "./menu-names";
 import {getServiceBySymbol} from "../../common/container/inject-container";
 import {IWindowsManager} from "../electron/service";
-import {WindowNames} from "../common/defines";
+import {WindowNames} from "../../common/defines";
 
 
 export const getMenuTemplate = async (): Promise<Array<(MenuItemConstructorOptions) | (MenuItem)>> => [
@@ -14,6 +14,15 @@ export const getMenuTemplate = async (): Promise<Array<(MenuItemConstructorOptio
             const winManager = getServiceBySymbol<IWindowsManager>(IWindowsManager)
             app.focus();
             winManager.openWinById(WindowNames.CaptureWin)
+        }
+    },
+    {
+        id: MenuNames.openVideo,
+        label: `打开视频`,
+        click: () => {
+            const winManager = getServiceBySymbol<IWindowsManager>(IWindowsManager)
+            app.focus();
+            winManager.openWinById(WindowNames.PlayerWin)
         }
     },
     {

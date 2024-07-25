@@ -1,12 +1,12 @@
 
 
 import {BaseSFWindow} from "./base-window";
-import {WindowNames} from "../../common/defines";
 import {injectable, postConstruct} from "inversify";
 import {Input, Event, Display, BrowserWindowConstructorOptions} from "electron";
 import path from "path";
 import {IRecordService} from "../../../common/service";
 import {getServiceBySymbol} from "../../../common/container/inject-container";
+import {WindowNames} from "../../../common/defines";
 
 @injectable()
 export class CaptureWindow extends BaseSFWindow{
@@ -42,12 +42,15 @@ export class CaptureWindow extends BaseSFWindow{
         super.init();
 
         setTimeout(() => {
-            const recordService: IRecordService = getServiceBySymbol(IRecordService);
-            recordService.recordingRunEmitterEvent(
-                (isRecording: boolean) => {
-                    this.setAllowPenetrate(isRecording).then()
-                }
-            )
+            // const recordService: IRecordService = getServiceBySymbol(IRecordService);
+            // recordService.recordingRunEmitterEvent(
+            //     (isRecording: boolean) => {
+            //         // this.setAllowPenetrate(isRecording).then()
+            //         // if (!isRecording){
+            //         //     this.hide()
+            //         // }
+            //     }
+            // )
         }, 1000)
     }
 

@@ -1,8 +1,8 @@
 import {BaseSFWindow} from "./base-window";
-import {WindowNames} from "../../common/defines";
 import {BrowserWindowConstructorOptions, Display, Event} from "electron";
 import path from "path";
 import {injectable} from "inversify";
+import {WindowNames} from "../../../common/defines";
 
 
 // 通用窗口

@@ -5,9 +5,9 @@ import {join} from "path";
 import {getHomeDir} from "../common/dynamic-defines";
 import {DefaultLogFile} from "../common/logger";
 import {ISysDialogService, IWindowsManager} from "../electron/service";
-import {WindowNames} from "../common/defines";
 import {Emitter, Event} from "../../common/event";
 import {getServiceBySymbol} from "../../common/container/inject-container";
+import {WindowNames} from "../../common/defines";
 
 @injectable()
 export class SettingService implements ISettingService{

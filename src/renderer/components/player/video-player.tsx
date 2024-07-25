@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect, useState, useRef, useMemo } from "react";
 import "plyr-react/plyr.css";
-import {RecordContext} from "../common/global-context";
+import {RecordContext} from "../../common/global-context";
 import dynamic from "next/dynamic";
 const Plyr = dynamic(() => import("plyr-react"), { ssr: false });
 

@@ -1,9 +1,8 @@
 
-import {WindowNames} from "../../common/defines";
-import {BrowserWindowConstructorOptions, Display, Event} from "electron";
-import path from "path";
+
 import {injectable} from "inversify";
 import {UniversalWindow} from "./universal-window";
+import {WindowNames} from "../../../common/defines";
 
 
 @injectable()

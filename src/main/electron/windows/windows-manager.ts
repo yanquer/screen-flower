@@ -1,9 +1,7 @@
 import {IBaseWindow, IWindowsManager} from "../service";
-import {WindowNames} from "../../common/defines";
 import {injectable, multiInject, postConstruct} from "inversify";
-import {type} from "node:os";
-import {BrowserWindow} from "electron";
 import {Logger} from "../../common/logger";
+import {WindowNames} from "../../../common/defines";
 
 
 @injectable()
@@ -59,14 +57,17 @@ export class WindowsManager implements IWindowsManager{
         this.allWins.map((win: IBaseWindow) => win.hide())
     }
 
-    protected findWinByWebId(id: number): IBaseWindow | undefined{
-        return this.allWins.find(win => win.findWinByWebContentId(id))
+    findWinByWebId(id: number): IBaseWindow | undefined{
+        Logger.info(`>> try find win by ${id}, type: ${typeof id}`);
+        if (!id) return undefined
+        const ret = this.allWins.find(win => win.findWinByWebContentId(id))
+        Logger.info(`>> find win ${ret.id}`);
+        return ret
     }
 
     async setClickPenetrateById(id: WindowNames | number, allow: boolean): Promise<void> {
-        Logger.info(`>> try find win by ${id}, type: ${typeof id}`);
         const cur = typeof id === 'number' ? this.findWinByWebId(id) : this.getWinById(id)
-        Logger.info(`>> find win ${cur.id}`);
+        Logger.info(`>> setClickPenetrateById ${cur.id}`);
         if (cur) {
             await cur.setAllowPenetrate(allow)
         }

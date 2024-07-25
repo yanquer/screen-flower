@@ -1,9 +1,9 @@
 import {inject, injectable, postConstruct} from "inversify";
-import {getHostUrl, WindowNames} from "../../common/defines";
+import {getHostUrl} from "../../common/defines";
 import {BrowserWindow, BrowserWindowConstructorOptions, Event, Input} from "electron";
 import {Emitter} from "../../../common/event";
 import {createWindow} from "../../helpers";
-import {HandlerStr} from "../../../common/defines";
+import {HandlerStr, WindowNames} from "../../../common/defines";
 import {WindowsUtils} from "./windows-utils";
 import {IBaseWindow, IScreenManager} from "../service";
 import {Logger} from "../../common/logger";
@@ -110,26 +110,34 @@ export class BaseSFWindow implements IBaseWindow{
     }
 
     close(){
+        if (!this._isShow) return
+        this._isShow = false
         Logger.info('>>> close window')
         this.win?.close()
         this.win = undefined
         this.win?.webContents.send(HandlerStr.onWindowHide)
     }
 
+    protected _isShow = false
     show() {
+        if (this._isShow) return
+        this._isShow = true
         this.win.show()
         if (this.firstInit) {
             // 首次启动的时候, 先 opacity: 0 , 再 1 , 避免看到首次show browserWindows 白屏
             //      除了此方案, 貌似还可以先加载一个其他的 browserWindows
             setTimeout(() => this.win.setOpacity(1), 100)
         }
+        this.win?.webContents.send(HandlerStr.onWindowShow, this.id)
     }
 
     hide() {
+        if (!this._isShow) return
+        this._isShow = false
         Logger.info(`>>> hide window ${this.name}`)
         this.windowHideEmitter.fire(this.id)
         this.win?.hide()
-        this.win?.webContents.send(HandlerStr.onWindowHide)
+        this.win?.webContents.send(HandlerStr.onWindowHide, this.id)
     }
 
     async setAllowPenetrate(allow: boolean): Promise<void> {

@@ -11,12 +11,13 @@ import {getHomeDir} from "../../common/dynamic-defines";
 import {getRandomStr} from "../../../renderer/common/common";
 import {Dispose} from "../../../common/container/dispose";
 import {IScreenManager, IWindowsManager} from "../../electron/service";
-import {isProd, WindowNames} from "../../common/defines";
+import {isProd} from "../../common/defines";
 import {isTest} from "../../../common/common";
 import {Process} from "../../common/process";
 import ffmpegPath from "ffmpeg-static";
 import {Logger} from "../../common/logger";
 import util from "electron-util";
+import {WindowNames} from "../../../common/defines";
 
 // import {fixPathForAsarUnpack} from 'electron-util'
 // const {fixPathForAsarUnpack} = require('electron-util');
@@ -163,6 +164,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         }
     }
 
+    protected curRecordPath: string
     async startRecord(area: CaptureArea, savePath?: string,){
         await this.initWait
 
@@ -178,6 +180,8 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         }
 
         const output = newSavePath ?? './report/video/simple3.mp4'
+
+        this.curRecordPath = output
 
         // this.ffmpegCommand
         // this.ffmpegCommand({source: "1"})
@@ -197,7 +201,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         // this.recordingRunEmitter.fire(true)
     }
 
-    async stopRecord(){
+    async stopRecord(): Promise<Buffer|undefined>{
         Logger.info('>> Stop record... ')
 
         this.currentCmd?.kill('SIGTERM')
@@ -205,6 +209,16 @@ export class ScreenRecorder extends Dispose implements IRecordService{
 
         this.recordingRunEmitter.fire(false)
 
+        Logger.info(`>> stopRecord file ${this.curRecordPath}`)
+
+        const data = await this.fileService.openBuffer(this.curRecordPath)
+        Logger.info(`>> stopRecord buffer has data ${data && data.length > 0}`)
+        if (!data) this.windowsManager.hideAllWindows().then();
+        setTimeout( () => {
+            this.windowsManager.openWinById(WindowNames.PlayerWin)
+            this.curRecordPath = undefined
+        }, 10000)
+        return data
     }
 
     async pauseRecord(): Promise<void> {

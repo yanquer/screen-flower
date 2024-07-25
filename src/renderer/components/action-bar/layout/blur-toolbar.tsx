@@ -6,6 +6,7 @@ import {
     TransformIcon,
     TrashIcon
 } from "../../svgs";
+import {Logger} from "../../../common/logger";
 
 interface BlurToolbarProps{
     className?: string;
@@ -17,6 +18,7 @@ export class BlurToolbar extends Component<BlurToolbarProps, any>{
 
     protected setPos(){
         const {setAllowPenetrate, setIsInActionBar, recording} = this.context
+        Logger.info('>>> setPos try setAllowPenetrate ', recording && true)
         recording && setAllowPenetrate(true)
         setIsInActionBar(false)
     }
@@ -44,9 +46,10 @@ export class BlurToolbar extends Component<BlurToolbarProps, any>{
                         ${this.context.blurView ? "tool-button-active" : "hover:bg-gray-200 hover:scale-95 "}
                         `}
                          onClick={() => {
+                             Logger.info('>>> blur onValueChange', true)
+
                              this.context.setBlurView(true)
                              this.context.setBarMode('none')
-
                              this.setPos()
 
                          }}
@@ -62,6 +65,8 @@ export class BlurToolbar extends Component<BlurToolbarProps, any>{
                         hover:bg-gray-200 hover:scale-95
                         `}
                          onClick={() => {
+                             Logger.info('>>> blur onValueChange', true)
+
                              this.context.setBarMode('none')
                              this.context.setBlurView(false)
 

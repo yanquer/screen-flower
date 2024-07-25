@@ -50,7 +50,7 @@ export interface IRecordService {
   pauseRecord(): Promise<void>
   resumeRecord(): Promise<void>
   restartRecord(): Promise<void>
-  stopRecord(): Promise<void>
+  stopRecord(): Promise<Buffer|undefined>
   cancelRecord(): Promise<void>
 
   recordBgImage(area: CaptureArea, savePath?: string, relative?: boolean): Promise<Buffer | undefined>
@@ -64,6 +64,9 @@ export interface IUtilService {
   getCursorScreenPoint(): Promise<{ x: number, y: number }>
 
   showFileInFolder(filePath: string): Promise<void>
+
+  askSelectAVideoFile(): Promise<Buffer | undefined>
+  askOpenPreview(): Promise<void>
 }
 
 export const ISettingService = Symbol.for('ISettingService')

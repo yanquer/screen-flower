@@ -3,6 +3,7 @@ import * as Toolbar from "@radix-ui/react-toolbar";
 import {CursorIcon, HighlightCursorIcon, SpotlightCursorIcon, TargetCursorIcon} from "../../svgs";
 import {CursorMode, IRecordContext, RecordContext} from "../../../common/global-context";
 import {ToolTipWrap} from "../../radix-ui/tool-tip-wrap";
+import {Logger} from "../../../common/logger";
 
 
 export class CursorToolbar extends Component<any, any>{
@@ -11,6 +12,7 @@ export class CursorToolbar extends Component<any, any>{
 
     protected setPos(){
         const {setAllowPenetrate, setIsInActionBar, recording} = this.context
+        Logger.info('>>> setPos try setAllowPenetrate ', recording && true)
         recording && setAllowPenetrate(true)
         setIsInActionBar(false)
     }
@@ -28,6 +30,7 @@ export class CursorToolbar extends Component<any, any>{
                 className="flex items-center justify-center h-full"
                 value={this.context.cursorMode}
                 onValueChange={(value: CursorMode) => {
+                    Logger.info('>>> cursor onValueChange', value)
                     if (value) {
                         this.context.setCursorMode(value)
                     }

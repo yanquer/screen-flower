@@ -12,11 +12,12 @@ export class SysDialogService implements ISysDialogService{
 
     protected _sysDialog = dialog
 
-    async openSelectFileDialog(win: BrowserWindow, defaultPath?: string): Promise<string | undefined> {
+    async openSelectFileDialog(win: BrowserWindow, defaultPath?: string, filters?: {name: string, extensions: string[]}[]): Promise<string | undefined> {
         const res = this._sysDialog.showOpenDialogSync(win, {
             title: "Select File",
             defaultPath: defaultPath ?? await this.settingService.getCachePath(),
             properties: ['openFile'],
+            filters,
         })
         if (res) return res[0]
     }

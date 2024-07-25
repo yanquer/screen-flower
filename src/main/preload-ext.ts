@@ -8,11 +8,17 @@ const handler = {
   settingService: (...args: []) => ipcRenderer.invoke(HandlerStr.settingService, ...args),
 
   // main => render
-  onHandleWindowHide: (callback: (...args: []) => any) => {
-    ipcRenderer.on(HandlerStr.onWindowHide, (_event: IpcRendererEvent, ..._args: []) => {
+  onHandleWindowHide: (callback: (...args: any[]) => any) => {
+    ipcRenderer.on(HandlerStr.onWindowHide, (_event: IpcRendererEvent, ..._args: any[]) => {
       callback(..._args)
     })
   },
+  onHandleWindowShow: (callback: (...args: any[]) => any) => {
+    ipcRenderer.on(HandlerStr.onWindowShow, (_event: IpcRendererEvent, ..._args: any[]) => {
+      callback(..._args)
+    })
+  },
+
 }
 
 contextBridge.exposeInMainWorld('ipcInvoke', handler)

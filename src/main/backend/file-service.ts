@@ -1,6 +1,6 @@
 import { stat, readFile, readdirSync, writeFileSync, existsSync, mkdirSync, renameSync } from 'fs'
 import { dump, load } from 'js-yaml'
-import path, { join, dirname } from 'path'
+import { join, dirname } from 'path'
 
 import { IFileService } from '../../common/service'
 import { PathStat } from '../../common/defines'
@@ -33,7 +33,9 @@ export class FileService implements IFileService {
   }
 
   async openBuffer(path: string): Promise<Buffer | undefined> {
+    Logger.info(`>> Opening buffer file ${path}`)
     if (!(await this.isExists(path))) {
+      Logger.info(`>> buffer file ${path} not exists`)
       return undefined
     }
 
@@ -42,7 +44,7 @@ export class FileService implements IFileService {
       readFile(path, {
       }, (err, data) => {
         if (err) {
-          Logger.info(err)
+          Logger.info(`>> buffer file ${path} err: ${err}`)
         }
         ret = data
         resolve(ret)

@@ -1,7 +1,7 @@
 import {BrowserWindow, BrowserWindowConstructorOptions} from "electron";
-import {WindowNames} from "../common/defines";
 import {Event} from "../../common/event";
 import {CaptureArea, CursorPosition, ScreenArea} from "../../common/models";
+import {WindowNames} from "../../common/defines";
 
 
 export const IBaseWindow = Symbol("IBaseWindow");
@@ -31,6 +31,7 @@ export interface IWindowsManager{
     openWinById(id: WindowNames, showNow?: boolean): Promise<void>
     hideAllWindows(): Promise<void>
     setWinHideEventById(id: WindowNames, evt: (arg: WindowNames) => any): void
+    findWinByWebId(id: number): IBaseWindow | undefined
     setClickPenetrateById(id: WindowNames | number, allow: boolean): Promise<void>
 }
 
@@ -81,7 +82,7 @@ export interface DialogOptions{
 }
 export const ISysDialogService = Symbol.for("ISysDialogService");
 export interface ISysDialogService{
-    openSelectFileDialog(win: BrowserWindow, defaultPath?: string): Promise<string | undefined>;
+    openSelectFileDialog(win: BrowserWindow, defaultPath?: string, filters?: {name: string, extensions: string[]}[]): Promise<string | undefined>;
     openSelectDirDialog(win: BrowserWindow, defaultPath?: string): Promise<string | undefined>;
     openSaveFileDialog(win: BrowserWindow, defaultPath?: string): Promise<string | undefined>;
 }
