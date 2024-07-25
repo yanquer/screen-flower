@@ -17,11 +17,11 @@ const registerApiFromMain = () => {
     })
 
     ipcMain.handle(HandlerStr.utilService, async (_event, ...args: []) => {
-        return await invokeInterfaceFun<IUtilService>(IUtilService, ...args)
+        return await invokeInterfaceFun<IUtilService>(IUtilService, ...args, _event.sender.id)
     })
 
     ipcMain.handle(HandlerStr.settingService, async (_event, ...args: []) => {
-        return await invokeInterfaceFun<ISettingService>(ISettingService, ...args)
+        return await invokeInterfaceFun<ISettingService>(ISettingService, ...args, _event.sender.id)
     })
 
 }

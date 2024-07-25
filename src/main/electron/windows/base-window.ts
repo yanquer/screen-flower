@@ -136,5 +136,9 @@ export class BaseSFWindow implements IBaseWindow{
         WindowsUtils.clickPenetrateWindow(this.win, allow)
     }
 
+    findWinByWebContentId(id: number): BrowserWindow | undefined{
+        return this.win?.webContents.id === id ? this.win : undefined
+    }
+
 }
 

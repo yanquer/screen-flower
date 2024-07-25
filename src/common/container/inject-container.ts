@@ -1,5 +1,6 @@
 import { Container, interfaces } from 'inversify'
 import { isPromise } from 'inversify/lib/utils/async'
+import {Logger} from "../logger";
 
 export const InjectContainer = new Container()
 
@@ -34,13 +35,13 @@ export const getDefaultContainer = (): Container => {
 
 export const invokeInterfaceFun = async <T>(
   serviceIdentifier: interfaces.ServiceIdentifier<T>,
-  ...args: []
+  ...args: any[]
 ): Promise<any> => {
-  // @ts-expect-error: funName is string
   const [funName, ...extArgs] = args
   const interface_: any = getServiceBySymbol(serviceIdentifier)
   if (!funName) return interface_
-  console.log(`>> invokeInterfaceFun: ${interface_} -- ${funName}`)
+  Logger.log(`>> invokeInterfaceFun: ${interface_} -- ${funName}`)
+  Logger.log(extArgs)
   let ret = interface_[funName](...extArgs)
   if (isPromise(ret)) ret = await ret
   return ret

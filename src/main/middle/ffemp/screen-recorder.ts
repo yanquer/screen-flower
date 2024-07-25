@@ -73,17 +73,12 @@ export class ScreenRecorder extends Dispose implements IRecordService{
             !exists && await this.fileService.mkDir(this.saveDir)
         })
 
-        const capWin = this.windowsManager.getWinById(WindowNames.CaptureWin)
-        if (capWin){
-            capWin.windowHideEmitterEvent(
-                (winName: WindowNames) => {
-                    if (winName === WindowNames.CaptureWin){
-                        Logger.info('>>> close cap win')
-                        this.stopRecord().then()
-                    }
-                }
-            )
-        }
+        this.windowsManager.setWinHideEventById(WindowNames.CaptureWin, (winName) => {
+            if (winName === WindowNames.CaptureWin){
+                Logger.info('>>> close cap win')
+                this.stopRecord().then()
+            }
+        })
 
         this.settingService.cachePathChangeEvent?.((cacheDir: string) => {
             this.saveDir = cacheDir

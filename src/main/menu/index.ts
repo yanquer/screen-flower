@@ -19,12 +19,11 @@ const openContextMenu = async () => {
 
 export const initializeMenu = (menuImg: string) => {
     const winManager = getServiceBySymbol<IWindowsManager>(IWindowsManager)
-    const capWin = winManager.getWinById(WindowNames.CaptureWin)
 
     // tray = new Tray(menuImg);
     // mac只能用nativeImage
     tray = new Tray(nativeImage.createFromPath(menuImg));
-    tray.on('click', async () => {await capWin.open()});
+    tray.on('click', async () => {await winManager.openWinById(WindowNames.CaptureWin)});
     tray.on('right-click', openContextMenu);
     tray.on('drop-files', (_, files) => {
 

@@ -12,11 +12,8 @@ export const getMenuTemplate = async (): Promise<Array<(MenuItemConstructorOptio
         label: `启动录制`,
         click: () => {
             const winManager = getServiceBySymbol<IWindowsManager>(IWindowsManager)
-            const capWin = winManager.getWinById(WindowNames.CaptureWin)
-            if (capWin) {
-                app.focus();
-                capWin.open()
-            }
+            app.focus();
+            winManager.openWinById(WindowNames.CaptureWin)
         }
     },
     {
@@ -24,12 +21,8 @@ export const getMenuTemplate = async (): Promise<Array<(MenuItemConstructorOptio
         label: `设置`,
         click: () => {
             const winManager = getServiceBySymbol<IWindowsManager>(IWindowsManager)
-            const setWin = winManager.getWinById(WindowNames.SettingWin)
-            winManager.getWinById(WindowNames.CaptureWin)?.hide()
-            if (setWin) {
-                app.focus();
-                setWin.open(true);
-            }
+            app.focus();
+            winManager.openWinById(WindowNames.SettingWin, true)
         }
     },
     getAboutMenuItem(),

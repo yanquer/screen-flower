@@ -15,18 +15,15 @@ export class UtilService implements IUtilService{
     @inject(IFileService)
     protected readonly fileService: IFileService;
 
-    async setClickPenetrate(penetrate: boolean): Promise<void> {
-        const capWin = this.windowsManager.getWinById(WindowNames.CaptureWin)
-        if (capWin) {
-            await capWin.setAllowPenetrate(penetrate)
-        }
+    async setClickPenetrate(penetrate: boolean, webContentId?: number): Promise<void> {
+        await this.windowsManager.setClickPenetrateById(webContentId, penetrate)
     }
 
-    async getCursorScreenPoint(): Promise<{ x: number; y: number }> {
+    async getCursorScreenPoint(webContentId?: number): Promise<{ x: number; y: number }> {
         return this.screenManager.getCursorPosition()
     }
 
-    async showFileInFolder(filePath: string): Promise<void> {
+    async showFileInFolder(filePath: string, webContentId?: number): Promise<void> {
         return (await this.fileService.isExists(filePath)) && shell.showItemInFolder(filePath);
     }
 

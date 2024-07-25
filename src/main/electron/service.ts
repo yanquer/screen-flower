@@ -19,6 +19,8 @@ export interface IBaseWindow {
     loadWindow(): Promise<void>
     // 是否允许点击穿透
     setAllowPenetrate(allow: boolean): Promise<void>
+
+    findWinByWebContentId(id: number): BrowserWindow | undefined
 }
 
 
@@ -26,6 +28,10 @@ export const IWindowsManager = Symbol.for("IWindowsManager");
 export interface IWindowsManager{
     registerWin(id: WindowNames, win: IBaseWindow): void
     getWinById(id: WindowNames): IBaseWindow
+    openWinById(id: WindowNames, showNow?: boolean): Promise<void>
+    hideAllWindows(): Promise<void>
+    setWinHideEventById(id: WindowNames, evt: (arg: WindowNames) => any): void
+    setClickPenetrateById(id: WindowNames | number, allow: boolean): Promise<void>
 }
 
 
