@@ -201,7 +201,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         // this.recordingRunEmitter.fire(true)
     }
 
-    async stopRecord(): Promise<Buffer|undefined>{
+    async stopRecord(onlyStr: boolean=true): Promise<Buffer|string|undefined>{
         Logger.info('>> Stop record... ')
 
         this.currentCmd?.kill('SIGTERM')
@@ -211,13 +211,17 @@ export class ScreenRecorder extends Dispose implements IRecordService{
 
         Logger.info(`>> stopRecord file ${this.curRecordPath}`)
 
-        const data = await this.fileService.openBuffer(this.curRecordPath)
-        Logger.info(`>> stopRecord buffer has data ${data && data.length > 0}`)
-        if (!data) this.windowsManager.hideAllWindows().then();
         setTimeout( () => {
             this.windowsManager.openWinById(WindowNames.PlayerWin)
             this.curRecordPath = undefined
         }, 10000)
+
+        if (onlyStr) return this.curRecordPath
+
+        const data = await this.fileService.openBuffer(this.curRecordPath)
+        Logger.info(`>> stopRecord buffer has data ${data && data.length > 0}`)
+        if (!data) this.windowsManager.hideAllWindows().then();
+
         return data
     }
 

@@ -97,7 +97,7 @@ const CursorModes = () => {
                 if (x != size?.x || y != size.y){
                     setSize({x, y});
                 }
-            }, 10)
+            }, 100)
         } else {
             if (sizeRef.current) clearInterval(sizeRef.current);
         }

@@ -8,4 +8,5 @@ export enum MenuNames {
     startRecordPage = 'startRecordPage',
     settingView = 'settingView',
     openVideo = 'openVideo',
+    openRecVideo = 'openRecVideo',
 }

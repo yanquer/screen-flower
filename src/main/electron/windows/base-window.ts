@@ -99,7 +99,12 @@ export class BaseSFWindow implements IBaseWindow{
     }
 
     protected handleKeydown(event: Event, input: Input) {
-        Logger.info(`>>> click key ${input?.key}`)
+        Logger.info(`>>> click 
+            key: ${input?.key} 
+            control: ${input.control} 
+            meta: ${input.meta} 
+            modifiers: ${input.modifiers}
+        `)
         switch (input.key){
             case 'Escape':
                 Logger.info(`>>> click Escape`)
@@ -113,9 +118,9 @@ export class BaseSFWindow implements IBaseWindow{
         if (!this._isShow) return
         this._isShow = false
         Logger.info('>>> close window')
+        this.win?.webContents.send(HandlerStr.onWindowClose, this.id)
         this.win?.close()
         this.win = undefined
-        this.win?.webContents.send(HandlerStr.onWindowHide)
     }
 
     protected _isShow = false

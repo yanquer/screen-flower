@@ -39,6 +39,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   const [canCapture, setCanCapture] = useState<boolean>(false)
   const [canSetting, setCanSetting] = useState<boolean>(false)
+  const [videoUrl, setVideoUrl] = useState<string>("")
 
   // 设置
   const [showDock, setShowDock] = useState<boolean>(false)
@@ -55,6 +56,16 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     invokeElectronHandler(
         () => {
+            window.ipcInvoke.onHandleWindowClose((winName: WindowNames) => {
+                Logger.info(`>>>> _app get: close ${winName}`);
+                (winName === WindowNames.CaptureWin) && setCanCapture(false);
+                (winName === WindowNames.SettingWin) && setCanSetting(false);
+                if (winName === WindowNames.PlayerWin) {
+                    setVideoUrl("")
+                    setCanPreview(false);
+                }
+                setRecording(false)
+            })
           window.ipcInvoke.onHandleWindowHide((winName: WindowNames) => {
             Logger.info(`>>>> _app get: hide ${winName}`);
             (winName === WindowNames.CaptureWin) && setCanCapture(false);
@@ -68,7 +79,9 @@ function MyApp({ Component, pageProps }: AppProps) {
             setCanSetting(winName === WindowNames.SettingWin);
             setCanPreview(winName === WindowNames.PlayerWin);
           })
+
         }
+
     )
     window.addEventListener('error', (error) => {
       // 处理渲染进程错误
@@ -106,7 +119,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         logPath, setLogPath,
         canCapture, setCanCapture,
         canSetting, setCanSetting,
-
+          videoUrl, setVideoUrl,
       }}>
         <Component {...pageProps} />
       </RecordContext.Provider>

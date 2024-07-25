@@ -30,13 +30,21 @@ export class UtilService implements IUtilService{
         return (await this.fileService.isExists(filePath)) && shell.showItemInFolder(filePath);
     }
 
-    async askSelectAVideoFile(webContentId?: number): Promise<Buffer | undefined>{
+    async askSelectAVideoFile(onlyStr: boolean=true, webContentId?: number): Promise<string | Buffer | undefined>{
         const curWin = this.windowsManager.findWinByWebId(webContentId)
         const selectFile = await this.sysDialogService.openSelectFileDialog(
             curWin.originWin, undefined,
             [{name: "video", extensions: ['.mp4', 'avi', ]}]
             )
         Logger.info(`>> askSelectAVideoFile ${selectFile}`)
+        if (onlyStr && !selectFile) {
+            Logger.info(`>> askSelectAVideoFile hideAllWindows`)
+            this.windowsManager.hideAllWindows().then()
+        }
+        if (onlyStr) {
+            Logger.info(`>> askSelectAVideoFile onlyStr`)
+            return selectFile
+        }
         if (selectFile){
             const data = await this.fileService.openBuffer(selectFile)
             Logger.info(`>> askSelectAVideoFile buffer has data ${data && data.length > 0}`)

@@ -28,8 +28,8 @@ export class RecordService extends BaseToElectron implements IRecordService{
 
     }
 
-    async stopRecord(): Promise<Buffer|undefined> {
-        return await this._backendService('stopRecord')
+    async stopRecord(onlyStr?: boolean): Promise<Buffer|string|undefined>{
+        return await this._backendService('stopRecord', onlyStr)
 
     }
 

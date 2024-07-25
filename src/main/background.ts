@@ -4,6 +4,7 @@ import serve from 'electron-serve'
 import { createWindow } from './helpers'
 import {getPermission, initAll} from "./init-all";
 import {setNoMenuDock} from "./common/electron/menu";
+import {LocalProtocol} from "./electron/local-protocol";
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -12,6 +13,8 @@ if (isProd) {
 } else {
   app.setPath('userData', `${app.getPath('userData')} (development)`)
 }
+
+LocalProtocol.registerBeforeApp()
 
 ;(async () => {
   await app.whenReady()
@@ -34,7 +37,8 @@ if (isProd) {
     await mainWindow.loadURL(`http://localhost:${port}/home`)
     mainWindow.webContents.openDevTools()
   }
-})()
+})().then();
+
 
 // 初始化
 ;(async () => {

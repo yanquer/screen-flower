@@ -13,6 +13,11 @@ const handler = {
       callback(..._args)
     })
   },
+  onHandleWindowClose: (callback: (...args: any[]) => any) => {
+    ipcRenderer.on(HandlerStr.onWindowClose, (_event: IpcRendererEvent, ..._args: any[]) => {
+      callback(..._args)
+    })
+  },
   onHandleWindowShow: (callback: (...args: any[]) => any) => {
     ipcRenderer.on(HandlerStr.onWindowShow, (_event: IpcRendererEvent, ..._args: any[]) => {
       callback(..._args)

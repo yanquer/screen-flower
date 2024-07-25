@@ -50,7 +50,7 @@ export interface IRecordService {
   pauseRecord(): Promise<void>
   resumeRecord(): Promise<void>
   restartRecord(): Promise<void>
-  stopRecord(): Promise<Buffer|undefined>
+  stopRecord(onlyStr?: boolean): Promise<Buffer|string|undefined>
   cancelRecord(): Promise<void>
 
   recordBgImage(area: CaptureArea, savePath?: string, relative?: boolean): Promise<Buffer | undefined>
@@ -65,7 +65,7 @@ export interface IUtilService {
 
   showFileInFolder(filePath: string): Promise<void>
 
-  askSelectAVideoFile(): Promise<Buffer | undefined>
+  askSelectAVideoFile(onlyStr?: boolean): Promise<string | Buffer | undefined>
   askOpenPreview(): Promise<void>
 }
 

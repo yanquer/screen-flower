@@ -104,7 +104,8 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
 
     render() {
         const {setAllowPenetrate, setIsInActionBar, barMode,
-            recording, setRecording, setPreviewBlob, canCapture} = this.context
+            recording, setRecording, setPreviewBlob, canCapture,
+            setVideoUrl} = this.context
 
         return (
             <div className={"bg-white pointer-events-auto"}
@@ -197,9 +198,10 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                                 buttonClickHandler={() => {
                                                     // this.captureRef.current.stopCapture()
                                                     this.recordService.stopRecord().then(
-                                                        data => {
+                                                        (data: string) => {
                                                             Logger.info(`>> stop record front, get data ${data}`)
-                                                            data && setPreviewBlob(createBlobByBuffer(data))
+                                                            data && setVideoUrl(data)
+                                                            // data && setPreviewBlob(createBlobByBuffer(data))
                                                             // data && this.utilService.askOpenPreview()
                                                         }
                                                     )

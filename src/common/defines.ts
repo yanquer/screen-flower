@@ -11,6 +11,7 @@ export enum HandlerStr {
   settingService = 'service:settingService',
 
 
+  onWindowClose = 'onService:onWindowClose',
   onWindowHide = 'onService:onWindowHide',
   onWindowShow = 'onService:onWindowShow',
 
@@ -37,5 +38,7 @@ export enum WindowNames {
 //     webPreferences: {
 //      webSecurity: false
 //     }
-export const ProtocolViaLocal = 'protocolViaLocal://';
+// 另外实际字符串不能太长还是驼峰, 不然不识别...
+export const ProtocolViaLocal = 'local';
+export const getPathWithProtocol = (path: string) => `${ProtocolViaLocal}://${path}`;
 

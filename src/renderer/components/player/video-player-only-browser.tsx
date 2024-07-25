@@ -4,16 +4,14 @@ import React, { useContext, useEffect, useState, useRef, useMemo } from "react";
 import "plyr-react/plyr.css";
 import {RecordContext} from "../../common/global-context";
 import dynamic from "next/dynamic";
-import {getPathWithProtocol} from "../../../common/defines";
-import {Logger} from "../../common/logger";
 const Plyr = dynamic(() => import("plyr-react"), { ssr: false });
 
 
-interface VideoPlayerProps {
+interface VideoPlayerOnlyBrowserProps {
 }
 
-export const VideoPlayer = (props: VideoPlayerProps) => {
-    const {videoUrl} = useContext(RecordContext);
+export const VideoPlayerOnlyBrowser = (props: VideoPlayerOnlyBrowserProps) => {
+    const {previewBlob, videoUrl} = useContext(RecordContext);
     const playerRef = useRef(null);
     const [url, setUrl] = useState(null);
     const [source, setSource] = useState(null);
@@ -42,19 +40,18 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
     );
 
     useEffect(() => {
-        if (videoUrl) {
-            const pUrl = getPathWithProtocol(videoUrl)
-            Logger.info(`>> video url: ${pUrl}`)
+        if (previewBlob) {
+            const objectURL = URL.createObjectURL(previewBlob);
             setSource({
                 type: "video",
                 sources: [
                     {
-                        src: pUrl,
+                        src: objectURL,
                         type: "video/mp4",
                     },
                 ],
             });
-            setUrl(pUrl);
+            setUrl(objectURL);
 
             // if (playerRef.current && playerRef.current.plyr) {
             //   // Check when the video is playing, update the time in real time
@@ -67,8 +64,15 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
             //   });
             // }
 
+            return () => {
+                URL.revokeObjectURL(objectURL);
+
+                // if (playerRef.current && playerRef.current.plyr) {
+                //   playerRef.current.plyr.off("timeupdate");
+                // }
+            };
         }
-    }, [videoUrl, playerRef]);
+    }, [previewBlob, playerRef]);
 
     // useEffect(() => {
     //     if (playerRef.current && playerRef.current.plyr) {
@@ -125,7 +129,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
 
     return (
         <div className="videoPlayer">
-            <div className="playerWrap w-full h-full"
+            <div className="playerWrap"
                  // onClick={handleClick}
             >
                 {url && (
@@ -137,21 +141,21 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
                     />
                 )}
             </div>
-            {/*<style>*/}
-            {/*    {`*/}
-			{/*		.plyr {*/}
-			{/*			height: 90%!important;*/}
-			{/*		}*/}
-			{/*		@media (max-width: 900px) {*/}
-			{/*			.videoPlayer {*/}
-			{/*				height: 100%!important;*/}
-			{/*				top: 40px!important;*/}
-			{/*			}*/}
-			{/*			.playerWrap {*/}
-			{/*				height: calc(100% - 300px)!important;*/}
-			{/*			}*/}
-			{/*		`}*/}
-            {/*</style>*/}
+            <style>
+                {`
+					.plyr {
+						height: 90%!important;
+					}
+					@media (max-width: 900px) {
+						.videoPlayer {
+							height: 100%!important;
+							top: 40px!important;
+						}
+						.playerWrap {
+							height: calc(100% - 300px)!important;
+						}
+					`}
+            </style>
         </div>
     );
 };

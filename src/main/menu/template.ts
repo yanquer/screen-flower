@@ -18,12 +18,28 @@ export const getMenuTemplate = async (): Promise<Array<(MenuItemConstructorOptio
     },
     {
         id: MenuNames.openVideo,
-        label: `打开视频`,
-        click: () => {
-            const winManager = getServiceBySymbol<IWindowsManager>(IWindowsManager)
-            app.focus();
-            winManager.openWinById(WindowNames.PlayerWin)
-        }
+        label: `打开`,
+        submenu: [
+            {
+                id: MenuNames.openRecVideo,
+                label: `打开最近`,
+                click: () => {
+                    const winManager = getServiceBySymbol<IWindowsManager>(IWindowsManager)
+                    app.focus();
+                    winManager.openWinById(WindowNames.PlayerWin, true)
+                }
+            },
+            {
+                id: MenuNames.openRecVideo,
+                label: `重新打开`,
+                click: () => {
+                    const winManager = getServiceBySymbol<IWindowsManager>(IWindowsManager)
+                    app.focus();
+                    winManager.openWinById(WindowNames.PlayerWin, true)
+                }
+            },
+        ],
+
     },
     {
         id: MenuNames.settingView,
@@ -43,7 +59,7 @@ export const getMenuTemplate = async (): Promise<Array<(MenuItemConstructorOptio
         role: 'quit',
         accelerator: 'Command+Q'
     },
-    forceQuit(),
+    // forceQuit(),
 
 ];
 
