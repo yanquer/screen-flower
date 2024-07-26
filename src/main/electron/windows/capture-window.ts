@@ -2,11 +2,12 @@
 
 import {BaseSFWindow} from "./base-window";
 import {injectable, postConstruct} from "inversify";
-import {Input, Event, Display, BrowserWindowConstructorOptions} from "electron";
+import {Event, Display, BrowserWindowConstructorOptions} from "electron";
 import path from "path";
-import {IRecordService} from "../../../common/service";
 import {getServiceBySymbol} from "../../../common/container/inject-container";
-import {WindowNames} from "../../../common/defines";
+import {ContextKey, HandlerStr, WindowNames} from "../../../common/defines";
+import {values} from "lodash";
+import {Logger} from "../../common/logger";
 
 @injectable()
 export class CaptureWindow extends BaseSFWindow{
@@ -70,6 +71,38 @@ export class CaptureWindow extends BaseSFWindow{
 
         // this.win.webContents.openDevTools()
 
+        // 主动给前端发鼠标信息, 在变化时
+        // 还是给前端调吧, 后端发有性能问题
+        // this.startPositionListenEvent()
+    }
+
+    protected curListen: NodeJS.Timeout
+    protected lastPosition: {x: number, y: number}
+    protected startPositionListenEvent(){
+        // Logger.info(`>> use onValChangeEvent, ${this.contextService}`)
+        this.contextService.onValChangeEvent((valData) => {
+            // Logger.info(`>> onValChangeEvent in start setInterval, ${valData}`)
+            // Logger.info(valData)
+            if (valData.key === ContextKey.Recording && valData.value === true){
+                Logger.info('onValChangeEvent recording, start setInterval')
+                this.curListen = setInterval(
+                    () => {
+                        const curPos = this.screenManager.getCursorPosition()
+                        // Logger.info('setInterval recording, get pos ', curPos)
+                        if (!this.lastPosition ||
+                            (this.lastPosition.x !== curPos.x || this.lastPosition.y !== curPos.y)) {
+
+                            // Logger.info('send pos ', curPos)
+                            this.lastPosition = curPos
+                            this.win?.webContents.send(HandlerStr.onMouseMoveWhenRecording, curPos)
+                        }
+                    }, 50
+                )
+            } else if (valData.key === ContextKey.Recording && valData.value === false){
+                Logger.info('onValChangeEvent no recording, clear setInterval')
+                this.curListen && clearInterval(this.curListen)
+            }
+        })
     }
 
     protected displayChange(event: Event, display: Display, changedMetrics: string[]) {

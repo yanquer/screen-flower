@@ -7,6 +7,8 @@ import {HandlerStr, WindowNames} from "../../../common/defines";
 import {WindowsUtils} from "./windows-utils";
 import {IBaseWindow, IScreenManager} from "../service";
 import {Logger} from "../../common/logger";
+import {IContextService} from "../../../common/service";
+import {getServiceBySymbol} from "../../../common/container/inject-container";
 
 
 @injectable()
@@ -31,7 +33,10 @@ export class BaseSFWindow implements IBaseWindow{
     firstInit: boolean = true;
 
     @inject(IScreenManager)
-    protected screenManager: IScreenManager;
+    protected readonly screenManager: IScreenManager;
+
+    @inject(IContextService)
+    protected readonly contextService: IContextService
 
     protected windowHideEmitter = new Emitter<WindowNames>()
     windowHideEmitterEvent = this.windowHideEmitter.event
@@ -51,7 +56,7 @@ export class BaseSFWindow implements IBaseWindow{
         if (this.win) {
             Logger.info('>>> already has win...')
             this.show()
-            this.firstInit = false
+            // this.firstInit = false
             return
         }
 
@@ -96,6 +101,9 @@ export class BaseSFWindow implements IBaseWindow{
         this.win.webContents.on('destroyed', () => {
             this.close()
         })
+        this.win.on('closed', () => {
+            this.close()
+        })
     }
 
     protected handleKeydown(event: Event, input: Input) {
@@ -132,14 +140,15 @@ export class BaseSFWindow implements IBaseWindow{
         if (this.firstInit) {
             // 首次启动的时候, 先 opacity: 0 , 再 1 , 避免看到首次show browserWindows 白屏
             //      除了此方案, 貌似还可以先加载一个其他的 browserWindows
-            setTimeout(() => this.win.setOpacity(1), 100)
+            setTimeout(() => {
+                this.win.setOpacity(1)
+                this.firstInit = false
+            }, 100)
         }
-        // Logger.info(`>>> send show to front, ${this.id}`)
-        // this.win?.webContents.send(HandlerStr.onWindowShow, this.id)
         // show 后才发送, 避免太早, 前端还没有加载
         this.win?.on('show', ()=>{
             Logger.info(`>>> inner send show to front, ${this.id}`)
-            this.win?.webContents.send(HandlerStr.onWindowShow, this.id)
+            setTimeout(() => this.win?.webContents.send(HandlerStr.onWindowShow, this.id), 100)
         })
     }
 

@@ -23,6 +23,11 @@ const handler = {
       callback(..._args)
     })
   },
+  onHandleMouseMoveWhenRecording: (callback: (mousePosition: {x: number, y: number}) => any) => {
+    ipcRenderer.on(HandlerStr.onMouseMoveWhenRecording, (_event: IpcRendererEvent, mousePosition) => {
+      callback(mousePosition)
+    })
+  },
 
 }
 

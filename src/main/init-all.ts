@@ -21,6 +21,8 @@ const cleanUp = () => {
 
 export const initAll = () => {
     bindElectron()
+    bindBackend()
+    bindMiddle()
 
     // Logger.info(">> ", __dirname)
     // const img = join(__dirname, "../resources/1.jpg")
@@ -37,8 +39,7 @@ export const initAll = () => {
     Logger.info(">> is dev:", !isProd)
     initializeMenu(img)
 
-    bindBackend()
-    bindMiddle()
+
 
     process.on('uncaughtException', (err) => {
         Logger.error('>>> Uncaught Exception in Main Process:', err);

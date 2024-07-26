@@ -15,6 +15,8 @@ export enum HandlerStr {
   onWindowHide = 'onService:onWindowHide',
   onWindowShow = 'onService:onWindowShow',
 
+  onMouseMoveWhenRecording = 'onService:onMouseMoveWhenRecording',
+
   openRightContextMenu = 'onService:openRightContextMenu',
 
   // 后端调前端
@@ -41,4 +43,10 @@ export enum WindowNames {
 // 另外实际字符串不能太长还是驼峰, 不然不识别...
 export const ProtocolViaLocal = 'local';
 export const getPathWithProtocol = (path: string) => `${ProtocolViaLocal}://${path}`;
+
+
+export enum ContextKey{
+  // boolean
+  Recording = 'recording',
+}
 

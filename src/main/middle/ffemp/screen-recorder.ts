@@ -1,10 +1,10 @@
 import ffmpeg from 'ffmpeg-static';
-import {IFileService, IRecordService, ISettingService} from "../../../common/service";
+import {IContextService, IFileService, IRecordService, ISettingService} from "../../../common/service";
 import {inject, injectable, postConstruct} from "inversify";
 import {FluentFfmpegApi} from './fluent-ffmpeg/api'
 
 import FfmpegCommand from 'fluent-ffmpeg';
-import {CaptureArea} from "../../../common/models";
+import {CaptureArea, eqCaptureArea} from "../../../common/models";
 import {Emitter, Event} from "../../../common/event";
 import {join} from "path";
 import {getHomeDir} from "../../common/dynamic-defines";
@@ -17,7 +17,7 @@ import {Process} from "../../common/process";
 import ffmpegPath from "ffmpeg-static";
 import {Logger} from "../../common/logger";
 import util from "electron-util";
-import {WindowNames} from "../../../common/defines";
+import {ContextKey, WindowNames} from "../../../common/defines";
 
 // import {fixPathForAsarUnpack} from 'electron-util'
 // const {fixPathForAsarUnpack} = require('electron-util');
@@ -64,6 +64,8 @@ export class ScreenRecorder extends Dispose implements IRecordService{
     protected readonly settingService: ISettingService
     @inject(ISysDialogService)
     protected readonly dialogService: ISysDialogService
+    @inject(IContextService)
+    protected readonly contextKeyService: IContextService
 
     protected saveDir: string
 
@@ -171,6 +173,8 @@ export class ScreenRecorder extends Dispose implements IRecordService{
     }
     protected curRecordPath: string
     async startRecord(area: CaptureArea, savePath?: string,){
+        this.contextKeyService.setKeyVal<boolean>(ContextKey.Recording, true)
+
         await this.initWait
 
         // 暂时不知怎么接受多显示器变化的通知, 所以多显示器下, 每次都刷新, 避免录制位置错误
@@ -207,6 +211,8 @@ export class ScreenRecorder extends Dispose implements IRecordService{
     }
 
     async stopRecord(onlyStr: boolean=true): Promise<Buffer|string|undefined>{
+        this.contextKeyService.setKeyVal<boolean>(ContextKey.Recording, false)
+
         Logger.info('>> Stop record... ')
 
         this.currentCmd?.kill('SIGTERM')
@@ -217,7 +223,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         Logger.info(`>> stopRecord file ${this.curRecordPath}`)
 
         setTimeout( () => {
-            this.windowsManager.openWinById(WindowNames.PlayerWin)
+            if(this.curRecordPath) this.windowsManager.openWinById(WindowNames.PlayerWin)
             // this.curRecordPath = undefined
         }, 500)
 
@@ -282,8 +288,16 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         return outputImg
     }
 
+    protected lastArea: CaptureArea
+    protected lastBgBuffer: Buffer
     async recordBgImage(area: CaptureArea, savePath?: string, relative?: boolean): Promise<Buffer | undefined>{
         await this.initWait
+
+        if (eqCaptureArea(area, this.lastArea) && this.lastBgBuffer) {
+            return this.lastBgBuffer
+        }
+
+        this.lastArea = area
 
         // 暂时不知怎么接受多显示器变化的通知, 所以多显示器下, 每次都刷新, 避免录制位置错误
         this.screenManager.mulDisplay && await this.getMacScreens(true)
@@ -360,6 +374,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         const buffer = await this.fileService.openBuffer(newSavePath)
         // const blob = new Blob([buffer], { type: 'image/png' })
         // return blob
+        this.lastBgBuffer = buffer
         return buffer
     }
 

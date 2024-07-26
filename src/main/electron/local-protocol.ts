@@ -27,7 +27,9 @@ export namespace LocalProtocol {
             const filePath = request.url.slice(`${ProtocolViaLocal}:/`.length)
             Logger.info(`>> get req from protocol: ${filePath}`)
             // return net.fetch(pathToFileURL(join(__dirname, filePath)).toString())
-            const ret = net.fetch(pathToFileURL(filePath).toString())
+            // 兼容中文路径
+            const originUrl = decodeURI(pathToFileURL(filePath).toString())
+            const ret = net.fetch(originUrl)
             Logger.info(`>> get req from protocol ret: ${ret}`)
             return ret
         })

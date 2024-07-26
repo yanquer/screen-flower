@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import {RecordContext} from "../../../common/global-context";
 import {getServiceBySymbol} from "../../../../common/container/inject-container";
 import {IUtilService} from "../../../../common/service";
+import {Logger} from "../../../common/logger";
 
 const CursorModes = () => {
   const {cursorMode, recording, setAllowPenetrate, isInActionBar} = useContext(RecordContext);
@@ -89,9 +90,10 @@ const CursorModes = () => {
 
     const sizeRef = useRef(null);
 
+    // 主要更新 按下后的位置
     useEffect(() => {
         const utilService: IUtilService = getServiceBySymbol(IUtilService)
-        if (recording){
+        if (recording && !isInActionBar){
             sizeRef.current = setInterval(async () => {
                 const {x, y} = await utilService.getCursorScreenPoint();
                 if (x != size?.x || y != size.y){
@@ -102,31 +104,45 @@ const CursorModes = () => {
             if (sizeRef.current) clearInterval(sizeRef.current);
         }
 
-    }, [recording]);
+    }, [recording, isInActionBar]);
+
+    // 监听主进程的鼠标移动
+    // useEffect(() => {
+    //     invokeElectronHandlerAsync(async () => {
+    //         window.ipcInvoke.onHandleMouseMoveWhenRecording((pos) => {
+    //             Logger.info('get position change from main: ', pos)
+    //             setSize(pos);   // recording 判断不准确
+    //             // if (recording){
+    //             //     Logger.info(' position change from main set')
+    //             //     setSize(pos);
+    //             // }
+    //         })
+    //     }).then()
+    // }, []);
 
     useEffect(() => {
         setLastMousePosition({ ...size });
+        Logger.info(`>> u pos: ${size}`)
+        Logger.info(size)
         updateCursorPosition();
     }, [size?.x, size?.y]);
 
   return (
     <div
-        // onMouseEnter={() => visScreenWhenRecording(true)}
-        // onMouseLeave={() => visScreenWhenRecording(true, false)}
     >
       <div
         className="cursor-highlight"
         ref={highlightRef}
-        // onMouseDown={() => recording && !isInActionBar && setAllowPenetrate(true)}
-        // onMouseEnter={() => setAllowPenetrate(true)}
-        // onMouseLeave={() => setAllowPenetrate(true)}
         style={{
-          display: "block",
+            display: cursorMode === "highlight" ? "block" : "none",
+          // display: "block",
           visibility:
             cursorMode === "highlight" ? "visible" : "hidden",
           position: "absolute",
-          top: 0,
-          left: 0,
+
+            // 设置到屏幕之外, 避免一开始卡一下在 0,0
+          top: -100,
+          left: -100,
           width: "80px",
           height: "80px",
           pointerEvents: "none",
@@ -136,16 +152,15 @@ const CursorModes = () => {
           transform: "translate(-50%, -50%)",
           borderRadius: "50%",
           animation: "none",
+            transition: "opacity 0.5s cubic-bezier(.25,.8,.25,1), transform .35s cubic-bezier(.25,.8,.25,1)",
         }}
       ></div>
       <div
         className="cursor-click-target"
-        // onMouseDown={() => recording && !isInActionBar && setAllowPenetrate(true)}
-        // onMouseEnter={() => visScreenWhenRecording(true)}
-        // onMouseLeave={() => visScreenWhenRecording(true)}
         ref={clickTargetRef}
         style={{
-          display: "block",
+          // display: "block",
+          display: cursorMode === "target" ? "block" : "none",
           visibility:
             cursorMode === "target" ? "visible" : "hidden",
           position: "absolute",
@@ -167,15 +182,10 @@ const CursorModes = () => {
       ></div>
       <div
         className="spotlight"
-        // onMouseDown={() => recording && !isInActionBar && setAllowPenetrate(true)}
-        // onMouseEnter={() => visScreenWhenRecording(true)}
-        // onMouseLeave={() => visScreenWhenRecording(true)}
-        // onMouseOver={() => visScreenWhenRecording(true)}
-        // onMouseOut={() => visScreenWhenRecording(true, false)}
         ref={spotlightRef}
         style={{
           position: "absolute",
-          display: cursorMode === "spotlight" ? "block" : "none",
+            display: cursorMode === "spotlight" ? "block" : "none",
           top: mousePosition.y + "px",
           left: mousePosition.x + "px",
           width: "100px",

@@ -1,6 +1,6 @@
 
 import { MenuItem, MenuItemConstructorOptions } from 'electron'
-import { ContextMenuNames } from "./defines";
+import {ContextKey, ContextMenuNames} from "./defines";
 import {CaptureArea} from "./models";
 import {Event} from "./event";
 
@@ -86,4 +86,14 @@ export interface ISettingService {
   getCachePathSync?(): string
   // cachePath 为空就表示, 弹出一个选择dialog
   setOrSelectCachePath(cachePath?: string): Promise<string | undefined>
+}
+
+
+// 全局上下文管理
+export const IContextService = Symbol.for('IContextService')
+export interface IContextService{
+  onValChangeEvent: Event<{key: ContextKey, value: any}>
+
+  setKeyVal<T>(key: ContextKey, value: T): void
+  getValByKey<T>(key: ContextKey): T
 }

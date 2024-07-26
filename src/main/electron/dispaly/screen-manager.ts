@@ -156,7 +156,7 @@ export class ScreenManager implements IScreenManager{
         const width = toNumber(`${area.width}`.replace('px', ''))
         const height = toNumber(`${area.height}`.replace('px', ''))
         // 剪去边框
-        return `${(width-4) * curPpi}:${(height-4) * curPpi}:${(area.x+2) * curPpi}:${(area.y+2) * curPpi}`
+        return `${(width-6) * curPpi}:${(height-6) * curPpi}:${(area.x+3) * curPpi}:${(area.y+3) * curPpi}`
     }
 
 
