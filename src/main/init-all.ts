@@ -58,6 +58,7 @@ export const initAll = () => {
 
     app.on('render-process-gone', (event, webContents, details) => {
         Logger.error('>> Render process crashed:', details);
+        Logger.error(details);
     });
 
     ipcMain.on('app-route-ready', () => {

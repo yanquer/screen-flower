@@ -104,6 +104,14 @@ export class BaseSFWindow implements IBaseWindow{
         this.win.on('closed', () => {
             this.close()
         })
+
+        //win = new BrowserWindow
+        this.win?.webContents.once('did-fail-load', () => {
+            setTimeout(()=>{
+                this.win?.reload();
+            }, 1000);
+        });
+
     }
 
     protected handleKeydown(event: Event, input: Input) {
@@ -136,19 +144,34 @@ export class BaseSFWindow implements IBaseWindow{
     show() {
         if (this._isShow) return
         this._isShow = true
+
         this.win.show()
-        if (this.firstInit) {
-            // 首次启动的时候, 先 opacity: 0 , 再 1 , 避免看到首次show browserWindows 白屏
-            //      除了此方案, 貌似还可以先加载一个其他的 browserWindows
-            setTimeout(() => {
-                this.win.setOpacity(1)
-                this.firstInit = false
-            }, 100)
-        }
+        // this.win?.once('ready-to-show', ()=> {
+        //     this.win.show()
+        // })
+        // if (this.firstInit) {
+        //     // 首次启动的时候, 先 opacity: 0 , 再 1 , 避免看到首次show browserWindows 白屏
+        //     //      除了此方案, 貌似还可以先加载一个其他的 browserWindows
+        //     setTimeout(() => {
+        //         this.win.setOpacity(1)
+        //         this.firstInit = false
+        //     }, 100)
+        // }
+        // this.win?.webContents.on('did-finish-load', () => {
+        //     Logger.info(`>>> inner webContents did-finish-load, ${this.id}`)
+        //     this.win?.setOpacity(1)
+        //     this.firstInit = false
+        // })
         // show 后才发送, 避免太早, 前端还没有加载
-        this.win?.on('show', ()=>{
+        // this.win?.on('ready-to-show', ()=>{
+        this.win?.once('show', ()=>{
             Logger.info(`>>> inner send show to front, ${this.id}`)
-            setTimeout(() => this.win?.webContents.send(HandlerStr.onWindowShow, this.id), 100)
+            setTimeout(() => {
+                this.win?.webContents.send(HandlerStr.onWindowShow, this.id)
+                Logger.info(`>>> inner webContents did-finish-load, ${this.id}`)
+                this.win?.setOpacity(1)
+                this.firstInit = false
+            }, 0)
         })
     }
 

@@ -43,7 +43,9 @@ export class SettingView extends Component<any, any>{
                     <Box>
                         <ToolTipWrap title={cachePath} key={cachePath}>
                             <TextField.Root
-                                size="1" placeholder="…" readOnly={true}
+                                size="1"
+                                // placeholder="…"
+                                readOnly={true}
                                 className={'overflow-x-auto overscroll-contain sm-scroll-bar'}
                             >
                                 {cachePath}
@@ -67,7 +69,9 @@ export class SettingView extends Component<any, any>{
                     </Box>
                     <Box>
                         <ToolTipWrap title={logPath} key={logPath}>
-                            <TextField.Root size="1" placeholder="…" readOnly={true}
+                            <TextField.Root size="1"
+                                            // placeholder="…"
+                                            readOnly={true}
                                             className={'overflow-x-auto overscroll-contain sm-scroll-bar'}
                             >
                                 {logPath}
