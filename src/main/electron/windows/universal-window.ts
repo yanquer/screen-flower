@@ -20,7 +20,9 @@ export class UniversalWindow extends BaseSFWindow {
 
     get winArea(){
         const {x, y, width, height} = this.screenManager.getCurrentScreenArea()
-        const initArea = {width: 900, height: 560}
+        // 16:10
+        const initArea = {width: 800, height: 500}
+        // const initArea = {width: 900, height: 560}
         const cx = x + width / 2 - initArea.width / 2
         const cy = y + height / 2 - initArea.height / 2
         return {x: cx, y: cy, width: initArea.width, height: initArea.height}

@@ -168,7 +168,7 @@ export class BaseSFWindow implements IBaseWindow{
             Logger.info(`>>> inner send show to front, ${this.id}`)
             setTimeout(() => {
                 this.win?.webContents.send(HandlerStr.onWindowShow, this.id)
-                Logger.info(`>>> inner webContents did-finish-load, ${this.id}`)
+                // Logger.info(`>>> inner webContents did-finish-load, ${this.id}`)
                 this.win?.setOpacity(1)
                 this.firstInit = false
             }, 0)

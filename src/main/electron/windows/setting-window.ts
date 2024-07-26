@@ -15,8 +15,7 @@ export class SettingWindow extends UniversalWindow {
 
     get winArea(){
         const {x, y, width, height} = this.screenManager.getCurrentScreenArea()
-        // 16:10
-        const initArea = {width: 800, height: 500}
+        const initArea = {width: 400, height: 550}
         const cx = x + width / 2 - initArea.width / 2
         const cy = y + height / 2 - initArea.height / 2
         return {x: cx, y: cy, width: initArea.width, height: initArea.height}
