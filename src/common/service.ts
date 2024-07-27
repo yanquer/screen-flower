@@ -1,7 +1,7 @@
 
 import { MenuItem, MenuItemConstructorOptions } from 'electron'
 import {ContextKey, ContextMenuNames} from "./defines";
-import {CaptureArea} from "./models";
+import {CaptureArea, VideoArgs} from "./models";
 import {Event} from "./event";
 
 export const IFileService = Symbol('IFileService')
@@ -21,6 +21,7 @@ export interface IFileService {
   mkDir(path: string, recursive?: boolean | number): Promise<boolean>
 
   move(originPath: string, newPath: string): Promise<boolean>
+  copy?(originPath: string, newPath: string): Promise<boolean>
 }
 
 
@@ -51,12 +52,12 @@ export interface IRecordService {
   pauseRecord(): Promise<void>
   resumeRecord(): Promise<void>
   restartRecord(): Promise<void>
-  stopRecord(onlyStr?: boolean): Promise<Buffer|string|undefined>
+  stopRecord(onlyStr?: boolean, webContentId?: number): Promise<Buffer|string|undefined>
   cancelRecord(): Promise<void>
 
   recordBgImage(area: CaptureArea, savePath?: string, relative?: boolean): Promise<Buffer | undefined>
 
-  convertToGif(inputVideo: string, webContentId?: number): Promise<string>
+  convertToGif(inputVideo: string, videoArg?: VideoArgs, webContentId?: number): Promise<string>
 }
 
 export const IUtilService = Symbol.for('IUtilService')

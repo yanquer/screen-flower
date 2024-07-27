@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {IRecordContext, RecordContext} from "../../../common/global-context";
-import {MovieStream} from "../../../common/movie-stream";
+import {MovieStream} from "../../../../common/movie-stream";
 import {Logger} from "../../../common/logger";
 
 interface ScreenCaptureProps {

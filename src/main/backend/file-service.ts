@@ -6,6 +6,7 @@ import { IFileService } from '../../common/service'
 import { PathStat } from '../../common/defines'
 import { injectable } from 'inversify'
 import {Logger} from "../common/logger";
+import {copyFileSync} from "node:fs";
 
 
 @injectable()
@@ -145,6 +146,15 @@ export class FileService implements IFileService {
   async move(originPath: string, newPath: string): Promise<boolean>{
     if ((await this.isExists(originPath))) {
       renameSync(originPath, newPath)
+    }
+
+    return false
+
+  }
+
+  async copy(originPath: string, newPath: string): Promise<boolean>{
+    if ((await this.isExists(originPath))) {
+      copyFileSync(originPath, newPath)
     }
 
     return false

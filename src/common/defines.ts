@@ -48,5 +48,8 @@ export const getPathWithProtocol = (path: string) => `${ProtocolViaLocal}://${pa
 export enum ContextKey{
   // boolean
   Recording = 'recording',
+  // boolean
+  AskWhenStopInCapture = 'askWhenStopRecording',
+  AskWhenSaveInPreview = 'askWhenPreviewRecording',
 }
 

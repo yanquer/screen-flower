@@ -1,14 +1,8 @@
 import {createContext} from "react";
 import {CaptureArea} from "../../common/models";
+import {MovieQuality} from "../../common/movie-stream";
 
-export enum MovieQuality{
-    FourK = "4k",
-    FullHD = "1080p",
-    HD = "720p",
-    SD4 = "480p",
-    SD3 = "360p",
-    S2 = "240p",
-}
+
 
 // bar 额外工具
 export type BarVideoMode = 'draw' | 'blur' | 'cursor' | 'none'

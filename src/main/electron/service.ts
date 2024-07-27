@@ -84,7 +84,10 @@ export const ISysDialogService = Symbol.for("ISysDialogService");
 export interface ISysDialogService{
     openSelectFileDialog(win: BrowserWindow, defaultPath?: string, filters?: {name: string, extensions: string[]}[]): Promise<string | undefined>;
     openSelectDirDialog(win: BrowserWindow, defaultPath?: string): Promise<string | undefined>;
-    openSaveFileDialog(win: BrowserWindow, defaultPath?: string, filters?: {name: string, extensions: string[]}[]): Promise<string | undefined>;
+    openSaveFileDialog(
+        win: BrowserWindow, defaultPath?: string,
+        title?: string,
+        filters?: {name: string, extensions: string[]}[]): Promise<string | undefined>;
 }
 
 

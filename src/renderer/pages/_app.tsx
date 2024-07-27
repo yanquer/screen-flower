@@ -9,12 +9,13 @@ import type { AppProps } from 'next/app'
 import '@radix-ui/themes/styles.css';
 import '../styles/globals.css'
 import '../styles/drag-box.scss'
-import {BarVideoMode, CursorMode, DefaultCapArea, MovieQuality, RecordContext} from "../common/global-context";
+import {BarVideoMode, CursorMode, DefaultCapArea, RecordContext} from "../common/global-context";
 import {useRouter} from "next/router";
 import {CaptureArea} from "../../common/models";
 import {Logger} from "../common/logger";
 import {invokeElectronHandler} from "../common/common";
 import {WindowNames} from "../../common/defines";
+import {MovieQuality} from "../../common/movie-stream";
 
 Logger.info('>> start _app...')
 

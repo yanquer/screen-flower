@@ -2,7 +2,7 @@ import {IRecordService} from "../../common/service";
 import {BaseToElectron} from "./base-model";
 import {ServiceFactory} from "./service-factory";
 import {injectable} from "inversify";
-import {CaptureArea} from "../../common/models";
+import {CaptureArea, VideoArgs} from "../../common/models";
 
 
 @injectable()
@@ -41,8 +41,8 @@ export class RecordService extends BaseToElectron implements IRecordService{
         return await this._backendService('recordBgImage', area, savePath, relative)
     }
 
-    async convertToGif(inputVideo: string): Promise<string> {
-        return await this._backendService('convertToGif', inputVideo)
+    async convertToGif(inputVideo: string, videoArg?: VideoArgs): Promise<string> {
+        return await this._backendService('convertToGif', inputVideo, videoArg)
     }
 
 }

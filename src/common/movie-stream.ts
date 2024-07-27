@@ -1,4 +1,13 @@
-import {MovieQuality} from "./global-context";
+
+// 视频质量
+export enum MovieQuality{
+    FourK = "4k",
+    FullHD = "1080p",
+    HD = "720p",
+    SD4 = "480p",
+    SD3 = "360p",
+    S2 = "240p",
+}
 
 interface VideoInfo{
     audioBits: number,

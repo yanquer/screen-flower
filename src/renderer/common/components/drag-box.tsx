@@ -1,8 +1,7 @@
 import {Component, useEffect, useId, useRef} from "react";
-import {asyncSleep, getRandomStr} from "../common";
-import { throttle } from 'lodash';
 import Draggable from 'react-draggable'
 import {Logger} from "../logger";
+import {asyncSleep} from "../../../common/common";
 
 
 // 为了使用 useId 换成函数组件

@@ -4,20 +4,21 @@ import {inject, injectable, postConstruct} from "inversify";
 import {FluentFfmpegApi} from './fluent-ffmpeg/api'
 
 import FfmpegCommand from 'fluent-ffmpeg';
-import {CaptureArea, eqCaptureArea} from "../../../common/models";
+import {CaptureArea, eqCaptureArea, VideoArgs} from "../../../common/models";
 import {Emitter, Event} from "../../../common/event";
-import {join} from "path";
+import {dirname, join, basename, extname} from "path";
 import {getHomeDir} from "../../common/dynamic-defines";
-import {getRandomStr} from "../../../renderer/common/common";
 import {Dispose} from "../../../common/container/dispose";
 import {IScreenManager, ISysDialogService, IWindowsManager} from "../../electron/service";
 import {isProd} from "../../common/defines";
-import {isTest} from "../../../common/common";
+import {getCurrentTime, getRandomStr, isTest} from "../../../common/common";
 import {Process} from "../../common/process";
 import ffmpegPath from "ffmpeg-static";
 import {Logger} from "../../common/logger";
 import util from "electron-util";
 import {ContextKey, WindowNames} from "../../../common/defines";
+import {MovieQuality, MovieStream} from "../../../common/movie-stream";
+import {getPathDirAndNameAndExt} from "../../common/common";
 
 // import {fixPathForAsarUnpack} from 'electron-util'
 // const {fixPathForAsarUnpack} = require('electron-util');
@@ -81,7 +82,10 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         this.windowsManager.setWinHideEventById(WindowNames.CaptureWin, (winName) => {
             if (winName === WindowNames.CaptureWin){
                 Logger.info('>>> close cap win')
-                this.stopRecord().then()
+                if (this.contextKeyService.getValByKey(ContextKey.Recording) === true){
+                    Logger.info('>>> check close cap win but already Recording, stop')
+                    this.stopRecord().then()
+                }
             }
         })
 
@@ -177,7 +181,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
 
         await this.initWait
 
-        // 暂时不知怎么接受多显示器变化的通知, 所以多显示器下, 每次都刷新, 避免录制位置错误
+        // todo: 暂时不知怎么接受多显示器变化的通知, 所以多显示器下, 每次都刷新, 避免录制位置错误
         this.screenManager.mulDisplay && await this.getMacScreens(true)
 
         const cropArea = this.screenManager.getCropAreaStr(area)
@@ -185,7 +189,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
 
         let newSavePath: string = savePath
         if (!savePath){
-            newSavePath = join(this.saveDir, getRandomStr() + '.mp4')
+            newSavePath = join(this.saveDir, '录屏 ' + getCurrentTime() + '.mp4')
         }
 
         const output = newSavePath ?? './report/video/simple3.mp4'
@@ -210,7 +214,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         // this.recordingRunEmitter.fire(true)
     }
 
-    async stopRecord(onlyStr: boolean=true): Promise<Buffer|string|undefined>{
+    async stopRecord(onlyStr: boolean=true, webContentId?: number): Promise<Buffer|string|undefined>{
         this.contextKeyService.setKeyVal<boolean>(ContextKey.Recording, false)
 
         Logger.info('>> Stop record... ')
@@ -221,6 +225,20 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         this.recordingRunEmitter.fire(false)
 
         Logger.info(`>> stopRecord file ${this.curRecordPath}`)
+
+        // if (await this.contextKeyService.getValByKey(ContextKey.AskWhenStopInCapture) !== false){
+        //     const win = this.windowsManager.findWinByWebId(webContentId)
+        //     const savePath = await this.dialogService.openSaveFileDialog(
+        //         win?.originWin,
+        //         this.curRecordPath,
+        //         "文件已保存, 是否需另存(建议取消)?",
+        //     )
+        //     if (savePath && savePath !== this.curRecordPath) {
+        //         await this.fileService.copy(this.curRecordPath, savePath)
+        //         this.curRecordPath = savePath
+        //     }
+        //     Logger.info(`>> stopRecord file and save in ${this.curRecordPath}`)
+        // }
 
         setTimeout( () => {
             if(this.curRecordPath) this.windowsManager.openWinById(WindowNames.PlayerWin)
@@ -378,21 +396,46 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         return buffer
     }
 
-    async convertToGif(inputVideo: string, webContentId?: number): Promise<string>{
+    async convertToGif(inputVideo: string, videoArg?: VideoArgs, webContentId?: number): Promise<string>{
         Logger.info(`>> convertToGif(inputVideo: ${inputVideo}`)
         if (!await this.fileService.isExists(inputVideo)){
             Logger.info(`>> convertToGif file not exists`)
             return
         }
 
-        // const win = this.windowsManager.findWinByWebId(webContentId)
-        // const output = this.dialogService.openSaveFileDialog(
-        //     win.originWin, undefined, )
+        const [_dir, _name, _ext] = getPathDirAndNameAndExt(inputVideo)
 
-        const output = inputVideo.replace('.mp4', '') + '.gif'
+        let output: string = join(_name, _name+'.gif')
 
-        const cmd = this.ffmpegCommand(inputVideo, false)
-            .output(output)
+        // if (this.contextKeyService.getValByKey(ContextKey.AskWhenSaveInPreview) === true) {
+        if (this.contextKeyService.getValByKey(ContextKey.AskWhenSaveInPreview) !== false) {
+            const win = this.windowsManager.findWinByWebId(webContentId)
+            output = await this.dialogService.openSaveFileDialog(
+                win.originWin, output, )
+            Logger.info(`>> convertToGif get file from dialog ${output}`)
+        }
+
+        Logger.info(`>> convertToGif get output ${output}`)
+
+        if (videoArg && videoArg.videoType !== 'gif'){
+            Logger.info(`>> convertToGif file type ${videoArg.videoType} not support`)
+            return
+        }
+
+        let cmd = this.ffmpegCommand(inputVideo, false)
+        if (videoArg.videoSize && videoArg.videoSize !== 'origin') {
+            const size = MovieStream.getVideoSize(videoArg.videoSize as MovieQuality)
+            Logger.info(`>> convertToGif get convert size ${size}`)
+            cmd = cmd.inputOptions([
+                `-vf "scale=${size[0]}:-1"`
+            ])
+        }
+        if (videoArg.fps && videoArg.fps !== 'origin') {
+            const useFps = Number(videoArg.fps)
+            Logger.info(`>> convertToGif get convert useFps ${useFps}`)
+            cmd = cmd.inputFPS(useFps)
+        }
+        cmd = cmd.output(output)
         this.cmdCommonDo(cmd)
         return output
     }

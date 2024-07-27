@@ -5,17 +5,34 @@ import {Box, Flex, TextField, Text, Checkbox, Theme, Grid, Button,
 import {VideoPlayer} from "./video-player";
 import {DragTitle} from "../drag-title";
 import {getServiceBySymbol} from "../../../common/container/inject-container";
-import {IFileService, IRecordService, IUtilService} from "../../../common/service";
+import {IRecordService, IUtilService} from "../../../common/service";
 import {IRecordContext, RecordContext} from "../../common/global-context";
+import {LabelSelect} from "../radix-ui/label-select";
+import {VideoArgs, VideoFps} from "../../../common/models";
 
+interface PlayViewState{
+    titleShow: boolean,
+    videoArgs?: VideoArgs,
+}
 
-export class PlayerView extends Component<any, any>{
+export class PlayerView extends Component<any, PlayViewState>{
 
     static contextType = RecordContext
     context: IRecordContext
 
-    state = {
-        titleShow: true
+    state: PlayViewState = {
+        titleShow: true,
+        videoArgs: {
+            videoType: 'gif',
+            videoSize: 'origin',
+            fps: 'origin',
+        },
+    }
+
+    protected getUrlName(vUrl: string){
+        if (!vUrl) return undefined
+        const lastSepI = vUrl.lastIndexOf('/')
+        return vUrl.substring(lastSepI + 1)
     }
 
     render() {
@@ -40,7 +57,7 @@ export class PlayerView extends Component<any, any>{
                          onMouseOver={() => this.setState({titleShow: true})}
                          // onMouseLeave={() => this.setState({titleShow: false})}
                     >
-                        <DragTitle title={'Player'}/>
+                        <DragTitle title={this.getUrlName(videoUrl) ?? 'Player'}/>
                     </Box>
 
                     <Box className={'p-1 flex items-center justify-center'}>
@@ -56,46 +73,67 @@ export class PlayerView extends Component<any, any>{
                         }>打开其他文件</Button>
 
                         <Box className={'m-2 flex items-center justify-center'}>
-                            <Text size={'2'} className={'pr-2'} >文件类型</Text>
-                            <Box className={'ml-2 mr-2'} >
-                                <Select.Root
-                                    size={'1'}
-                                    defaultValue="gif">
-                                    <Select.Trigger />
-                                    <Select.Content
-                                        // className={'m-2'}
-                                    >
-                                        <Select.Group>
-                                            <Select.Label>Vide Target</Select.Label>
-                                            <Select.Item value="gif">Gif</Select.Item>
-                                            <Select.Item value="mp4" disabled>
-                                                MP4
-                                            </Select.Item>
-                                        </Select.Group>
-                                        {/*<Select.Separator />*/}
-                                        {/*<Select.Group>*/}
-                                        {/*    <Select.Label>Vide Size</Select.Label>*/}
-                                        {/*    <Select.Item value="HD">1920 x 1080</Select.Item>*/}
-                                        {/*</Select.Group>*/}
-                                    </Select.Content>
-                                </Select.Root>
-                            </Box>
 
-                            <Box className={'ml-2 mr-2'}  >
+                            <LabelSelect
+                                defaultValue={"gif"}
+                                label={"类型"}
+                                selectLabel={"生成目标类型"}
+                                options={[
+                                    {value: "gif", disabled: false, text: "GIF"},
+                                    {value: "mp4", disabled: true, text: "MP4"},
+                                ]}
+                                onChange={(value: 'gif' | 'mp4') => {
+                                    this.setState((preState) => {
+                                        return {videoArgs: {
+                                            ...preState.videoArgs,
+                                                videoType: value
+                                        }}
+                                    })
+                                }}
+                            />
 
-                                <Select.Root
-                                    size={'1'}
-                                    defaultValue="origin">
-                                    <Select.Trigger />
-                                    <Select.Content>
-                                        <Select.Group>
-                                            <Select.Label>视频尺寸</Select.Label>
-                                            <Select.Item value="origin">原始</Select.Item>
-                                            <Select.Item value="HD" disabled={true}>1920 x 1080</Select.Item>
-                                        </Select.Group>
-                                    </Select.Content>
-                                </Select.Root>
-                            </Box>
+                            <LabelSelect
+                                defaultValue={"origin"}
+                                label={"尺寸"}
+                                selectLabel={"视频尺寸"}
+                                options={[
+                                    {value: "origin", disabled: false, text: "原始"},
+                                    {value: "HD", disabled: false, text: "1920 x 1080"},
+                                ]}
+                                onChange={(value: 'origin' | 'HD') => {
+                                    this.setState((preState) => {
+                                        return {videoArgs: {
+                                                ...preState.videoArgs,
+                                                videoSize: value
+                                            }}
+                                    })
+                                }}
+                            />
+
+                            <LabelSelect
+                                defaultValue={"origin"}
+                                label={"FPS"}
+                                selectLabel={"FPS"}
+                                options={[
+                                    {value: "origin", disabled: false, text: "原始"},
+                                    {value: "10", disabled: false, text: "10"},
+                                    {value: "15", disabled: false, text: "15"},
+                                    {value: "20", disabled: false, text: "20"},
+                                    {value: "25", disabled: false, text: "25"},
+                                    {value: "30", disabled: false, text: "30"},
+                                    {value: "60", disabled: true, text: "60"},
+                                ]}
+                                onChange={(value: VideoFps) => {
+                                    this.setState((preState) => {
+                                        return {videoArgs: {
+                                                ...preState.videoArgs,
+                                                fps: value
+                                            }}
+                                    })
+                                }}
+                            />
+
+
                         </Box>
 
                         <Button color={'gold'}
@@ -103,12 +141,20 @@ export class PlayerView extends Component<any, any>{
                                 className={'m-2 opacity-80'}
                             onClick={() => {
                                 const recordService = getServiceBySymbol<IRecordService>(IRecordService)
-                                recordService.convertToGif(videoUrl).then((data: string) =>{
+                                recordService.convertToGif(videoUrl, this.state.videoArgs).then((data: string) =>{
                                     const utilService = getServiceBySymbol<IUtilService>(IUtilService)
                                     utilService.showFileInFolder(data).then(() => utilService.askHideWin())
                                 })
                             }}
                         >保存</Button>
+                        <Button color={'gold'}
+                                size={'1'}
+                                className={'m-2 opacity-80'}
+                                onClick={() => {
+                                    const utilService: IUtilService = getServiceBySymbol(IUtilService)
+                                    utilService.showFileInFolder(videoUrl).then()
+                                }}
+                        >打开所在目录</Button>
                         {/*<Button color={'gold'}*/}
                         {/*        size={'1'}*/}
                         {/*        className={'m-2 opacity-80'}*/}

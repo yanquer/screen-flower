@@ -4,6 +4,7 @@ import {IScreenManager, ISysDialogService, IWindowsManager} from "../electron/se
 import {shell} from "electron";
 import {Logger} from "../common/logger";
 import {WindowNames} from "../../common/defines";
+import {getPathDirAndNameAndExt} from "../common/common";
 
 
 @injectable()
@@ -29,7 +30,15 @@ export class UtilService implements IUtilService{
     }
 
     async showFileInFolder(filePath: string, webContentId?: number): Promise<void> {
-        return (await this.fileService.isExists(filePath)) && shell.showItemInFolder(filePath);
+        // return (await this.fileService.isExists(filePath)) && shell.showItemInFolder(filePath);
+        if (await this.fileService.isExists(filePath)) {
+            return shell.showItemInFolder(filePath);
+        } else {
+            const _dir = getPathDirAndNameAndExt(filePath)?.[0]
+            if (_dir && await this.fileService.isExists(_dir)) {
+                return shell.showItemInFolder(_dir);
+            }
+        }
     }
 
     async askLastRecord(alsoSelect: boolean = false, webContentId?: number): Promise<string | undefined> {
