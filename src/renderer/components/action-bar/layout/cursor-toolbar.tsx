@@ -49,16 +49,16 @@ export class CursorToolbar extends Component<any, any>{
                     </div>
                 </ToolTipWrap>
                 <Toolbar.Separator className="toolbar-separator" />
-                <ToolTipWrap title={"突出显示点击"}>
-                    <div className={`tool-every-button 
-                        ${this.context.cursorMode === 'target' ? "tool-button-active" : "hover:bg-gray-200 hover:scale-95"}
-                        `}
-                    >
-                        <Toolbar.ToggleItem className="ToolbarToggleItem" value="target">
-                            <TargetCursorIcon />
-                        </Toolbar.ToggleItem>
-                    </div>
-                </ToolTipWrap>
+                {/*<ToolTipWrap title={"点击显示点击"}>*/}
+                {/*    <div className={`tool-every-button */}
+                {/*        ${this.context.cursorMode === 'target' ? "tool-button-active" : "hover:bg-gray-200 hover:scale-95"}*/}
+                {/*        `}*/}
+                {/*    >*/}
+                {/*        <Toolbar.ToggleItem className="ToolbarToggleItem" value="target">*/}
+                {/*            <TargetCursorIcon />*/}
+                {/*        </Toolbar.ToggleItem>*/}
+                {/*    </div>*/}
+                {/*</ToolTipWrap>*/}
                 <ToolTipWrap title={"突出显示光标"}>
                     <div className={`tool-every-button 
                         ${this.context.cursorMode === 'highlight' ? "tool-button-active" : "hover:bg-gray-200 hover:scale-95"}

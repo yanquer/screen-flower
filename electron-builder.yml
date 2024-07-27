@@ -15,7 +15,7 @@ files:
   - '!src/*'
   # 排除配置文件
   - '!electron.vite.config.{js,ts,mjs,cjs}'
-  - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
+  - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.rst}'
   # 排除环境变量文件和 npm 配置文件
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
 

@@ -119,23 +119,6 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                      setAllowPenetrate(true)
                      setIsInActionBar(false)
                  }}
-                 // onMouseOver={() => this.visScreenWhenRecording(false)}
-                 // onMouseOut={() => this.visScreenWhenRecording(true)}
-                // 兼容工具栏收起时,
-                // onMouseUp={(e) => {
-                //     // 加个延时, barMode要稍后才变化
-                //     Logger.info('onMouseUp --')
-                //
-                //     const boxTop = this.boxRef.current?.getBoundingClientRect().y
-                //     Logger.info(`>> ${boxTop}, ${e.clientY}, ${barMode}`)
-                //     // 关闭bar工具栏组后, 才检查
-                //     // todo: barMode 不是预期的值, 暂时使用相反的判断
-                //     //      待想想怎么判断, 点击后, 但是
-                //     if (e.clientY < boxTop && barMode !== 'none') {
-                //         setAllowPenetrate(true)
-                //         setIsInActionBar(false)
-                //     }
-                // }}
             >
                 <Rnd
                     // className={"fixed"}
@@ -292,6 +275,7 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                             key={`${this.context.barMode}`}
                                             title={"切换绘图工具"}
                                             buttonClassName={`${toolbarButton}`}
+                                            buttonDisable={true}
                                         >
                                             <DrawIcon/>
                                         </ToolTipButtonWrap>
