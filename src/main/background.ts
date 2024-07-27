@@ -14,6 +14,8 @@ if (isProd) {
   app.setPath('userData', `${app.getPath('userData')} (development)`)
 }
 
+// // 尝试 ·禁用 gpu 加速· 解决白屏问题
+// app.disableHardwareAcceleration()
 LocalProtocol.registerBeforeApp()
 
 ;(async () => {

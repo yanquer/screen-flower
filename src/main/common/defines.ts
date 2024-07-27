@@ -1,6 +1,7 @@
 import {Logger} from "./logger";
 
 export const isProd = process.env.NODE_ENV === 'production'
+Logger.info(">> is dev:", !isProd)
 export const getHostUrl = (url: string) => {
     let ret: string
     if (isProd) {
@@ -13,6 +14,7 @@ export const getHostUrl = (url: string) => {
     Logger.info('>> getHostUrl: ', ret)
     return ret
 }
+
 
 
 

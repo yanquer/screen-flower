@@ -4,6 +4,7 @@ import {RecordContext} from "../common/global-context";
 import {invokeElectronHandlerAsync} from "../common/common";
 import {getServiceBySymbol} from "../../common/container/inject-container";
 import {ISettingService} from "../../common/service";
+import {DefaultBgView} from "../components/default-bg-view";
 
 const SettingPage = () => {
     const {canSetting, setCachePath, setLogPath} = useContext(RecordContext)
@@ -22,7 +23,7 @@ const SettingPage = () => {
     const render = () => {
         return canSetting ? <div>
             <SettingView/>
-        </div> : ""
+        </div> : <DefaultBgView/>
     }
 
     return render();

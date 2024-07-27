@@ -16,6 +16,7 @@ import {Logger} from "../common/logger";
 import {invokeElectronHandler} from "../common/common";
 import {WindowNames} from "../../common/defines";
 import {MovieQuality} from "../../common/movie-stream";
+import {DefaultBgView} from "../components/default-bg-view";
 
 Logger.info('>> start _app...')
 
@@ -98,8 +99,14 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   Logger.info('re run')
 
+    const [loadOver, setLoadOver] = useState<boolean>(false)
+
+    useEffect(() => {
+        setLoadOver(true)
+    }, []);
+
   return (
-      <RecordContext.Provider value={{
+      loadOver ? <RecordContext.Provider value={{
         recording, setRecording,
           pause, setPause,
         qualityValue, setQualityValue,
@@ -123,8 +130,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           videoUrl, setVideoUrl,
       }}>
         <Component {...pageProps} />
-      </RecordContext.Provider>
-
+      </RecordContext.Provider> :
+          <DefaultBgView/>
   )
 }
 

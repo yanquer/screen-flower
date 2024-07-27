@@ -5,6 +5,7 @@ import {invokeElectronHandlerAsync} from "../common/common";
 import {getServiceBySymbol} from "../../common/container/inject-container";
 import {IUtilService} from "../../common/service";
 import {PlayerView} from "../components/player/player-view";
+import {DefaultBgView} from "../components/default-bg-view";
 
 export default function Preview(){
     const {previewBlob, setPreviewBlob,
@@ -25,8 +26,6 @@ export default function Preview(){
         canPreview && videoUrl ? <div>
             <PlayerView/>
         </div> :
-            <div
-                className={"w-full bg-gray-500 h-full"}
-            ></div>
+            <DefaultBgView/>
     );
 }

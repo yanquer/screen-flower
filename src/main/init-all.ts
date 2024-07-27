@@ -14,6 +14,7 @@ import {Logger} from "./common/logger";
 import {getServiceBySymbol} from "../common/container/inject-container";
 import {IWindowsManager} from "./electron/service";
 import {WindowNames} from "../common/defines";
+import {ElePathUtil} from "./common/dynamic-defines";
 
 const cleanUp = () => {
     const needClean = getNeedCleanDispose()
@@ -24,41 +25,35 @@ const cleanUp = () => {
 
 const onEventErrListen = () => {
     process.on('uncaughtException', (err) => {
-        Logger.error('>>> Uncaught Exception in Main Process:', err);
+        Logger.error('>>> ==== Uncaught Exception in Main Process start ====');
+        Logger.error(err);
+        Logger.error('>>> ==== Uncaught Exception in Main Process end ====');
     });
 
     process.on('unhandledRejection', (reason, p) => {
         // 处理rejection
-        Logger.error('>>> unhandledRejection in Main Process:', reason, p);
-
+        Logger.error('>>> ==== unhandledRejection in Main Process start ====');
+        Logger.error(reason, p);
+        Logger.error('>>> ==== unhandledRejection in Main Process end ====');
     });
     app.on('render-process-gone', (event, webContents, details) => {
-        Logger.error('>> Render process crashed:', details);
+        Logger.error('>> ==== Render process crashed start ====');
         Logger.error(details);
+        Logger.error('>> ==== Render process crashed end ====');
     });
 }
 
 const loadMenu = () => {
-    // Logger.info(">> ", __dirname)
-    // const img = join(__dirname, "../resources/1.jpg")
-    // const img = join(__dirname, "../resources/icon_16x16.png")
-
-    const curExecPath = dirname(app.getPath('exe'))
-    Logger.info(">> exec root:", curExecPath)
-
     // 只支持png和jpeg
-    const img = isProd ?
-        join(curExecPath, '../Resources/resources/icons/icon_16x16.png') :
-        join(__dirname, "../resources/icons/icon_16x16.png")
+    const img = ElePathUtil.getMenuImg()
     Logger.info(">> use menu image:", img)
-    Logger.info(">> is dev:", !isProd)
     initializeMenu(img)
 }
 
 const listenKeyboard = () => {
     // globalShortcut.register('Alt+CommandOrControl+I', () => {
     globalShortcut.register('CommandOrControl+R', () => {
-        Logger.info('Electron loves global shortcuts!')
+        Logger.info('Electron global shortcuts trigger')
         const winManager: IWindowsManager = getServiceBySymbol(IWindowsManager)
         winManager.openWinById(WindowNames.CaptureWin, true).then();
     })

@@ -7,6 +7,7 @@ import {invokeElectronHandler} from "../common/common";
 import {IUtilService} from "../../common/service";
 import {getServiceBySymbol} from "../../common/container/inject-container";
 import {Logger} from "../common/logger";
+import {DefaultBgView} from "../components/default-bg-view";
 
 
 export default function Capture() {
@@ -40,7 +41,7 @@ export default function Capture() {
             canCapture ? <div>
                 <CaptureWin/>
                 <ActionToolBar/>
-            </div> : ""
+            </div> : <DefaultBgView mode={'cap'}/>
         )
     }
 

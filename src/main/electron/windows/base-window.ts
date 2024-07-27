@@ -9,6 +9,9 @@ import {IBaseWindow, IScreenManager} from "../service";
 import {Logger} from "../../common/logger";
 import {IContextService} from "../../../common/service";
 import {getServiceBySymbol} from "../../../common/container/inject-container";
+import {Barrier} from "../../../common/barrier";
+import {ElePathUtil} from "../../common/dynamic-defines";
+import {asyncSleep} from "../../../common/common";
 
 
 @injectable()
@@ -52,6 +55,7 @@ export class BaseSFWindow implements IBaseWindow{
 
     get originWin(){ return this.win }
 
+    protected waitWinReadyShow?: Barrier<void>
     async open(showNow: boolean=false): Promise<void> {
         if (this.win) {
             Logger.info('>>> already has win...')
@@ -75,14 +79,31 @@ export class BaseSFWindow implements IBaseWindow{
             this.name,
             this.options ?? {}
         )
-        this.setAllowPenetrate(true).then()
+
+        this.waitWinReadyShow = new Barrier<void>()
+        ret.on('ready-to-show', ()=> {
+            Logger.info(`>>> ready-to-show window, waitWinReadyShow pass , ${this.id}`)
+            this.waitWinReadyShow.pass().then()
+        })
+        ret.webContents.on('dom-ready', ()=> {
+            Logger.info(`>>> dom-ready window , ${this.id}`)
+        })
+        ret.webContents.on('did-finish-load', ()=> {
+            Logger.info(`>>> did-finish-load window , ${this.id}`)
+        })
+
+        // this.setAllowPenetrate(true).then()
         return ret
     }
 
     async loadWindow(): Promise<void> {
+        // const preLoadIndex = ElePathUtil.getPreloadIndex()
+        // // 先加载一个预备窗口来避免白屏
+        // Logger.info(`>>> loadFile preview: ${preLoadIndex}`)
+        // await this.win.loadFile(preLoadIndex)
         Logger.info(`>>> loadURL: ${this.url}`)
         await this.win.loadURL(getHostUrl(this.url))
-        await this.setAllowPenetrate(false)
+        // await this.setAllowPenetrate(false)
     }
 
     async extOperation(): Promise<void>{
@@ -106,10 +127,10 @@ export class BaseSFWindow implements IBaseWindow{
         })
 
         //win = new BrowserWindow
-        this.win?.webContents.once('did-fail-load', () => {
-            setTimeout(()=>{
-                this.win?.reload();
-            }, 1000);
+        this.win?.webContents.once('did-fail-load', async () => {
+            Logger.info(`>>> did-fail-load and reload, ${this.id}`)
+            await asyncSleep(1000)
+            this.win?.reload();
         });
 
     }
@@ -145,33 +166,23 @@ export class BaseSFWindow implements IBaseWindow{
         if (this._isShow) return
         this._isShow = true
 
-        this.win.show()
-        // this.win?.once('ready-to-show', ()=> {
-        //     this.win.show()
-        // })
-        // if (this.firstInit) {
-        //     // 首次启动的时候, 先 opacity: 0 , 再 1 , 避免看到首次show browserWindows 白屏
-        //     //      除了此方案, 貌似还可以先加载一个其他的 browserWindows
-        //     setTimeout(() => {
-        //         this.win.setOpacity(1)
-        //         this.firstInit = false
-        //     }, 100)
-        // }
-        // this.win?.webContents.on('did-finish-load', () => {
-        //     Logger.info(`>>> inner webContents did-finish-load, ${this.id}`)
-        //     this.win?.setOpacity(1)
-        //     this.firstInit = false
-        // })
-        // show 后才发送, 避免太早, 前端还没有加载
-        // this.win?.on('ready-to-show', ()=>{
-        this.win?.once('show', ()=>{
+        this.waitWinReadyShow.wait().then(async () => {
             Logger.info(`>>> inner send show to front, ${this.id}`)
-            setTimeout(() => {
-                this.win?.webContents.send(HandlerStr.onWindowShow, this.id)
-                // Logger.info(`>>> inner webContents did-finish-load, ${this.id}`)
-                this.win?.setOpacity(1)
-                this.firstInit = false
-            }, 0)
+
+            this.win?.webContents.send(HandlerStr.onWindowShow, this.id)
+            // Logger.info(`>>> inner webContents did-finish-load, ${this.id}`)
+            this.win?.setOpacity(1)
+            this.firstInit = false
+
+            await asyncSleep(50)
+            // 再发一次, 因为上面那次发过去的时候, 前端事件监听可能还没加载过来
+            this.win?.webContents.send(HandlerStr.onWindowShow, this.id)
+
+            await asyncSleep(700)
+            Logger.info(`>>> show window, ${this.id}`)
+            this.win.show()
+
+
         })
     }
 
