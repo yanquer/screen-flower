@@ -5,9 +5,10 @@ import {invokeElectronHandlerAsync} from "../common/common";
 import {getServiceBySymbol} from "../../common/container/inject-container";
 import {ISettingService} from "../../common/service";
 import {DefaultBgView} from "../components/default-bg-view";
+import {Logger} from "../common/logger";
 
 const SettingPage = () => {
-    const {canSetting, setCachePath, setLogPath} = useContext(RecordContext)
+    const {canSetting, setCachePath, setLogPath, setShowDock} = useContext(RecordContext)
 
     // 设置
     useEffect(() => {
@@ -16,6 +17,9 @@ const SettingPage = () => {
                 const setService = getServiceBySymbol<ISettingService>(ISettingService)
                 setCachePath(await setService.getCachePath())
                 setLogPath(await setService.getLogPath())
+                const showDock = await setService.getDockShow()
+                Logger.info(`>> showDock: ${showDock}`)
+                setShowDock(showDock)
             }).then()
         }
     }, [canSetting]);

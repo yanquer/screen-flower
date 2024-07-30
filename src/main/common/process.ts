@@ -7,6 +7,7 @@ import {Logger} from "./logger";
 import {Dispose} from "../../common/container/dispose";
 
 export class Process extends Dispose{
+    value = 'clean process'
 
     constructor(protected cmd: string[]) {
         super();

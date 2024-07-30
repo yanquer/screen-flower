@@ -31,3 +31,12 @@ export interface VideoArgs{
 }
 
 
+
+// setting
+export interface SettingOptions{
+    logFile?: string,
+    hiddenDock?: boolean,
+    cacheDir?: string,
+}
+
+

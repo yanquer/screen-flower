@@ -3,6 +3,7 @@ import {injectable} from "inversify";
 
 // export const IDispose = Symbol.for('IDispose');
 export interface IDispose {
+    value?: string
     dispose(): void;
 }
 

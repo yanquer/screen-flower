@@ -50,6 +50,7 @@ FfmpegCommand.setFfmpegPath(truthFfmpegPath)
 
 @injectable()
 export class ScreenRecorder extends Dispose implements IRecordService{
+    value = 'clean ScreenRecorder'
 
     protected currentCmd?: FluentFfmpegApi
     protected recordingRunEmitter = new Emitter<boolean>()

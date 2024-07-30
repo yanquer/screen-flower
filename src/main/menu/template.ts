@@ -10,7 +10,7 @@ export const getMenuTemplate = async (): Promise<Array<(MenuItemConstructorOptio
     {
         id: MenuNames.startRecordPage,
         label: `启动录制`,
-        accelerator: 'Command+R',
+        accelerator: 'Command+Shift+R',
         click: () => {
             const winManager = getServiceBySymbol<IWindowsManager>(IWindowsManager)
             app.focus();

@@ -13,7 +13,7 @@ export class SettingView extends Component<any, any>{
     context: IRecordContext
 
     render() {
-        const {logPath, cachePath, setLogPath, setCachePath, setShowDock} = this.context
+        const {logPath, cachePath, showDock ,setLogPath, setCachePath, setShowDock} = this.context
         return (<div className={'w-screen h-screen flex items-center justify-center overflow-hidden bg-gray-500'}>
             <Theme appearance={'dark'}
                 className={"p-4 pt-1 bg-gray-800"}
@@ -31,8 +31,14 @@ export class SettingView extends Component<any, any>{
                     </Box>
                     <Box>
                         <Checkbox defaultChecked={false} color={'bronze'}
+                                  checked={showDock}
                                   onClick={(e) => {
-                                      setShowDock((pre) => !pre)
+                                      // setShowDock((pre) => !pre)
+                                      setShowDock((pre) => {
+                                          const setService: ISettingService = getServiceBySymbol(ISettingService);
+                                          setService.setDockShow(!pre).then()
+                                          return !pre
+                                      })
                                   }}
                         />
                     </Box>
@@ -46,9 +52,10 @@ export class SettingView extends Component<any, any>{
                                 size="1"
                                 // placeholder="…"
                                 readOnly={true}
-                                className={'overflow-x-auto overscroll-contain sm-scroll-bar'}
+                                // className={'overflow-x-auto overscroll-contain sm-scroll-bar'}
+                                className={'text-nowrap overflow-x-auto sm-scroll-bar'}
+                                value={cachePath}
                             >
-                                {cachePath}
                             </TextField.Root>
                         </ToolTipWrap>
                     </Box>
@@ -73,8 +80,9 @@ export class SettingView extends Component<any, any>{
                                             // placeholder="…"
                                             readOnly={true}
                                             className={'overflow-x-auto overscroll-contain sm-scroll-bar'}
+                                            value={logPath}
                             >
-                                {logPath}
+                                {/*    if icon*/}
                             </TextField.Root>
                         </ToolTipWrap>
                     </Box>

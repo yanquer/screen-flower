@@ -2,7 +2,6 @@
 import 'reflect-metadata'
 
 import {initializeMenu} from "./menu";
-import {dirname, join} from "path";
 import {ensureScreenCapturePermissions} from "./common/permissions";
 import {bindMiddle} from "./middle";
 import {bindBackend} from "./backend";
@@ -19,6 +18,7 @@ import {ElePathUtil} from "./common/dynamic-defines";
 const cleanUp = () => {
     const needClean = getNeedCleanDispose()
     needClean.map(((disposeIns: IDispose) => {
+        Logger.info(`>> clean ${disposeIns?.value}`)
         disposeIns.dispose?.();
     }))
 }
@@ -52,7 +52,7 @@ const loadMenu = () => {
 
 const listenKeyboard = () => {
     // globalShortcut.register('Alt+CommandOrControl+I', () => {
-    globalShortcut.register('CommandOrControl+R', () => {
+    globalShortcut.register('CommandOrControl+Shift+R', () => {
         Logger.info('Electron global shortcuts trigger')
         const winManager: IWindowsManager = getServiceBySymbol(IWindowsManager)
         winManager.openWinById(WindowNames.CaptureWin, true).then();

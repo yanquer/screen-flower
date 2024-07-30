@@ -26,4 +26,8 @@ export class SettingService implements ISettingService{
         return await this._backendService('setLogPath', logPath);
     }
 
+    async getDockShow(): Promise<boolean> {
+        return await this._backendService('getDockShow', );
+    }
+
 }

@@ -80,6 +80,7 @@ export const ISettingService = Symbol.for('ISettingService')
 export interface ISettingService {
   cachePathChangeEvent?: Event<string>
 
+  getDockShow(): Promise<boolean>
   setDockShow(show: boolean): Promise<void>
   getLogPath(): Promise<string>
   setLogPath(logPath: string): Promise<void>
