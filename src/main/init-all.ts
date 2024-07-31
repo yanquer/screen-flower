@@ -69,8 +69,11 @@ export const initAll = () => {
     listenKeyboard()
 
     app.on('quit', () => {
-        Logger.info('>> app quit...', );
+        Logger.info('>> app quit start...', );
         cleanUp()
+        Logger.info('>> app quit clean up end...', );
+        app.quit()
+        Logger.info('>> app quit end...', );
     })
 
     ipcMain.on('app-route-ready', () => {
