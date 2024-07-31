@@ -2,7 +2,7 @@
   "private": true,
   "name": "screen-flower",
   "description": "screen util such as flower",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "YanQue",
   "main": "app/background.js",
   "scripts": {
