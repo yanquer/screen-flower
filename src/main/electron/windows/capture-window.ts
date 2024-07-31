@@ -19,7 +19,7 @@ export class CaptureWindow extends BaseSFWindow{
 
     get options(): BrowserWindowConstructorOptions  {
         return {
-            ...this.screenManager.getCurrentScreenArea(),  // x, y, width, height
+            ...this.screenManager.getCurrentScreenArea(true),  // x, y, width, height
             frame: false, // 删除默认窗口边框
             transparent: true, // 设置窗口为透明
             hasShadow: false,

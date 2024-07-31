@@ -41,11 +41,15 @@ export class ScreenManager implements IScreenManager{
             throw new Error('Cant find the screen, are you bind the display ?')
         }
         if (allDisplays.length === 1){
+            Logger.info('>> display - is not mulDisplay')
             this._mulDisplay = false
             return allDisplays[0]
         }
+        Logger.info('>> display - is mulDisplay')
         this._mulDisplay = true
         const cursor = this.getFoucPointInAllDisplay()
+        Logger.info('>> display - cursor')
+        Logger.info(cursor)
         return screen.getDisplayNearestPoint(cursor)
     }
 
@@ -55,11 +59,15 @@ export class ScreenManager implements IScreenManager{
     protected _currentScreenAreaOnlyContent: ScreenArea
     getCurrentScreenArea(refresh: boolean=false, fullArea: boolean=true): ScreenArea{
         if (!this._currentScreenArea || !this._currentScreenAreaOnlyContent || refresh) {
+            Logger.info('>> refresh getCurrentScreenArea')
             const screen = this.getFoucScreen()
             this._currentScreenArea = screen.bounds as ScreenArea
             this._currentScreenAreaOnlyContent = screen.workArea as ScreenArea
         }
-        return fullArea ? this._currentScreenArea : this._currentScreenAreaOnlyContent
+        const ret = fullArea ? this._currentScreenArea : this._currentScreenAreaOnlyContent
+        Logger.info('>> getCurrentScreenArea')
+        Logger.info(ret)
+        return ret
     }
 
     protected _currentScreenIndex: number
@@ -120,7 +128,7 @@ export class ScreenManager implements IScreenManager{
         if (refresh || !this._currentScreenIndex){
             this.getCurrentDisplay()
         }
-
+        Logger.info(`>> cur ScreenIndex ${this._currentScreenIndex}`)
         return this._currentScreenIndex;
     }
 

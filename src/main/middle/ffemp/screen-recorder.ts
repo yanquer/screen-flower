@@ -13,7 +13,6 @@ import {IScreenManager, ISysDialogService, IWindowsManager} from "../../electron
 import {isProd} from "../../common/defines";
 import {getCurrentTime, getRandomStr, isTest} from "../../../common/common";
 import {Process} from "../../common/process";
-import ffmpegPath from "ffmpeg-static";
 import {Logger} from "../../common/logger";
 import util from "electron-util";
 import {ContextKey, WindowNames} from "../../../common/defines";
