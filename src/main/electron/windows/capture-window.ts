@@ -112,6 +112,11 @@ export class CaptureWindow extends BaseSFWindow{
         // if (this.win) moveToFoucScreen(this.win)
     }
 
+    show() {
+        this.win && this.screenManager.showMoveToAnotherScreen(this.win)
+        super.show();
+    }
+
     close(){
         super.close()
         // screen.off('display-metrics-changed', this.displayChange.bind(this))

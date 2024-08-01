@@ -1,7 +1,7 @@
 import {IScreenManager} from "../service";
 import {Emitter} from "../../../common/event";
 import {injectable, postConstruct} from "inversify";
-import {Display, screen} from "electron";
+import {BrowserWindow, Display, screen} from "electron";
 import {CaptureArea, CursorPosition, ScreenArea} from "../../../common/models";
 import {toNumber} from "lodash";
 import {Logger} from "../../common/logger";
@@ -165,6 +165,22 @@ export class ScreenManager implements IScreenManager{
         const height = toNumber(`${area.height}`.replace('px', ''))
         // 剪去边框
         return `${(width-6) * curPpi}:${(height-6) * curPpi}:${(area.x+3) * curPpi}:${(area.y+3) * curPpi}`
+    }
+
+    showMoveToAnotherScreen(win: BrowserWindow) {
+        if (!this.mulDisplay) return
+        const curWinArea = win.getBounds()
+        const curWinScreen = screen.getDisplayNearestPoint({
+            x: curWinArea.x,
+            y: curWinArea.y,
+        })
+        const focusScreen = this.getFoucScreen()
+        if (focusScreen.id !== curWinScreen.id){
+            Logger.info('>> showMoveToAnotherScreen: Fouc screen change...')
+            const focusArea: ScreenArea = focusScreen.bounds
+            Logger.info(focusArea)
+            win.setBounds(focusArea)
+        }
     }
 
 

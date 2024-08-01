@@ -49,6 +49,7 @@ export interface IScreenManager {
     //  获取鼠标在当前屏幕上的相对位置
     getCursorPosition(): CursorPosition;
     getCropAreaStr(area: CaptureArea): string
+    showMoveToAnotherScreen(win: BrowserWindow): void
 }
 
 export interface DialogOptions{
