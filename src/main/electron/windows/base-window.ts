@@ -83,14 +83,17 @@ export class BaseSFWindow implements IBaseWindow{
         this.waitWinReadyShow = new Barrier<void>()
         ret.on('ready-to-show', ()=> {
             Logger.info(`>>> ready-to-show window, waitWinReadyShow pass , ${this.id}`)
-            this.waitWinReadyShow.pass().then()
+            // this.waitWinReadyShow.pass().then()
         })
         ret.webContents.on('dom-ready', ()=> {
             Logger.info(`>>> dom-ready window , ${this.id}`)
         })
         ret.webContents.on('did-finish-load', ()=> {
             Logger.info(`>>> did-finish-load window , ${this.id}`)
+            this.waitWinReadyShow.pass().then()
         })
+        // 防止窗口失去焦点
+        ret.webContents.prependListener('blur', (e) => e.preventDefault())
 
         // this.setAllowPenetrate(true).then()
         return ret
@@ -180,8 +183,12 @@ export class BaseSFWindow implements IBaseWindow{
 
             await asyncSleep(700)
             Logger.info(`>>> show window, ${this.id}`)
-            this.win.show()
 
+            // 若直接show, 会立即聚焦导致一闪而逝白屏
+            // 故把 show 换成 showInactive 并延时聚焦就没有一闪而逝的白屏
+            this.win.showInactive()
+            await asyncSleep(500)
+            this.win.focus()
 
         })
     }
