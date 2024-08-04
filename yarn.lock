@@ -5784,9 +5784,9 @@ next@^14.2.4:
     "@next/swc-win32-ia32-msvc" "14.2.5"
     "@next/swc-win32-x64-msvc" "14.2.5"
 
-"nextron@https://github.com/yanquer/nextron.git#v9.2.0":
-  version "9.1.0"
-  resolved "https://github.com/yanquer/nextron.git#87f97d736b3107c19d366baf87fdfe77e258beaf"
+"nextron@https://github.com/yanquer/nextron.git#v9.2.1":
+  version "9.2.1"
+  resolved "https://github.com/yanquer/nextron.git#53ba2ad6ab5c528c9acb2c229ddde95e0a5c946d"
   dependencies:
     "@babel/core" "7.24.7"
     "@babel/plugin-transform-class-properties" "7.24.7"
