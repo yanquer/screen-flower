@@ -7,6 +7,9 @@
   "main": "app/background.js",
   "scripts": {
     "dev": "nextron",
+    "dev:windows:electron": "electron . 8888 --remote-debugging-port=5858 --inspect=9292",
+    "dev:windows:next": "next -p 8888 src/renderer",
+
     "build": "export CSC_IDENTITY_AUTO_DISCOVERY=false && nextron build",
     "build:prod": "nextron build --config electron-builder.prod.yml",
     "build:mac": "export CSC_IDENTITY_AUTO_DISCOVERY=false ; nextron build --mac --x64",
