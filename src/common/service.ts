@@ -74,6 +74,7 @@ export interface IUtilService {
   askSelectAVideoFile(onlyStr?: boolean, failedCancel?: boolean): Promise<string | Buffer | undefined>
   askOpenPreview(): Promise<void>
   askHideWin(): Promise<void>
+  askQuit(): Promise<void>
 }
 
 export const ISettingService = Symbol.for('ISettingService')

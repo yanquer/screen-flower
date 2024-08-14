@@ -36,6 +36,10 @@ export class UtilService implements IUtilService{
         return await this._backendService('askLastRecord', alsoSelect);
     }
 
+    async askQuit(): Promise<void>{
+        return await this._backendService('askQuit');
+    }
+
 
 
 }

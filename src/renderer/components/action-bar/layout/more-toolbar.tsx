@@ -7,6 +7,8 @@ import {
     FullCircleCloseButtonToolbar,
 } from "../../svgs";
 import {Logger} from "../../../common/logger";
+import {getServiceBySymbol} from "../../../../common/container/inject-container";
+import {IUtilService} from "../../../../common/service";
 
 interface MoreToolbarProps{
     className?: string;
@@ -18,9 +20,13 @@ export class MoreToolbar extends Component<MoreToolbarProps, any>{
 
     protected setPos(){
         const {setAllowPenetrate, setIsInActionBar, recording} = this.context
-        Logger.info('>>> setPos try setAllowPenetrate ', recording && true)
+        Logger.info('>>> MoreToolbar setPos try setAllowPenetrate ', recording && true)
         recording && setAllowPenetrate(true)
         setIsInActionBar(false)
+    }
+
+    protected get _utilService(){
+        return getServiceBySymbol<IUtilService>(IUtilService);
     }
 
     render() {
@@ -47,11 +53,12 @@ export class MoreToolbar extends Component<MoreToolbarProps, any>{
                         ${this.context.blurView ? "tool-button-active" : "hover:bg-gray-200 hover:scale-95 "}
                         `}
                          onClick={() => {
-                             Logger.info('>>> blur onValueChange', true)
+                             Logger.info('>>> MoreToolbar close win')
 
-                             this.context.setBlurView(true)
                              this.context.setBarMode('none')
                              this.setPos()
+
+                             this._utilService.askHideWin().then();
 
                          }}
                     >
@@ -68,12 +75,11 @@ export class MoreToolbar extends Component<MoreToolbarProps, any>{
                         hover:bg-gray-200 hover:scale-95
                         `}
                          onClick={() => {
-                             Logger.info('>>> blur onValueChange', true)
+                             Logger.info('>>> MoreToolbar quit app onValueChange')
 
                              this.context.setBarMode('none')
-                             this.context.setBlurView(false)
-
                              this.setPos()
+                             this._utilService.askQuit().then();
 
                          }}
                     >

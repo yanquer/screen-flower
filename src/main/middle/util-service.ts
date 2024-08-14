@@ -1,7 +1,7 @@
 import {IFileService, IRecordService, IUtilService} from "../../common/service";
 import {inject, injectable} from "inversify";
 import {IScreenManager, ISysDialogService, IWindowsManager} from "../electron/service";
-import {shell} from "electron";
+import {app, shell} from "electron";
 import {Logger} from "../common/logger";
 import {WindowNames} from "../../common/defines";
 import {getPathDirAndNameAndExt} from "../common/common";
@@ -81,6 +81,10 @@ export class UtilService implements IUtilService{
 
     async askHideWin(): Promise<void>{
         await this.windowsManager.hideAllWindows()
+    }
+
+    async askQuit(): Promise<void>{
+        app.quit();
     }
 
 }
