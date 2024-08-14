@@ -5,7 +5,7 @@ import {MovieQuality} from "../../common/movie-stream";
 
 
 // bar 额外工具
-export type BarVideoMode = 'draw' | 'blur' | 'cursor' | 'none'
+export type BarVideoMode = 'draw' | 'blur' | 'cursor' | 'more' | 'none'
 
 // 光标模式
 export type CursorMode =

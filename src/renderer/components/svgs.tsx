@@ -5,6 +5,7 @@ import { ReactSVG } from "react-svg";
 interface SvgProps {
     width?: string;
     height?: string;
+    className?: string;
 }
 
 const defaultSize = {width: "40", height: "40"};
@@ -85,12 +86,36 @@ export const DiscardIcon = (props: SvgProps) => {
 export const CloseButtonToolbar = (props: SvgProps) => {
     return (
         <ReactSVG
+            className={props?.className ?? ""}
             src={"/images/components/action-tool-bar/close-button.svg"}
             width={props.width ?? defaultSize.width}
             height={props.height ?? defaultSize.height}
         />
     );
 };
+
+export const CircleCloseButtonToolbar = (props: SvgProps) => {
+    return (
+        <ReactSVG
+            className={props?.className ?? ""}
+            src={"/images/components/action-tool-bar/circle-close-button.svg"}
+            width={props.width ?? defaultSize.width}
+            height={props.height ?? defaultSize.height}
+        />
+    );
+};
+
+export const FullCircleCloseButtonToolbar = (props: SvgProps) => {
+    return (
+        <ReactSVG
+            className={props?.className ?? ""}
+            src={"/images/components/action-tool-bar/full-circle-close-button.svg"}
+            width={props.width ?? defaultSize.width}
+            height={props.height ?? defaultSize.height}
+        />
+    );
+};
+
 
 export const DrawIcon = (props: SvgProps) => {
     return (
@@ -198,6 +223,17 @@ export const TrashIcon = (props: SvgProps) => {
     return (
         <ReactSVG
             src={"/images/components/action-tool-bar/trash-icon.svg"}
+            width={props.width}
+            height={props.height}
+        />
+    );
+};
+
+// https://fontawesome.com/icons/ellipsis-vertical?f=classic&s=solid
+export const EllipsisVerticalIcon = (props: SvgProps) => {
+    return (
+        <ReactSVG
+            src={"/images/components/action-tool-bar/ellipsis-vertical.svg"}
             width={props.width}
             height={props.height}
         />

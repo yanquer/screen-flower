@@ -6,7 +6,7 @@ import {
     BlurIcon, CameraIcon,
     CloseButtonToolbar, CursorIcon,
     DiscardIcon,
-    DrawIcon,
+    DrawIcon, EllipsisVerticalIcon,
     GrabIcon, HighlightCursorIcon, MicIcon,
     PauseIcon, PlayIcon,
     RestartIcon,
@@ -26,6 +26,7 @@ import {getServiceBySymbol} from "../../../common/container/inject-container";
 import {IRecordService, IUtilService} from "../../../common/service";
 import {Logger} from "../../common/logger";
 import {createBlobByBuffer} from "../../../common/common";
+import {MoreToolbar} from "./layout/more-toolbar";
 
 
 interface ActionToolBarState {
@@ -344,6 +345,28 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                         <CameraIcon/>
                                     </ToolTipButtonWrap>
 
+                                </div>
+
+                                <Separator className={'toolbar-separator'}/>
+
+                                <div className={'relative'}>
+                                    {this.context.barMode === 'more' ? (
+                                        this.renderCloseTool('more')
+                                    ) : (
+                                        <ToolTipButtonWrap
+                                            key={`${this.context.barMode}`}
+                                            title={"更多"}
+                                            buttonClassName={`${toolbarButton} 
+                      
+                                            `}
+                                            buttonClickHandler={() => {
+                                                this.context.setBarMode('more')
+                                            }}
+                                        >
+                                            <EllipsisVerticalIcon/>
+                                        </ToolTipButtonWrap>
+                                    )}
+                                    {this.context.barMode === 'more' ? <MoreToolbar /> : ''}
                                 </div>
 
                             </Flex>
