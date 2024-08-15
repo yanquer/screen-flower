@@ -1,6 +1,6 @@
 
-import {CaptureWin} from "../components/capture-win";
-import {ActionToolBar} from "../components/action-bar/action-tool-bar";
+import {CaptureWin} from "../layout/capture-win";
+import {ActionToolBar} from "../layout/action-bar/action-tool-bar";
 import {useContext, useEffect} from "react";
 import {RecordContext} from "../common/global-context";
 import {invokeElectronHandler} from "../common/common";

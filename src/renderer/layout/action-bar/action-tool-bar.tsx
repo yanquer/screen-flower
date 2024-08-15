@@ -12,14 +12,14 @@ import {
     RestartIcon,
     ResumeIcon, SpotlightCursorIcon,
     StopIcon, TargetCursorIcon
-} from "../svgs";
+} from "../../components/svgs";
 
 // @ts-ignore
-import {toolbarButton} from "../../styles/components/action-tool-bar.module.scss"
-import {ToolTipButtonWrap} from "../radix-ui/tool-tip-button-wrap";
+import {toolbarButton} from "../../styles/layout/action-tool-bar.module.scss"
+import {ToolTipButtonWrap} from "../../components/radix-ui/tool-tip-button-wrap";
 import {BarVideoMode, IRecordContext, RecordContext} from "../../common/global-context";
-import {ScreenCaptureBrowser} from "../movie-stream/browser/screen-capture-browser";
-import {RecordedTimer} from "../movie-stream/record-timer";
+import {ScreenCaptureBrowser} from "../../components/movie-stream/browser/screen-capture-browser";
+import {RecordedTimer} from "../../components/movie-stream/record-timer";
 import {CursorToolbar} from "./layout/cursor-toolbar";
 import {BlurToolbar} from "./layout/blur-toolbar";
 import {getServiceBySymbol} from "../../../common/container/inject-container";

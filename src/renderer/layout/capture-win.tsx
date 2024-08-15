@@ -4,7 +4,7 @@ import {DraggableData, DraggableEvent} from "react-draggable";
 
 // @ts-ignore
 import {resizeHandle, topLeft, topRight, top, right, left, bottomRight, bottom, bottomLeft, boxShadowFull
-} from '../styles/components/capture-win.module.scss'
+} from '../styles/layout/capture-win.module.scss'
 import {IRecordContext, RecordContext} from "../common/global-context";
 import CursorModes from "./action-bar/tool/cursor-modes";
 import {getServiceBySymbol} from "../../common/container/inject-container";

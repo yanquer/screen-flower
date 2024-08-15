@@ -4,6 +4,7 @@ module.exports = {
   content: [
     './src/renderer/pages/**/*.{js,ts,jsx,tsx}',
     './src/renderer/components/**/*.{js,ts,jsx,tsx}',
+    './src/renderer/layout/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     colors: {

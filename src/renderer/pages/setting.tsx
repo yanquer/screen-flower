@@ -1,4 +1,4 @@
-import {SettingView} from "../components/setting-view";
+import {SettingView} from "../layout/setting-view";
 import {useContext, useEffect} from "react";
 import {RecordContext} from "../common/global-context";
 import {invokeElectronHandlerAsync} from "../common/common";

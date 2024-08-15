@@ -1,11 +1,11 @@
 import {Component} from "react";
 import { IRecordContext, RecordContext} from "../../../common/global-context";
 import * as Toolbar from "@radix-ui/react-toolbar";
-import {ToolTipWrap} from "../../radix-ui/tool-tip-wrap";
+import {ToolTipWrap} from "../../../components/radix-ui/tool-tip-wrap";
 import {
     TransformIcon,
     TrashIcon
-} from "../../svgs";
+} from "../../../components/svgs";
 import {Logger} from "../../../common/logger";
 
 interface BlurToolbarProps{

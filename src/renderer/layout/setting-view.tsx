@@ -1,11 +1,11 @@
 import {Component} from "react";
-import {Box, Flex, TextField, Text, Checkbox, Theme, Grid, Button} from "@radix-ui/themes";
+import {Box, TextField, Text, Checkbox, Theme, Grid, Button} from "@radix-ui/themes";
 import {IRecordContext, RecordContext} from "../common/global-context";
-import {ToolTipWrap} from "./radix-ui/tool-tip-wrap";
+import {ToolTipWrap} from "../components/radix-ui/tool-tip-wrap";
 import {invokeElectronHandlerAsync} from "../common/common";
 import {getServiceBySymbol} from "../../common/container/inject-container";
 import {ISettingService, IUtilService} from "../../common/service";
-import {DragTitle} from "./drag-title";
+import {DragTitle} from "../components/drag-title";
 
 
 export class SettingView extends Component<any, any>{
