@@ -6,7 +6,7 @@ import {FluentFfmpegApi} from './fluent-ffmpeg/api'
 import FfmpegCommand from 'fluent-ffmpeg';
 import {CaptureArea, eqCaptureArea, VideoArgs} from "../../../common/models";
 import {Emitter, Event} from "../../../common/event";
-import {dirname, join, basename, extname} from "path";
+import {join} from "path";
 import {getHomeDir} from "../../common/dynamic-defines";
 import {Dispose} from "../../../common/container/dispose";
 import {IScreenManager, ISysDialogService, IWindowsManager} from "../../electron/service";
@@ -14,10 +14,10 @@ import {isProd} from "../../common/defines";
 import {getCurrentTime, getRandomStr, isTest} from "../../../common/common";
 import {Process} from "../../common/process";
 import {Logger} from "../../common/logger";
-import util from "electron-util";
 import {ContextKey, WindowNames} from "../../../common/defines";
 import {MovieQuality, MovieStream} from "../../../common/movie-stream";
 import {getPathDirAndNameAndExt} from "../../common/common";
+import {OS, OsType} from "../../common/os";
 
 // import {fixPathForAsarUnpack} from 'electron-util'
 // const {fixPathForAsarUnpack} = require('electron-util');
@@ -129,7 +129,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
 
             const out = (await (new Process([
                 truthFfmpegPath,
-                `-f`, ScreenRecorder.MacScreenSource,
+                `-f`, this.inputCaptureSource,
                 '-list_devices', 'true',
                 '-i', '""',
             ])).run()).stderr
@@ -153,9 +153,9 @@ export class ScreenRecorder extends Dispose implements IRecordService{
             // const wait = new Promise(resolve => waitResolve=resolve)
 
             // const cmd = this.ffmpegCommand("", false)
-            //     .inputFormat(ScreenRecorder.MacScreenSource)
+            //     .inputFormat(this.inputCaptureSource)
             //     .inputOptions([
-            //         // `-f ${ScreenRecorder.MacScreenSource}`,
+            //         // `-f ${this.inputCaptureSource}`,
             //         '-list_devices true',
             //         '-i ""'
             //     ])
@@ -199,7 +199,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         // this.ffmpegCommand
         // this.ffmpegCommand({source: "1"})
         const cmd = this.ffmpegCommand(this.currentScreen)
-            .inputFormat(ScreenRecorder.MacScreenSource)
+            .inputFormat(this.inputCaptureSource)
             // .native()
             .noAudio()
             .videoFilter(`crop=${cropArea}`)
@@ -339,7 +339,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
 
         // ffmpeg -f avfoundation -i "2" -vframes 1 -s 1920x1080 screenshot.png
         this.ffmpegCommand(this.currentScreen, false)
-            .inputFormat(ScreenRecorder.MacScreenSource)
+            .inputFormat(this.inputCaptureSource)
             .outputOptions([
                 // `-vf "crop=${cropArea}"`,
                 '-vframes 1',
@@ -440,8 +440,32 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         return output
     }
 
+    private _cacheInputCaptureSource: string
+    protected get inputCaptureSource(): string {
+        if (!this._cacheInputCaptureSource) {
+
+            switch (OS.curOsType) {
+                case OsType.mac:
+                    this._cacheInputCaptureSource = ScreenRecorder.MacScreenSource
+                    break
+                case OsType.win:
+                    this._cacheInputCaptureSource = ScreenRecorder.WindowsScreenSource
+                    break
+                case OsType.linux:
+                    this._cacheInputCaptureSource = ScreenRecorder.LinuxScreenSource
+                    break
+            }
+
+            // 默认 Mac?
+            this._cacheInputCaptureSource = ScreenRecorder.MacScreenSource
+        }
+        return this._cacheInputCaptureSource
+    }
+
 }
 
 export namespace ScreenRecorder {
     export const MacScreenSource = 'avfoundation'
+    export const WindowsScreenSource = 'dshow'
+    export const LinuxScreenSource = 'x11grab'
 }
