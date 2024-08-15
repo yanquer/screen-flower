@@ -17,6 +17,12 @@ import {invokeElectronHandler} from "../common/common";
 import {WindowNames} from "../../common/defines";
 import {MovieQuality} from "../../common/movie-stream";
 import {DefaultBgView} from "../components/default-bg-view";
+import {getServiceBySymbol} from "../../common/container/inject-container";
+import {IUtilService} from "../../common/service";
+
+// font
+import "@fortawesome/fontawesome-free/css/all.css"
+
 
 Logger.info('>> start _app...')
 
@@ -105,6 +111,17 @@ function MyApp({ Component, pageProps }: AppProps) {
         setLoadOver(true)
     }, []);
 
+  // 是否开发模式
+    const [devMode, setDevMode] = useState<boolean>(false);
+    useEffect(() => {
+        invokeElectronHandler(() => {
+            const utilService = getServiceBySymbol<IUtilService>(IUtilService)
+            utilService?.isDevMode().then(dev => {
+                setDevMode(dev)
+            })
+        })
+    }, []);
+
   return (
       loadOver ? <RecordContext.Provider value={{
         recording, setRecording,
@@ -128,6 +145,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         canCapture, setCanCapture,
         canSetting, setCanSetting,
           videoUrl, setVideoUrl,
+          devMode, setDevMode,
       }}>
         <Component {...pageProps} />
       </RecordContext.Provider> :

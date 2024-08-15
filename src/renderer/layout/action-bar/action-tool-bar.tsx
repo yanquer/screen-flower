@@ -74,9 +74,9 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                     if (click) click()
                     this.context.setBarMode('none')
                 }}
-                buttonClassName={`tool-sub-group ${this.context.barMode === curBar ? 'tool-sub-group-active' : ''}`}
+                buttonClassName={`tool-sub-group svg-active ${this.context.barMode === curBar ? 'tool-sub-group-active' : ''}`}
             >
-                <CloseButtonToolbar/>
+                <CloseButtonToolbar />
             </ToolTipButtonWrap>
         )
     }
@@ -141,6 +141,7 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                             >
                                 <div>
                                     <ToolTipButtonWrap
+                                        key={"garb"}
                                         title={"拖动"}
                                         buttonClassName={`${toolbarButton}`}
                                         buttonMouseDownHandler={() => this.setCanDrag(true)}
@@ -331,21 +332,22 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                 <div>
                                     <ToolTipButtonWrap
                                         title={"打开麦克风"}
+                                        buttonDisable={true}
                                         buttonClassName={`${toolbarButton}`}
                                     >
                                         <MicIcon/>
                                     </ToolTipButtonWrap>
 
                                 </div>
-                                <div>
-                                    <ToolTipButtonWrap
-                                        title={"打开摄像头"}
-                                        buttonClassName={`${toolbarButton}`}
-                                    >
-                                        <CameraIcon/>
-                                    </ToolTipButtonWrap>
+                                {/*<div>*/}
+                                {/*    <ToolTipButtonWrap*/}
+                                {/*        title={"打开摄像头"}*/}
+                                {/*        buttonClassName={`${toolbarButton}`}*/}
+                                {/*    >*/}
+                                {/*        <CameraIcon/>*/}
+                                {/*    </ToolTipButtonWrap>*/}
 
-                                </div>
+                                {/*</div>*/}
 
                                 <Separator className={'toolbar-separator'}/>
 

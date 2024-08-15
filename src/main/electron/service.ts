@@ -21,6 +21,7 @@ export interface IBaseWindow {
     setAllowPenetrate(allow: boolean): Promise<void>
 
     findWinByWebContentId(id: number): BrowserWindow | undefined
+    openDevTools(): Promise<void>
 }
 
 

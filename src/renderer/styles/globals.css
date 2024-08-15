@@ -30,9 +30,14 @@
     margin: 0 8px;
   }
 
-  svg {
+  svg, i {
     color: #9797A4;
   }
+  .svg-active i,
+  .svg-active svg{
+    color: #3080F8;
+  }
+
   .tool-button-active{
     @apply bg-blue-400
   }

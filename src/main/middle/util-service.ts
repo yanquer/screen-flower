@@ -5,6 +5,7 @@ import {app, shell} from "electron";
 import {Logger} from "../common/logger";
 import {WindowNames} from "../../common/defines";
 import {getPathDirAndNameAndExt} from "../common/common";
+import {isProd} from "../common/defines";
 
 
 @injectable()
@@ -85,6 +86,15 @@ export class UtilService implements IUtilService{
 
     async askQuit(): Promise<void>{
         app.quit();
+    }
+
+    async askOpenDevTool(webContentId?: number): Promise<void>{
+        const curWin = this.windowsManager.findWinByWebId(webContentId)
+        curWin.openDevTools().then()
+    }
+
+    async isDevMode(): Promise<boolean>{
+        return isProd === false
     }
 
 }

@@ -75,6 +75,9 @@ export interface IUtilService {
   askOpenPreview(): Promise<void>
   askHideWin(): Promise<void>
   askQuit(): Promise<void>
+  askOpenDevTool(): Promise<void>
+
+  isDevMode(): Promise<boolean>
 }
 
 export const ISettingService = Symbol.for('ISettingService')

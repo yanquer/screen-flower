@@ -40,6 +40,13 @@ export class UtilService implements IUtilService{
         return await this._backendService('askQuit');
     }
 
+    async askOpenDevTool(): Promise<void>{
+        return await this._backendService('askOpenDevTool');
+    }
+
+    async isDevMode(): Promise<boolean>{
+        return await this._backendService('isDevMode');
+    }
 
 
 }

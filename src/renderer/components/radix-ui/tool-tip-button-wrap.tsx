@@ -24,16 +24,18 @@ export class ToolTipButtonWrap extends Component<ToolTipProps, any> {
     }
 
     render() {
+
+        const _disable = this.props.buttonDisable ?? false;
         return (
-            <ToolTipWrap title={this.props.title}>
+            <ToolTipWrap title={this.props.title ?? ""}>
                 <Toolbar.Button
-                    className={this.props.buttonClassName + ` tool-every-button
+                    className={(this.props.buttonClassName ?? "") + ` tool-every-button
                         hover:bg-gray-200 hover:scale-95 
-                        ${this.props.buttonDisable ? "cursor-not-allowed" : ""}
+                        ${_disable ? "cursor-not-allowed" : ""}
                         `}
                     onMouseDown={() => this.props?.buttonMouseDownHandler?.()}
-                    onClick={() => this.props.buttonClickHandler?.()}
-                    disabled={this.props.buttonDisable ?? false}
+                    onClick={() => !_disable && this.props.buttonClickHandler?.()}
+                    disabled={_disable}
                 >
                     {this.props.children}
                 </Toolbar.Button>

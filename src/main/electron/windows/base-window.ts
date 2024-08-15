@@ -210,5 +210,9 @@ export class BaseSFWindow implements IBaseWindow{
         return this.win?.webContents.id === id ? this.win : undefined
     }
 
+    async openDevTools(): Promise<void>{
+        this.win?.webContents.openDevTools();
+    }
+
 }
 

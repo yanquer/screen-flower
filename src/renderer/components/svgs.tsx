@@ -84,38 +84,33 @@ export const DiscardIcon = (props: SvgProps) => {
 
 
 export const CloseButtonToolbar = (props: SvgProps) => {
+
+    // https://fontawesome.com/icons/xmark?f=classic&s=solid
     return (
-        <ReactSVG
-            className={props?.className ?? ""}
-            src={"/images/components/action-tool-bar/close-button.svg"}
-            width={props.width ?? defaultSize.width}
-            height={props.height ?? defaultSize.height}
-        />
+        <i className="fa-solid fa-xmark"></i>
     );
 };
 
 export const CircleCloseButtonToolbar = (props: SvgProps) => {
+    // https://fontawesome.com/icons/circle-xmark?f=classic&s=regular
     return (
-        <ReactSVG
-            className={props?.className ?? ""}
-            src={"/images/components/action-tool-bar/circle-close-button.svg"}
-            width={props.width ?? defaultSize.width}
-            height={props.height ?? defaultSize.height}
-        />
+        <i className="fa-regular fa-circle-xmark"></i>
     );
 };
 
 export const FullCircleCloseButtonToolbar = (props: SvgProps) => {
+    // https://fontawesome.com/icons/circle-xmark?f=classic&s=solid
     return (
-        <ReactSVG
-            className={props?.className ?? ""}
-            src={"/images/components/action-tool-bar/full-circle-close-button.svg"}
-            width={props.width ?? defaultSize.width}
-            height={props.height ?? defaultSize.height}
-        />
+        <i className="fa-solid fa-circle-xmark"></i>
     );
 };
 
+
+export const DevIcon = (props: SvgProps) => {
+    return (
+        <i className="fa-brands fa-dev"></i>
+    );
+};
 
 export const DrawIcon = (props: SvgProps) => {
     return (
@@ -229,14 +224,10 @@ export const TrashIcon = (props: SvgProps) => {
     );
 };
 
-// https://fontawesome.com/icons/ellipsis-vertical?f=classic&s=solid
 export const EllipsisVerticalIcon = (props: SvgProps) => {
+    // https://fontawesome.com/icons/ellipsis-vertical?f=classic&s=solid
     return (
-        <ReactSVG
-            src={"/images/components/action-tool-bar/ellipsis-vertical.svg"}
-            width={props.width}
-            height={props.height}
-        />
+        <i className="fa-solid fa-ellipsis-vertical"></i>
     );
 };
 

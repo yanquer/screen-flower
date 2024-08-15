@@ -75,6 +75,9 @@ export interface IRecordContext{
     setCachePath?: (cachePath: string) => void
     logPath: string
     setLogPath?: (logPath: string) => void
+
+    devMode: boolean
+    setDevMode?: (devMode: boolean) => void
 }
 
 export const DefaultCapArea = () => ({
@@ -102,4 +105,5 @@ export const RecordContext = createContext<IRecordContext>({
     logPath: "~/Log",
     canCapture: false,
     canSetting: false,
+    devMode: false,
 })
