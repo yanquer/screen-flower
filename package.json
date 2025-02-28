@@ -6,7 +6,7 @@
   "author": "YanQue",
   "main": "app/background.js",
   "scripts": {
-    "dev": "nextron",
+    "dev": "NODE_ENV=dev nextron",
     "dev:windows:electron": "electron . 8888 --remote-debugging-port=5858 --inspect=9292",
     "dev:windows:next": "next -p 8888 src/renderer",
 

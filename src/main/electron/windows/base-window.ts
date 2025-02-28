@@ -166,6 +166,7 @@ export class BaseSFWindow implements IBaseWindow{
 
     protected _isShow = false
     show() {
+        Logger.info(`>>> enter show, ${this.id}`)
         if (this._isShow) return
         this._isShow = true
 

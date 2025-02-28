@@ -6,6 +6,10 @@ import chalk from 'chalk'
 
 namespace chalkLogger {
 
+    export const debug = (text: string) => {
+        console.log(chalk`{cyan [browser]} ${text}`)
+    }
+
     export const info = (text: string) => {
         console.log(chalk`{cyan [browser]} ${text}`)
     }
@@ -21,30 +25,21 @@ namespace chalkLogger {
 
 namespace ULogger{
     export const warn = (...message: any[]) => {
-        if (typeof message === 'string') {
-            log.warn(`[browser] ${message}`)
-        } else {
-            log.warn("[browser] > ")
-            log.warn(message)
-        }
+        log.warn("[browser] > ", ...message)
+
+    }
+
+    export const debug = (...message: any[]) => {
+        log.debug("[browser] > ", ...message)
     }
 
     export const info = (...message: any[]) => {
-        if (typeof message === 'string') {
-            log.info(`[browser] ${message}`)
-        } else {
-            log.info("[browser] > ")
-            log.info(message)
-        }
+        log.debug("[browser] > ", ...message)
     }
 
     export const error = (...message: any[]) => {
-        if (typeof message === 'string') {
-            log.error(`[browser] ${message}`)
-        } else {
-            log.error("[browser] > ")
-            log.error(message)
-        }
+        log.error("[browser] > ", ...message)
+
     }
 }
 

@@ -241,7 +241,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         // }
 
         setTimeout( () => {
-            if(this.curRecordPath) this.windowsManager.openWinById(WindowNames.PlayerWin)
+            if(this.curRecordPath) this.windowsManager.openWinById(WindowNames.PlayerWin, true)
             // this.curRecordPath = undefined
         }, 500)
 

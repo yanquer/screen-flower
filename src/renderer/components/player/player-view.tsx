@@ -9,6 +9,7 @@ import {IRecordService, IUtilService} from "../../../common/service";
 import {IRecordContext, RecordContext} from "../../common/global-context";
 import {LabelSelect} from "../radix-ui/label-select";
 import {VideoArgs, VideoFps} from "../../../common/models";
+import {Logger} from "../../common/logger";
 
 interface PlayViewState{
     titleShow: boolean,
@@ -68,7 +69,10 @@ export class PlayerView extends Component<any, PlayViewState>{
                             async () => {
                                 const utilService = getServiceBySymbol<IUtilService>(IUtilService)
                                 const fileName: string = await utilService.askSelectAVideoFile(true, false) as string
-                                if (fileName) setVideoUrl(fileName)
+                                if (fileName) {
+                                    Logger.info("player-view get url form backend: ", fileName)
+                                    setVideoUrl(fileName)
+                                }
                             }
                         }>打开其他文件</Button>
 

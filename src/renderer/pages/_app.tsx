@@ -69,6 +69,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                 (winName === WindowNames.CaptureWin) && setCanCapture(false);
                 (winName === WindowNames.SettingWin) && setCanSetting(false);
                 if (winName === WindowNames.PlayerWin) {
+                    Logger.debug("_app: set no video url and can't preview")
                     setVideoUrl("")
                     setCanPreview(false);
                 }
