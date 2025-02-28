@@ -42,19 +42,30 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
     );
 
     useEffect(() => {
+
+        const _setUrl = (preVal: string) => {
+            if (videoUrl) {
+                const pUrl = getPathWithProtocol(videoUrl)
+                Logger.info(`>> video url _setUrl: ${pUrl}`)
+                return pUrl
+            }
+        }
+
+        setUrl(_setUrl)
+
         if (videoUrl) {
-            const pUrl = getPathWithProtocol(videoUrl)
-            Logger.info(`>> video url: ${pUrl}`)
-            setSource({
-                type: "video",
-                sources: [
-                    {
-                        src: pUrl,
-                        type: "video/mp4",
-                    },
-                ],
-            });
-            setUrl(pUrl);
+            // const pUrl = getPathWithProtocol(videoUrl)
+            // Logger.info(`>> video url: ${pUrl}`)
+            // setSource({
+            //     type: "video",
+            //     sources: [
+            //         {
+            //             src: pUrl,
+            //             type: "video/mp4",
+            //         },
+            //     ],
+            // });
+            // setUrl(pUrl);
 
             // if (playerRef.current && playerRef.current.plyr) {
             //   // Check when the video is playing, update the time in real time
@@ -69,6 +80,25 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
 
         }
     }, [videoUrl, playerRef]);
+
+    useEffect(() => {
+        const _setSource = (preVal: any) => {
+            if (url) {
+                Logger.info(`>> video url _setSource: ${url}`)
+                return {
+                    type: "video",
+                    sources: [
+                        {
+                            src: url,
+                            type: "video/mp4",
+                        },
+                    ],
+                }
+            }
+        }
+
+        setSource(_setSource)
+    }, [url]);
 
     // useEffect(() => {
     //     if (playerRef.current && playerRef.current.plyr) {
