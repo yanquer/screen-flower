@@ -23,7 +23,7 @@
     "build:webpack": "tsc -p tsconfig.webpack.json",
     "build:main:dev": "node webpack-config-js/webpack.config.development.js",
     "build:main:production": "node webpack-config-js/webpack.config.production.js",
-    "pack:electron": "export CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --config electron-builder.yml"
+    "pack:electron": "export CSC_IDENTITY_AUTO_DISCOVERY=true && electron-builder --config electron-builder.yml"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.6.0",

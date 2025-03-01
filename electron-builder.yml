@@ -6,18 +6,19 @@ directories:
   buildResources: resources
 files:
   - from: .
-    filter:
+  - filter:
       - package.json
       - app
-  # 排除 .vscode 目录下的所有文件
-  - '!**/.vscode/*'
-  # 排除 src 目录下的所有文件
-  - '!src/*'
-  # 排除配置文件
-  - '!electron.vite.config.{js,ts,mjs,cjs}'
-  - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.rst}'
-  # 排除环境变量文件和 npm 配置文件
-  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+      # 排除 .vscode 目录下的所有文件
+      - '!**/.vscode/*'
+      # 排除 src 目录下的所有文件
+      - '!src/*'
+      # 排除配置文件
+      - '!electron.vite.config.{js,ts,mjs,cjs}'
+      - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.rst}'
+      # 排除环境变量文件和 npm 配置文件
+      - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+#      - "!node_modules/ffmpeg-static/ffmpeg"
 
 publish: null
 
@@ -68,6 +69,28 @@ mac: {
   ],
   # 是否进行苹果官方的签名
   notarize: false,
+  electronUpdaterCompatibility: ">=2.16",
+  category: "public.app-category.productivity",
+  minimumSystemVersion: "10.12.0",
+  darkModeSupport: true,
+  hardenedRuntime: true,
+  entitlements: "./resources/build/entitlements.mac.inherit.plist",
+  extendInfo: {
+    NSMicrophoneUsageDescription: "Screen Flower needs access to the microphone to be able to record audio for screen recordings.",
+    NSCameraUsageDescription: "A Screen Flower plugin wants to use the camera.",
+    NSUserNotificationAlertStyle: "alert",
+    CFBundleDocumentTypes: [
+      {
+        CFBundleTypeName: "Video",
+        CFBundleTypeRole: "Viewer",
+        LSHandlerRank: "Alternate",
+        LSItemContentTypes: [
+          "public.mpeg-4",
+          "com.apple.quicktime-movie"
+        ]
+      }
+    ]
+  },
 }
 
 
