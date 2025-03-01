@@ -1,8 +1,8 @@
 import {Menu, Tray, nativeImage} from 'electron';
 import {getMenuTemplate} from "./template";
-import {getServiceBySymbol} from "../../common/container/inject-container";
-import {IWindowsManager} from "../electron/service";
-import {WindowNames} from "../../common/defines";
+import {getServiceBySymbol} from "../../../common/container/inject-container";
+import {IWindowsManager} from "../service";
+import {WindowNames} from "../../../common/defines";
 
 
 let tray: Tray;

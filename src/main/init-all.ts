@@ -1,7 +1,7 @@
 // for inject
 import 'reflect-metadata'
 
-import {initializeMenu} from "./menu";
+import {initializeMenu} from "./electron/menu";
 import {ensureScreenCapturePermissions} from "./common/permissions";
 import {bindMiddle} from "./middle";
 import {bindBackend} from "./backend";

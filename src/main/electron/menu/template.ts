@@ -1,9 +1,9 @@
 import {app, MenuItem, MenuItemConstructorOptions} from 'electron';
 import {forceQuit, getAboutMenuItem} from "./menu-items";
 import {MenuNames} from "./menu-names";
-import {getServiceBySymbol} from "../../common/container/inject-container";
-import {IWindowsManager} from "../electron/service";
-import {WindowNames} from "../../common/defines";
+import {getServiceBySymbol} from "../../../common/container/inject-container";
+import {IWindowsManager} from "../service";
+import {WindowNames} from "../../../common/defines";
 
 
 export const getMenuTemplate = async (): Promise<Array<(MenuItemConstructorOptions) | (MenuItem)>> => [

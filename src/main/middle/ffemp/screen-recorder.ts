@@ -18,6 +18,7 @@ import {ContextKey, WindowNames} from "../../../common/defines";
 import {MovieQuality, MovieStream} from "../../../common/movie-stream";
 import {getPathDirAndNameAndExt} from "../../common/common";
 import {OS, OsType} from "../../common/os";
+import {FfmpegExtension} from "../../common/third-resources/ffmpeg-ext";
 
 // import {fixPathForAsarUnpack} from 'electron-util'
 // const {fixPathForAsarUnpack} = require('electron-util');
@@ -27,10 +28,7 @@ import {OS, OsType} from "../../common/os";
 Logger.info(`>> origin ffmpeg path: ${ffmpeg}`)
 
 // fix Asar path
-const truthFfmpegPath = isProd ?
-    ffmpeg.replace('app.asar', 'app.asar.unpacked') :
-    // ffmpeg:
-    ffmpeg;
+const truthFfmpegPath = FfmpegExtension.ffmpegPath(ffmpeg)
 
 Logger.info(`>> truth ffmpeg path: ${truthFfmpegPath}`)
 

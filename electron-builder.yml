@@ -18,7 +18,7 @@ files:
       - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.rst}'
       # 排除环境变量文件和 npm 配置文件
       - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
-#      - "!node_modules/ffmpeg-static/ffmpeg"
+      # - "!node_modules/ffmpeg-static/ffmpeg"
 
 publish: null
 
@@ -28,6 +28,10 @@ extraResources:
 #  - resources
   - from: resources
     to: resources
+#  # - from: node_modules/ffmpeg-static/bin/${platform}/${arch}/ffmpeg",
+#  - from: node_modules/ffmpeg-static/ffmpeg
+#    to: resources/ffmpeg/ffmpeg
+
 
 ## 指定从asar归档中解压的文件或文件夹
 #asarUnpack:
