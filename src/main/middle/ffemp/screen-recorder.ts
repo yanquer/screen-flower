@@ -1,7 +1,7 @@
 import ffmpeg from 'ffmpeg-static';
 import {IContextService, IFileService, IRecordService, ISettingService} from "../../../common/service";
 import {inject, injectable, postConstruct} from "inversify";
-import {FluentFfmpegApi} from './fluent-ffmpeg/api'
+// import {FluentFfmpegApi} from './fluent-ffmpeg/api'
 
 import FfmpegCommand from 'fluent-ffmpeg';
 import {CaptureArea, eqCaptureArea, VideoArgs} from "../../../common/models";
@@ -43,6 +43,8 @@ FfmpegCommand.setFfmpegPath(truthFfmpegPath)
 // } else (
 //     FfmpegCommand.setFfmpegPath(truthFfmpegPath)
 // )
+
+interface FluentFfmpegApi extends FfmpegCommand.FfmpegCommand{}
 
 
 @injectable()
@@ -96,11 +98,11 @@ export class ScreenRecorder extends Dispose implements IRecordService{
 
     protected ffmpegCommand = (input?: any, record: boolean = true): FluentFfmpegApi => {
         if (record) {
-            if (input) this.currentCmd = new FfmpegCommand(input);
-            else this.currentCmd = new FfmpegCommand();
+            if (input) this.currentCmd = FfmpegCommand(input);
+            else this.currentCmd = FfmpegCommand();
             return this.currentCmd
         } else {
-            return new FfmpegCommand(input);
+            return FfmpegCommand(input);
         }
     }
     // protected ffmpegCommand = () => Ffmpeg('./report/video/simple.mp4');
