@@ -5,6 +5,7 @@ import {MainLogger} from "electron-log";
 const logInit = () => {
     // Optional, initialize the logger for any renderer process
     log.initialize();
+    log.transports.file.level = 'debug';
     // log.transports.console.format = '{h}:{i}:{s} {text}';
 }
 

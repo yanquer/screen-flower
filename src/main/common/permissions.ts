@@ -1,6 +1,15 @@
-import {app, dialog, shell} from "electron";
-import {hasScreenCapturePermission, hasPromptedForPermission, openSystemPreferences} from 'mac-screen-capture-permissions';
+import {app, dialog} from "electron";
+import {
+    hasPromptedForPermission,
+    hasScreenCapturePermission,
+    openSystemPreferences
+} from 'mac-screen-capture-permissions';
 import {ensureDockIsShowing} from "./platform/dock";
+import {hasScreenPremise} from "./electron/electron-preferences";
+import {Logger} from "./logger";
+import {getServiceBySymbol} from "../../common/container/inject-container";
+import {IWindowsManager} from "../electron/service";
+import {WindowNames} from "../../common/defines";
 
 
 let isDialogShowing = false;
@@ -12,20 +21,24 @@ const promptSystemPreferences = (options: {message: string; detail: string; syst
 
     isDialogShowing = true;
     await ensureDockIsShowing(async () => {
-        const {response} = await dialog.showMessageBox({
+        // 单独给一个窗口, 来保证弹出的dialog能自动弹出在最前显示
+        const winManager = getServiceBySymbol<IWindowsManager>(IWindowsManager)
+        const tempWin = winManager.getWinById(WindowNames.NotifyWin)
+        const {response} = await dialog.showMessageBox(tempWin.originWin, {
             type: 'warning',
             buttons: ['Open System Preferences', 'Cancel'],
             defaultId: 0,
             message: options.message,
             detail: options.detail,
-            cancelId: 1
+            cancelId: 1,
         });
         isDialogShowing = false;
 
         if (response === 0) {
             await openSystemPreferences();
-            app.quit();
+            // app.quit();
         }
+        app.quit();
     });
 
     return false;
@@ -41,14 +54,21 @@ const screenCaptureFallback = promptSystemPreferences({
 
 
 export const ensureScreenCapturePermissions = (fallback = screenCaptureFallback) => {
+    // 这两都比较老, 15上判断可能有问题
     const hadAsked = hasPromptedForPermission();
-
     const hasAccess = hasScreenCapturePermission();
+    // 用 electron 的接口判断
+    const electronHasPremise = hasScreenPremise();
 
-    if (hasAccess) {
+    if (hasAccess || electronHasPremise) {
+        Logger.debug('already has access');
+        setTimeout(() => Logger.debug('already has access'), 3000)
+
         return true;
     }
 
+    Logger.debug('ask for access');
+    setTimeout(() => Logger.debug('ask for access'), 3000)
     fallback({hasAsked: !hadAsked}).then();
     return false;
 };

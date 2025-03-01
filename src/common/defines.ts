@@ -33,6 +33,7 @@ export enum WindowNames {
   UniversalWin = 'universal-window',
   SettingWin = 'setting-window',
   PlayerWin = 'player-window',
+  NotifyWin = 'notify-window',
 }
 
 // 为了 electron 加载本地文件用

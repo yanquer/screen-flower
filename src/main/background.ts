@@ -5,6 +5,7 @@ import { createWindow } from './helpers'
 import {getPermission, initAll} from "./init-all";
 import {setNoMenuDock} from "./common/electron/menu";
 import {LocalProtocol} from "./electron/local-protocol";
+import {Logger} from "./common/logger";
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -49,6 +50,8 @@ LocalProtocol.registerBeforeApp()
 
   // 开发环境不检查权限
   if (!isProd) {
+    Logger.debug('dev mode, do not check access')
+    setTimeout(() => Logger.debug('dev mode, do not check access'), 3000)
     return
   }
 
