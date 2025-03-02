@@ -1,8 +1,9 @@
 import {ISysDialogService} from "./service";
-import {BrowserWindow, dialog} from "electron";
+import {BrowserWindow} from "electron";
 import {inject, injectable} from "inversify";
 import {ISettingService} from "../../common/service";
 import {Logger} from "../common/logger";
+import {DialogManager} from "./manager/dialog-manager";
 
 
 @injectable()
@@ -11,7 +12,7 @@ export class SysDialogService implements ISysDialogService{
     @inject(ISettingService)
     protected readonly settingService: ISettingService;
 
-    protected _sysDialog = dialog
+    protected _sysDialog = DialogManager
 
     async openSelectFileDialog(win: BrowserWindow, defaultPath?: string, filters?: {name: string, extensions: string[]}[]): Promise<string | undefined> {
         const res = this._sysDialog.showOpenDialogSync(win, {

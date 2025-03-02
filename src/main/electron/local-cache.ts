@@ -1,10 +1,10 @@
 import Store from 'electron-store'
-import {app} from "electron";
 import {Logger} from "../common/logger";
+import {AppManager} from "./manager/app-manager";
 
 export namespace LocalCache {
     const cachePath = () => {
-        return app.getPath('userData');
+        return AppManager.getPath('userData');
     }
     Logger.info(`>> LocalCache cache to ${cachePath()}`)
 

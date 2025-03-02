@@ -1,15 +1,18 @@
-import {app, dialog} from "electron";
+
 import {
     hasPromptedForPermission,
     hasScreenCapturePermission,
     openSystemPreferences
 } from 'mac-screen-capture-permissions';
 import {ensureDockIsShowing} from "./platform/dock";
-import {hasScreenPremise} from "./electron/electron-preferences";
-import {Logger} from "./logger";
+import {hasScreenPremise} from "../common/electron/electron-preferences";
+import {Logger} from "../common/logger";
 import {getServiceBySymbol} from "../../common/container/inject-container";
-import {IWindowsManager} from "../electron/service";
+import {IWindowsManager} from "./service";
 import {WindowNames} from "../../common/defines";
+import {AppManager} from "./manager/app-manager";
+import {DialogManager} from "./manager/dialog-manager";
+import {asyncSleep} from "../../common/common";
 
 
 let isDialogShowing = false;
@@ -24,7 +27,9 @@ const promptSystemPreferences = (options: {message: string; detail: string; syst
         // 单独给一个窗口, 来保证弹出的dialog能自动弹出在最前显示
         const winManager = getServiceBySymbol<IWindowsManager>(IWindowsManager)
         const tempWin = winManager.getWinById(WindowNames.NotifyWin)
-        const {response} = await dialog.showMessageBox(tempWin.originWin, {
+        await tempWin.open(true)
+        await asyncSleep(1000)
+        const {response} = await DialogManager.showMessageBox(tempWin.originWin, {
             type: 'warning',
             buttons: ['Open System Preferences', 'Cancel'],
             defaultId: 0,
@@ -36,9 +41,10 @@ const promptSystemPreferences = (options: {message: string; detail: string; syst
 
         if (response === 0) {
             await openSystemPreferences();
-            // app.quit();
+            // AppManager.quitApp()
+        } else {
+            AppManager.quitApp()
         }
-        app.quit();
     });
 
     return false;

@@ -2,7 +2,7 @@ import {homedir} from "node:os";
 import {Logger} from "./logger";
 import {isProd} from "./defines";
 import {dirname, join} from "path";
-import {app} from "electron";
+import {AppManager} from "../electron/manager/app-manager";
 
 
 let _HOMEDIR: string
@@ -17,7 +17,7 @@ export const getHomeDir = (refresh: boolean = false) => {
 export namespace ElePathUtil {
 
     export const getTruthPath = (data: string) => {
-        const curExecPath = dirname(app.getPath('exe'))
+        const curExecPath = dirname(AppManager.getPath('exe'))
         Logger.info(">> exec root:", curExecPath)
         return isProd ?
             join(curExecPath, '../Resources/', 'resources/icons/icon_16x16.png') :

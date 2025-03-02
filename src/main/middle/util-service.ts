@@ -1,11 +1,12 @@
 import {IFileService, IRecordService, IUtilService} from "../../common/service";
 import {inject, injectable} from "inversify";
 import {IScreenManager, ISysDialogService, IWindowsManager} from "../electron/service";
-import {app, shell} from "electron";
 import {Logger} from "../common/logger";
 import {WindowNames} from "../../common/defines";
 import {getPathDirAndNameAndExt} from "../common/common";
 import {isProd} from "../common/defines";
+import {AppManager} from "../electron/manager/app-manager";
+import {ShellManager} from "../electron/manager/shell-manager";
 
 
 @injectable()
@@ -33,11 +34,11 @@ export class UtilService implements IUtilService{
     async showFileInFolder(filePath: string, webContentId?: number): Promise<void> {
         // return (await this.fileService.isExists(filePath)) && shell.showItemInFolder(filePath);
         if (await this.fileService.isExists(filePath)) {
-            return shell.showItemInFolder(filePath);
+            return ShellManager.showItemInFolder(filePath);
         } else {
             const _dir = getPathDirAndNameAndExt(filePath)?.[0]
             if (_dir && await this.fileService.isExists(_dir)) {
-                return shell.showItemInFolder(_dir);
+                return ShellManager.showItemInFolder(_dir);
             }
         }
     }
@@ -85,7 +86,7 @@ export class UtilService implements IUtilService{
     }
 
     async askQuit(): Promise<void>{
-        app.quit();
+        AppManager.quitApp()
     }
 
     async askOpenDevTool(webContentId?: number): Promise<void>{

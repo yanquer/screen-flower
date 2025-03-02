@@ -1,28 +1,29 @@
-import {app} from 'electron';
+
 import {Promisable} from 'type-fest';
+import {AppManager} from "../manager/app-manager";
 
 export const ensureDockIsShowing = async (action: () => Promisable<void>) => {
-  const wasDockShowing = app.dock.isVisible();
+  const wasDockShowing = AppManager.dock.isVisible();
   if (!wasDockShowing) {
-    await app.dock.show();
+    await AppManager.dock.show();
   }
 
   await action();
 
   if (!wasDockShowing) {
-    app.dock.hide();
+    AppManager.dock.hide();
   }
 };
 
 export const ensureDockIsShowingSync = (action: () => void) => {
-  const wasDockShowing = app.dock.isVisible();
+  const wasDockShowing = AppManager.dock.isVisible();
   if (!wasDockShowing) {
-    app.dock.show().then();
+    AppManager.dock.show().then();
   }
 
   action();
 
   if (!wasDockShowing) {
-    app.dock.hide();
+    AppManager.dock.hide();
   }
 };

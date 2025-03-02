@@ -1,18 +1,19 @@
 import path from 'path'
-import { app, ipcMain } from 'electron'
+import { ipcMain } from 'electron'
 import serve from 'electron-serve'
 import { createWindow } from './helpers'
 import {getPermission, initAll} from "./init-all";
 import {setNoMenuDock} from "./common/electron/menu";
 import {LocalProtocol} from "./electron/local-protocol";
 import {Logger} from "./common/logger";
+import {AppManager} from "./electron/manager/app-manager";
 
 const isProd = process.env.NODE_ENV === 'production'
 
 if (isProd) {
   serve({ directory: 'app' })
 } else {
-  app.setPath('userData', `${app.getPath('userData')} (development)`)
+  AppManager.setPath('userData', `${AppManager.getPath('userData')} (development)`)
 }
 
 // // 尝试 ·禁用 gpu 加速· 解决白屏问题
@@ -20,7 +21,7 @@ if (isProd) {
 LocalProtocol.registerBeforeApp()
 
 ;(async () => {
-  await app.whenReady()
+  await AppManager.whenReady()
 
   setNoMenuDock()
   return
@@ -45,7 +46,7 @@ LocalProtocol.registerBeforeApp()
 
 // 初始化
 ;(async () => {
-  await app.whenReady()
+  await AppManager.whenReady()
   initAll()
 
   // 开发环境不检查权限
@@ -60,8 +61,8 @@ LocalProtocol.registerBeforeApp()
 
 })()
 
-app.on('window-all-closed', () => {
-  app.quit()
+AppManager.addListen('window-all-closed', () => {
+  AppManager.quitApp()
 })
 
 ipcMain.on('message', async (event, arg) => {

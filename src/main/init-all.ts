@@ -2,18 +2,18 @@
 import 'reflect-metadata'
 
 import {initializeMenu} from "./electron/menu";
-import {ensureScreenCapturePermissions} from "./common/permissions";
+import {ensureScreenCapturePermissions} from "./electron/permissions";
 import {bindMiddle} from "./middle";
 import {bindBackend} from "./backend";
-import {app, ipcMain, globalShortcut} from "electron";
+import {ipcMain, globalShortcut} from "electron";
 import {getNeedCleanDispose, IDispose} from "../common/container/dispose";
 import {bindElectron} from "./electron";
-import {isProd} from "./common/defines";
 import {Logger} from "./common/logger";
 import {getServiceBySymbol} from "../common/container/inject-container";
 import {IWindowsManager} from "./electron/service";
 import {WindowNames} from "../common/defines";
 import {ElePathUtil} from "./common/dynamic-defines";
+import {AppManager} from "./electron/manager/app-manager";
 
 const cleanUp = () => {
     const needClean = getNeedCleanDispose()
@@ -36,7 +36,7 @@ const onEventErrListen = () => {
         Logger.error(reason, p);
         Logger.error('>>> ==== unhandledRejection in Main Process end ====');
     });
-    app.on('render-process-gone', (event, webContents, details) => {
+    AppManager.addListen('render-process-gone', (event, webContents, details) => {
         Logger.error('>> ==== Render process crashed start ====');
         Logger.error(details);
         Logger.error('>> ==== Render process crashed end ====');
@@ -68,11 +68,11 @@ export const initAll = () => {
     onEventErrListen()
     listenKeyboard()
 
-    app.on('quit', () => {
+    AppManager.addListen('quit', () => {
         Logger.info('>> app quit start...', );
         cleanUp()
         Logger.info('>> app quit clean up end...', );
-        app.quit()
+        AppManager.quitApp()
         Logger.info('>> app quit end...', );
     })
 

@@ -1,9 +1,10 @@
-import {app, MenuItem, MenuItemConstructorOptions} from 'electron';
+import {MenuItem, MenuItemConstructorOptions} from 'electron';
 import {forceQuit, getAboutMenuItem} from "./menu-items";
 import {MenuNames} from "./menu-names";
 import {getServiceBySymbol} from "../../../common/container/inject-container";
 import {IWindowsManager} from "../service";
 import {WindowNames} from "../../../common/defines";
+import {AppManager} from "../manager/app-manager";
 
 
 export const getMenuTemplate = async (): Promise<Array<(MenuItemConstructorOptions) | (MenuItem)>> => [
@@ -13,7 +14,7 @@ export const getMenuTemplate = async (): Promise<Array<(MenuItemConstructorOptio
         accelerator: 'Command+Shift+R',
         click: () => {
             const winManager = getServiceBySymbol<IWindowsManager>(IWindowsManager)
-            app.focus();
+            AppManager.focus();
             winManager.openWinById(WindowNames.CaptureWin)
         }
     },
@@ -26,7 +27,7 @@ export const getMenuTemplate = async (): Promise<Array<(MenuItemConstructorOptio
                 label: `打开最近`,
                 click: () => {
                     const winManager = getServiceBySymbol<IWindowsManager>(IWindowsManager)
-                    app.focus();
+                    AppManager.focus();
                     winManager.openWinById(WindowNames.PlayerWin, true)
                 }
             },
@@ -35,7 +36,7 @@ export const getMenuTemplate = async (): Promise<Array<(MenuItemConstructorOptio
                 label: `重新打开`,
                 click: () => {
                     const winManager = getServiceBySymbol<IWindowsManager>(IWindowsManager)
-                    app.focus();
+                    AppManager.focus();
                     winManager.openWinById(WindowNames.PlayerWin, true)
                 }
             },
@@ -47,7 +48,7 @@ export const getMenuTemplate = async (): Promise<Array<(MenuItemConstructorOptio
         label: `设置`,
         click: () => {
             const winManager = getServiceBySymbol<IWindowsManager>(IWindowsManager)
-            app.focus();
+            AppManager.focus();
             winManager.openWinById(WindowNames.SettingWin, true)
         }
     },
