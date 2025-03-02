@@ -10,8 +10,13 @@ export namespace AppManager {
     export const addListen = app.on
     export const removeListen = app.off
 
-    export const setPath = app.setPath
-    export const getPath = app.getPath
+    export const setPath = (
+        name: string, path: string
+    ) => app.setPath(name, path)
+    export const getPath =
+        (
+            name: 'home' | 'appData' | 'userData' | 'sessionData' | 'temp' | 'exe' | 'module' | 'desktop' | 'documents' | 'downloads' | 'music' | 'pictures' | 'videos' | 'recent' | 'logs' | 'crashDumps'
+        ): string => app.getPath(name)
 
     export const focus = app.focus
     export const showAboutPanel = app.showAboutPanel
