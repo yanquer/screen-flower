@@ -5,6 +5,7 @@ import {Event, Display, BrowserWindowConstructorOptions} from "electron";
 import {ContextKey, HandlerStr, WindowNames} from "../../../common/defines";
 import {UniversalWindow} from "./universal-window";
 import {asyncSleep} from "../../../common/common";
+import {isProd} from "../../common/defines";
 
 @injectable()
 export class NotifyWindow extends UniversalWindow{
@@ -26,7 +27,7 @@ export class NotifyWindow extends UniversalWindow{
         return {
             // enableLargerThanScreen: true,
             movable: false,
-            alwaysOnTop: true,
+            alwaysOnTop: isProd,
             opacity: 0,
             // autoHideMenuBar: true,
         } as BrowserWindowConstructorOptions

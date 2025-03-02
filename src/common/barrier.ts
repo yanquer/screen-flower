@@ -11,7 +11,7 @@ export class Barrier<T> {
   }
 
   async wait() {
-    await this._barrierWait
+    return await this._barrierWait
   }
 
   async pass(val: T) {

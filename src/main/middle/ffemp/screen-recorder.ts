@@ -19,6 +19,8 @@ import {MovieQuality, MovieStream} from "../../../common/movie-stream";
 import {getPathDirAndNameAndExt} from "../../common/common";
 import {OS, OsType} from "../../common/os";
 import {FfmpegExtension} from "../../common/third-resources/ffmpeg-ext";
+import {NotifyManager} from "../../electron/manager/notify-manager";
+import {Barrier} from "../../../common/barrier";
 
 // import {fixPathForAsarUnpack} from 'electron-util'
 // const {fixPathForAsarUnpack} = require('electron-util');
@@ -107,18 +109,30 @@ export class ScreenRecorder extends Dispose implements IRecordService{
     }
     // protected ffmpegCommand = () => Ffmpeg('./report/video/simple.mp4');
 
-    protected cmdCommonDo(cmd: FluentFfmpegApi, desc?: string){
-        return cmd
+    protected async cmdCommonDo(cmd: FluentFfmpegApi, desc?: string, errMsgHead?: string){
+        const cmdBarrier = new Barrier<boolean>()
+        cmd
             .on('start', function (commandLine) {
                 Logger.info('Spawned Ffmpeg with command: ' + commandLine);
             })
             .on('end', () => {
                 Logger.info(`${desc} finished!`);
+                cmdBarrier.pass(true)
             })
             .on('error', (err: Error) => {
+                if (err.message.includes("ffmpeg exited with code 255: Exiting normally, received signal 15")){
+                    Logger.debug(`Error cmd with normally exited`);
+                    // 正常检查的退出
+                    cmdBarrier.pass(true)
+                } else {
+                    NotifyManager.sendNotify((errMsgHead ?? "") + err)
+                    cmdBarrier.pass(false)
+                }
                 Logger.error(`Error ${desc}`, err);
             })
             .run()
+        return await cmdBarrier.wait()
+
     }
 
     currentScreen : string
@@ -207,7 +221,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
             .format('matroska')
             .output(output)
 
-        this.cmdCommonDo(cmd, "startRecord")
+        await this.cmdCommonDo(cmd, "startRecord")
 
         // todo: 后续考虑只给前端触发?
         //      这里, 可能前端在工具栏点击后, 还没有离开工具栏
@@ -436,8 +450,8 @@ export class ScreenRecorder extends Dispose implements IRecordService{
             cmd = cmd.inputFPS(useFps)
         }
         cmd = cmd.output(output)
-        this.cmdCommonDo(cmd)
-        return output
+        const ret = await this.cmdCommonDo(cmd, undefined, "convertToGif err: ")
+        return ret ? output : ""
     }
 
     private _cacheInputCaptureSource: string

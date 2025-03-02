@@ -146,6 +146,8 @@ export class PlayerView extends Component<any, PlayViewState>{
                             onClick={() => {
                                 const recordService = getServiceBySymbol<IRecordService>(IRecordService)
                                 recordService.convertToGif(videoUrl, this.state.videoArgs).then((data: string) =>{
+                                    if (!data) return
+                                    Logger.debug("record save to: ", data)
                                     const utilService = getServiceBySymbol<IUtilService>(IUtilService)
                                     utilService.showFileInFolder(data).then(() => utilService.askHideWin())
                                 })

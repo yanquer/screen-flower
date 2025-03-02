@@ -1,4 +1,4 @@
-import {app} from "electron";
+import {app, Notification} from "electron";
 
 export namespace AppManager {
     export const quitApp = () => app.quit();

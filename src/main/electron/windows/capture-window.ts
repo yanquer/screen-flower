@@ -8,6 +8,7 @@ import {getServiceBySymbol} from "../../../common/container/inject-container";
 import {ContextKey, HandlerStr, WindowNames} from "../../../common/defines";
 import {values} from "lodash";
 import {Logger} from "../../common/logger";
+import {isProd} from "../../common/defines";
 
 @injectable()
 export class CaptureWindow extends BaseSFWindow{
@@ -23,11 +24,11 @@ export class CaptureWindow extends BaseSFWindow{
             frame: false, // 删除默认窗口边框
             transparent: true, // 设置窗口为透明
             hasShadow: false,
-            enableLargerThanScreen: true,
+            enableLargerThanScreen: isProd,
             resizable: false,
             movable: false,
             show: false,
-            alwaysOnTop: true,
+            alwaysOnTop: isProd,
             opacity: 0,
             // 设置 titleBarStyle 反而可以看到, `退出-最大化-最小化` 的按钮了
             // titleBarStyle: 'hidden',
