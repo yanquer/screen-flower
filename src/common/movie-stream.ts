@@ -1,5 +1,7 @@
 
 // 视频质量
+import {VideoSizeStr} from "./models";
+
 export enum MovieQuality{
     FourK = "4k",
     FullHD = "1080p",
@@ -112,8 +114,23 @@ export namespace MovieStream {
         return [getMimeType(), ...getMovieBits(qualityVal)]
     }
 
-    export const getVideoSize = (qualityVal: MovieQuality) => {
-        const info = videoInfosMap.get(qualityVal) ?? defaultInfo
+    const getQualityByStr = (qualityVal: VideoSizeStr) => {
+        switch (qualityVal) {
+            case "HD":
+                return MovieQuality.HD
+            case "SD4":
+                return MovieQuality.SD4
+            case "SD3":
+                return MovieQuality.SD3
+            case "S2":
+                return MovieQuality.S2
+            default:
+                return undefined
+        }
+    }
+    export const getVideoSize = (qualityVal: MovieQuality | VideoSizeStr) => {
+        // @ts-ignore
+        const info = videoInfosMap.get(getQualityByStr(qualityVal)) ?? videoInfosMap.get(qualityVal) ?? defaultInfo
         return [info.width, info.height]
     }
 

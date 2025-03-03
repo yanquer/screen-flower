@@ -24,9 +24,10 @@ export interface ScreenArea{
 
 // ffmpeg参数
 export type VideoFps = 'origin' | '10' | '15' | '20' | '25' | '30' | '60'
+export type VideoSizeStr = 'origin' | 'HD' | 'SD4' | 'SD3' | 'S2'
 export interface VideoArgs{
     videoType?: 'gif' | 'mp4',
-    videoSize?: 'origin' | 'HD',
+    videoSize?: VideoSizeStr,
     fps?: VideoFps ,
 }
 

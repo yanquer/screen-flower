@@ -412,6 +412,7 @@ export class ScreenRecorder extends Dispose implements IRecordService{
 
     async convertToGif(inputVideo: string, videoArg?: VideoArgs, webContentId?: number): Promise<string>{
         Logger.info(`>> convertToGif(inputVideo: ${inputVideo}`)
+        Logger.info(`>> convertToGif(videoArg: `, videoArg)
         if (!await this.fileService.isExists(inputVideo)){
             Logger.info(`>> convertToGif file not exists`)
             return
@@ -437,18 +438,36 @@ export class ScreenRecorder extends Dispose implements IRecordService{
         }
 
         let cmd = this.ffmpegCommand(inputVideo, false)
-        if (videoArg.videoSize && videoArg.videoSize !== 'origin') {
-            const size = MovieStream.getVideoSize(videoArg.videoSize as MovieQuality)
-            Logger.info(`>> convertToGif get convert size ${size}`)
-            cmd = cmd.inputOptions([
-                `-vf "scale=${size[0]}:-1"`
-            ])
-        }
-        if (videoArg.fps && videoArg.fps !== 'origin') {
-            const useFps = Number(videoArg.fps)
-            Logger.info(`>> convertToGif get convert useFps ${useFps}`)
-            cmd = cmd.inputFPS(useFps)
-        }
+        // if (videoArg.videoSize && videoArg.videoSize !== 'origin') {
+        //     const size = MovieStream.getVideoSize(videoArg.videoSize as MovieQuality)
+        //     Logger.info(`>> convertToGif get convert size ${size}`)
+        //     cmd = cmd.inputOptions([
+        //         `-vf "scale=${size[0]}:-1"`
+        //     ])
+        // }
+        // if (videoArg.fps && videoArg.fps !== 'origin') {
+        //     const useFps = Number(videoArg.fps)
+        //     Logger.info(`>> convertToGif get convert useFps ${useFps}`)
+        //     cmd = cmd.inputFPS(useFps)
+        // }
+
+        // 优化噪点 大小
+        const videoSize_ = videoArg.videoSize ?? "origin"
+        const size = MovieStream.getVideoSize(videoSize_ as MovieQuality)
+        // cmd = cmd.complexFilter([
+        //     // 'fps=10', // 设置帧率
+        //     `fps=${videoArg.fps ?? 10}`,
+        //     // `scale=480:-1:flags=lanczos`, // 缩放宽度为 480 像素，高度按比例缩放, lanczos 可以降低大小
+        //     // 使用分辨率的高度来设置其宽度
+        //     `scale=${videoArg.videoSize ? size[1] : "-1"}:-1:flags=lanczos`,
+        //     'split[s0][s1]', // 将视频流拆分为两个流 [s0] 和 [s1]
+        //     '[s0]palettegen[p]', // 使用 [s0] 生成调色板 [p]
+        //     '[s1][p]paletteuse' // 使用 [s1] 和调色板 [p] 生成 GIF
+        // ])
+        cmd = cmd.outputOptions([
+            `-vf`,
+            `fps=${videoArg.fps==='origin' ? 10:videoArg.fps},scale=${videoSize_ !== 'origin' ? size[1] : "-1"}:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse`,
+        ])
         cmd = cmd.output(output)
         const ret = await this.cmdCommonDo(cmd, undefined, "convertToGif err: ")
         return ret ? output : ""

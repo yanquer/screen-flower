@@ -25,11 +25,14 @@ export class NotifyWindow extends UniversalWindow{
 
     get extOption(): BrowserWindowConstructorOptions  {
         return {
+            // frame: false,
+            // transparent: true,
             // enableLargerThanScreen: true,
             movable: false,
             alwaysOnTop: isProd,
             opacity: 0,
             // autoHideMenuBar: true,
+            titleBarStyle: 'default'
         } as BrowserWindowConstructorOptions
     }
 

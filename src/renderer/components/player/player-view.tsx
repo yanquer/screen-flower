@@ -8,7 +8,7 @@ import {getServiceBySymbol} from "../../../common/container/inject-container";
 import {IRecordService, IUtilService} from "../../../common/service";
 import {IRecordContext, RecordContext} from "../../common/global-context";
 import {LabelSelect} from "../radix-ui/label-select";
-import {VideoArgs, VideoFps} from "../../../common/models";
+import {VideoArgs, VideoFps, VideoSizeStr} from "../../../common/models";
 import {Logger} from "../../common/logger";
 
 interface PlayViewState{
@@ -103,8 +103,11 @@ export class PlayerView extends Component<any, PlayViewState>{
                                 options={[
                                     {value: "origin", disabled: false, text: "原始"},
                                     {value: "HD", disabled: false, text: "1920 x 1080"},
+                                    {value: "SD4", disabled: false, text: "480p"},
+                                    {value: "SD3", disabled: false, text: "360p"},
+                                    {value: "S2", disabled: false, text: "240p"},
                                 ]}
-                                onChange={(value: 'origin' | 'HD') => {
+                                onChange={(value: VideoSizeStr) => {
                                     this.setState((preState) => {
                                         return {videoArgs: {
                                                 ...preState.videoArgs,
