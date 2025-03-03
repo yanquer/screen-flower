@@ -26,8 +26,12 @@ publish: null
 
 extraResources:
 #  - resources
-  - from: resources
-    to: resources
+  - from: resources/icons
+    to: resources/icons
+  - from: resources/index.html
+    to: resources/index.html
+  - from: resources/build/Info.plist
+    to: Info.plist
 #  # - from: node_modules/ffmpeg-static/bin/${platform}/${arch}/ffmpeg",
 #  - from: node_modules/ffmpeg-static/ffmpeg
 #    to: resources/ffmpeg/ffmpeg
@@ -37,6 +41,10 @@ extraResources:
 #asarUnpack:
 #  # 解压 resources 目录下的所有内容
 #  - resources/**
+"asarUnpack": [
+  # 解决放到asar会出现模块未签名的问题
+  "node_modules/node-mac-permissions"
+]
 
 # 不需要签名公证
 #afterSign: "electron-builder-notarize"
@@ -69,7 +77,7 @@ mac: {
   artifactName: '${productName}-${platform}-${arch}-${version}.${ext}',
   target: [ # 要打的包的格式类型设置
             'dmg',
-            'zip' # 这里注意更新的时候，mac只认zip格式的包
+            # 'zip' # 这里注意更新的时候，mac只认zip格式的包
   ],
   # 是否进行苹果官方的签名
   notarize: false,
@@ -78,7 +86,7 @@ mac: {
   minimumSystemVersion: "10.12.0",
   darkModeSupport: true,
   hardenedRuntime: true,
-  # entitlements: "./resources/build/entitlements.mac.inherit.plist",
+  entitlements: "./resources/build/entitlements.mac.inherit.plist",
   extendInfo: {
     NSMicrophoneUsageDescription: "Screen Flower needs access to the microphone to be able to record audio for screen recordings.",
     NSCameraUsageDescription: "A Screen Flower plugin wants to use the camera.",

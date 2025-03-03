@@ -13,4 +13,7 @@ export namespace NotifyManager {
             Logger.log('Notifications are not supported on this platform.');
         }
     }
+
+    const requestNotifyPermission = () => {
+    }
 }

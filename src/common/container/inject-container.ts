@@ -1,5 +1,5 @@
 import { Container, interfaces } from 'inversify'
-import { isPromise } from 'inversify/lib/utils/async'
+import { isPromise } from '../types'
 import {Logger} from "../logger";
 
 export const InjectContainer = new Container()
