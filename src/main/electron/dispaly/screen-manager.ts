@@ -58,6 +58,8 @@ export class ScreenManager implements IScreenManager{
     // 不包括任务栏
     protected _currentScreenAreaOnlyContent: ScreenArea
     getCurrentScreenArea(refresh: boolean=false, fullArea: boolean=true): ScreenArea{
+        // 兼容多显示器 (暂时没有焦点在显示器变化的事件)
+        refresh = this._mulDisplay
         if (!this._currentScreenArea || !this._currentScreenAreaOnlyContent || refresh) {
             Logger.info('>> refresh getCurrentScreenArea')
             const screen = this.getFoucScreen()
