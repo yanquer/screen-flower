@@ -17,6 +17,9 @@ let config: webpack.Configuration = merge(baseConfig, {
     ],
   },
   plugins: [
+    // new webpack.IgnorePlugin({
+    //   resourceRegExp: /\.map$/, // 忽略所有 .map 文件
+    // }),
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
       DEBUG_PROD: "false",
@@ -26,7 +29,8 @@ let config: webpack.Configuration = merge(baseConfig, {
       'process.type': '"browser"',
     }),
   ],
-  devtool: 'source-map',
+  // devtool: 'source-map',
+  devtool: false,
 })
 
 if (typeof userWebpack === 'function') {
