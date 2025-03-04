@@ -1,5 +1,5 @@
 import {Component} from "react";
-import {Box, TextField, Text, Checkbox, Theme, Grid, Button} from "@radix-ui/themes";
+import {Box, TextField, Text, Checkbox, Theme, Grid, Button, Flex} from "@radix-ui/themes";
 import {IRecordContext, RecordContext} from "../common/global-context";
 import {ToolTipWrap} from "../components/radix-ui/tool-tip-wrap";
 import {invokeElectronHandlerAsync} from "../common/common";
@@ -7,6 +7,8 @@ import {getServiceBySymbol} from "../../common/container/inject-container";
 import {ISettingService, IUtilService} from "../../common/service";
 import {DragTitle} from "../components/drag-title";
 import {Logger} from "../common/logger";
+import {FormItemInputText} from "../components/radix-ui/form/form-item-input-text";
+import {FormItemCheckbox} from "../components/radix-ui/form/form-item-checkbox";
 
 interface SettingViewStates {
     showDock: boolean
@@ -72,86 +74,56 @@ export class SettingView extends Component<any, SettingViewStates>{
                 className={"p-4 pt-1 bg-gray-800 w-[400px]"}
             >
                 <DragTitle title={'设置'}/>
-                <Grid columns={"2"} gap="3"
+                <Flex gap="3"
+                      direction={"column"}
                     className="bg-gray-700 p-4 rounded-lg"
                 >
 
-                    {/* row1 */}
-                    <Box>
-                        <Text as="label" size="2">显示dock栏</Text>
-                    </Box>
 
-                    {/*<Box>*/}
-                    {/*</Box>*/}
-
-                    <Box>
-                        <Checkbox defaultChecked={false} color={'bronze'}
-                                  checked={this.state.showDock}
-                                  onClick={(e) => {
-                                      // setShowDock((pre) => !pre)
-                                      const checked = !this.state.showDock
-                                      Logger.debug(`显示dock栏 checked: ${checked}`)
-                                      const setService: ISettingService = getServiceBySymbol(ISettingService);
-                                      setService.setDockShow(checked).then()
-                                      this.setShowDock(checked)
-                                  }}
-                        />
-                    </Box>
-
-                    {/* row2 */}
-                    <Box>
-                        <Text as="label" size="2">录制缓存</Text>
-                    </Box>
-                    <Box>
-                        {this.buildButton("选择", () => {
+                    <FormItemCheckbox
+                        label={"显示dock栏"}
+                        value={this.state.showDock}
+                        clickEvent={(val: boolean) => {
+                            Logger.debug(`显示dock栏 checked: ${val}`)
                             const setService: ISettingService = getServiceBySymbol(ISettingService);
-                            setService.setOrSelectCachePath().then(
-                                (retPath) => retPath && this.setCachePath(retPath)
-                            )
-                        })}
-                        {this.openButton(this.state.cachePath)}
-                    </Box>
+                            setService.setDockShow(val).then()
+                            this.setShowDock(val)
+                        }}
+                    />
 
-                    {/* row2 - text */}
-                    <Box gridColumn={"1 / span 2"}>
-                        <ToolTipWrap title={this.state.cachePath} key={this.state.cachePath}>
-                            <TextField.Root
-                                size="1"
-                                // placeholder="…"
-                                readOnly={true}
-                                // className={'overflow-x-auto overscroll-contain sm-scroll-bar'}
-                                className={'text-nowrap overflow-x-auto sm-scroll-bar'}
-                                value={this.state.cachePath}
-                            >
-                            </TextField.Root>
-                        </ToolTipWrap>
-                    </Box>
+                    <FormItemInputText
+                        label={"录制缓存"}
+                        value={this.state.cachePath}
+                        buttons={[
+                            {name: "打开", clickEvent: () => {
+                                    invokeElectronHandlerAsync(async () => {
+                                        const utilService = getServiceBySymbol<IUtilService>(IUtilService)
+                                        await utilService.showFileInFolder(this.state.cachePath)
+                                    }).then()
+                                }},
+                            {name: "选择", clickEvent: () => {
+                                    const setService: ISettingService = getServiceBySymbol(ISettingService);
+                                    setService.setOrSelectCachePath().then(
+                                        (retPath) => retPath && this.setCachePath(retPath)
+                                    )
+                                }},
+                        ]}
+                    />
 
-                    <Box/>
+                    <FormItemInputText
+                        label={"日志"}
+                        value={this.state.logPath}
+                        buttons={[
+                            {name: "打开", clickEvent: () => {
+                                    invokeElectronHandlerAsync(async () => {
+                                        const utilService = getServiceBySymbol<IUtilService>(IUtilService)
+                                        await utilService.showFileInFolder(this.state.logPath)
+                                    }).then()
+                                }},
+                        ]}
+                    />
 
-                    {/* row3 */}
-                    <Box gridColumnStart={"1"}>
-                        <Text as="label" size="2">日志</Text>
-                    </Box>
-                    <Box>
-                        {this.openButton(this.state.logPath)}
-                    </Box>
-
-                    {/* row3 - text */}
-                    <Box gridColumn={"1 / span 2"}>
-                        <ToolTipWrap title={this.state.logPath} key={this.state.logPath}>
-                            <TextField.Root size="1"
-                                            // placeholder="…"
-                                            readOnly={true}
-                                            className={'overflow-x-auto overscroll-contain sm-scroll-bar'}
-                                            value={this.state.logPath}
-                            >
-                                {/*    if icon*/}
-                            </TextField.Root>
-                        </ToolTipWrap>
-                    </Box>
-
-                </Grid>
+                </Flex>
             </Theme>
         </div>)
     }
