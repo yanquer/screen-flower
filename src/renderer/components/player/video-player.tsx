@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useContext, useEffect, useState, useRef, useMemo } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import "plyr-react/plyr.css";
-import {RecordContext} from "../../common/global-context";
 import dynamic from "next/dynamic";
 import {getPathWithProtocol} from "../../../common/defines";
 import {Logger} from "../../common/logger";
@@ -10,14 +9,16 @@ const Plyr = dynamic(() => import("plyr-react"), { ssr: false });
 
 
 interface VideoPlayerProps {
+    playUrl: string;
 }
 
 export const VideoPlayer = (props: VideoPlayerProps) => {
-    const {videoUrl} = useContext(RecordContext);
     const playerRef = useRef(null);
     const [url, setUrl] = useState(null);
     const [source, setSource] = useState(null);
     const [isSet, setIsSet] = useState(false);
+
+    const {playUrl} = props
 
     // useEffect(() => {
     //     if (
@@ -44,8 +45,8 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
     useEffect(() => {
 
         const _setUrl = (preVal: string) => {
-            if (videoUrl) {
-                const pUrl = getPathWithProtocol(videoUrl)
+            if (playUrl) {
+                const pUrl = getPathWithProtocol(playUrl)
                 Logger.info(`>> video url _setUrl: ${pUrl}`)
                 return pUrl
             }
@@ -53,7 +54,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
 
         setUrl(_setUrl)
 
-        if (videoUrl) {
+        if (playUrl) {
             // const pUrl = getPathWithProtocol(videoUrl)
             // Logger.info(`>> video url: ${pUrl}`)
             // setSource({
@@ -79,7 +80,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
             // }
 
         }
-    }, [videoUrl, playerRef]);
+    }, [playUrl, playerRef]);
 
     useEffect(() => {
         const _setSource = (preVal: any) => {

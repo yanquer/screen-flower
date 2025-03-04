@@ -22,6 +22,7 @@ import {IUtilService} from "../../common/service";
 
 // font
 import "@fortawesome/fontawesome-free/css/all.css"
+import {isFrontDev} from "../common/run-time-env";
 
 
 Logger.info('>> start _app...')
@@ -49,11 +50,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [canSetting, setCanSetting] = useState<boolean>(false)
   const [videoUrl, setVideoUrl] = useState<string>("")
 
-  // 设置
-  const [showDock, setShowDock] = useState<boolean>(false)
-  const [cachePath, setCachePath] = useState<string | null>(undefined)
-  const [logPath, setLogPath] = useState<string | null>(undefined)
-
     const router = useRouter()
     const toPage = (pageUrl: string) => {
       router.push({ pathname: `${pageUrl}` }).then()
@@ -64,7 +60,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     invokeElectronHandler(
         () => {
-            window.ipcInvoke.onHandleWindowClose((winName: WindowNames) => {
+            window.ipcInvoke?.onHandleWindowClose((winName: WindowNames) => {
                 Logger.info(`>>>> _app get: close ${winName}`);
                 (winName === WindowNames.CaptureWin) && setCanCapture(false);
                 (winName === WindowNames.SettingWin) && setCanSetting(false);
@@ -75,15 +71,15 @@ function MyApp({ Component, pageProps }: AppProps) {
                 }
                 setRecording(false)
             })
-          window.ipcInvoke.onHandleWindowHide((winName: WindowNames) => {
+          window.ipcInvoke?.onHandleWindowHide((winName: WindowNames) => {
             Logger.info(`>>>> _app get: hide ${winName}`);
             (winName === WindowNames.CaptureWin) && setCanCapture(false);
             (winName === WindowNames.SettingWin) && setCanSetting(false);
             (winName === WindowNames.PlayerWin) && setCanPreview(false);
             setRecording(false)
           })
-          window.ipcInvoke.onHandleWindowShow((winName: WindowNames) => {
-            Logger.info(`>>>> _app get: show ${winName} -- ${winName === WindowNames.SettingWin}`)
+          window.ipcInvoke?.onHandleWindowShow((winName: WindowNames) => {
+            Logger.info(`>>>> _app get: show ${winName}`)
             setCanCapture(winName === WindowNames.CaptureWin);
             setCanSetting(winName === WindowNames.SettingWin);
             setCanPreview(winName === WindowNames.PlayerWin);
@@ -124,7 +120,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     }, []);
 
   return (
-      loadOver ? <RecordContext.Provider value={{
+      loadOver ? (<RecordContext.Provider value={{
         recording, setRecording,
           pause, setPause,
         qualityValue, setQualityValue,
@@ -140,16 +136,13 @@ function MyApp({ Component, pageProps }: AppProps) {
           capArea, setCapArea,
           allowPenetrate, setAllowPenetrate,
         isInActionBar, setIsInActionBar,
-        showDock, setShowDock,
-        cachePath, setCachePath,
-        logPath, setLogPath,
         canCapture, setCanCapture,
         canSetting, setCanSetting,
           videoUrl, setVideoUrl,
           devMode, setDevMode,
       }}>
         <Component {...pageProps} />
-      </RecordContext.Provider> :
+      </RecordContext.Provider>) :
           <DefaultBgView/>
   )
 }

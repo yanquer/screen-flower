@@ -9,8 +9,8 @@ import {getServiceBySymbol} from "../../common/container/inject-container";
 import {Logger} from "../common/logger";
 import {DefaultBgView} from "../components/default-bg-view";
 
+const Capture_ = () => {
 
-export default function Capture() {
     const {recording, canCapture, allowPenetrate} = useContext(RecordContext)
 
     // 是否允许点击穿透
@@ -36,12 +36,18 @@ export default function Capture() {
 
     }, [allowPenetrate]);
 
+    return <div>
+        <CaptureWin/>
+        <ActionToolBar/>
+    </div>
+}
+
+export default function Capture() {
+    const {canCapture} = useContext(RecordContext)
+
     const render = () => {
         return (
-            canCapture ? <div>
-                <CaptureWin/>
-                <ActionToolBar/>
-            </div> : <DefaultBgView mode={'cap'}/>
+            canCapture ? <Capture_ /> : <DefaultBgView mode={'cap'}/>
         )
     }
 

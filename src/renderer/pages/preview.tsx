@@ -8,27 +8,50 @@ import {PlayerView} from "../components/player/player-view";
 import {DefaultBgView} from "../components/default-bg-view";
 import {Logger} from "../common/logger";
 
-export default function Preview(){
+const Preview_ = () => {
     const {previewBlob, setPreviewBlob,
         videoUrl, setVideoUrl,
         canPreview, setCanPreview} = useContext(RecordContext);
 
-    useEffect(()=>{
-        invokeElectronHandlerAsync(async () => {
-            if (!videoUrl && canPreview) {
-                const utilService: IUtilService = getServiceBySymbol(IUtilService);
-                const videoPath: string = await utilService.askLastRecord(true) as string
-                Logger.info("Preview get url form backend: ", videoPath)
-                setVideoUrl(videoPath)
-            }
-        }).then()
-    }, [canPreview])
+    // useEffect(()=>{
+    //     // 用于打开预览窗口时, 如果没有 url, 初始化一下
+    //     invokeElectronHandlerAsync(async () => {
+    //         if (!videoUrl && canPreview) {
+    //             const utilService: IUtilService = getServiceBySymbol(IUtilService);
+    //             const videoPath: string = await utilService.askLastRecord(true) as string
+    //             Logger.info("Preview get url form backend: ", videoPath)
+    //             setVideoUrl(videoPath)
+    //         }
+    //     }).then()
+    // }, [])
+
+    // const [videoUrl, setVideoUrl] = useEffect<>("")
+
+    // 每次加载的时候都刷新
+    invokeElectronHandlerAsync(async () => {
+        if (canPreview) {
+            const utilService: IUtilService = getServiceBySymbol(IUtilService);
+            const videoPath: string = await utilService.askLastRecord(true) as string
+            Logger.info("Preview get url form backend: ", videoPath)
+            setVideoUrl(videoPath)
+        }
+    }).then()
+
+    useEffect(() => {
+
+    }, []);
+
+    Logger.debug("Preview preview with videoUrl: ", videoUrl)
+    return <PlayerView playUrl={videoUrl} setPlayUrl={setVideoUrl}/>
+}
+
+export default function Preview(){
+    const {canPreview} = useContext(RecordContext);
 
     Logger.debug("Preview preview with canPreview: ", canPreview)
-    Logger.debug("Preview preview with videoUrl: ", videoUrl)
     return (
-        canPreview && videoUrl ? <div>
-            <PlayerView/>
+        canPreview ? <div>
+            <Preview_ />
         </div> :
             <DefaultBgView/>
     );

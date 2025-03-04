@@ -1,29 +1,15 @@
 
 import log from 'electron-log/renderer';
-import {RendererLogger} from "electron-log";
+// import {RendererLogger} from "electron-log";
 
-import chalk from 'chalk'
+import {isFrontDev} from "./run-time-env";
+import {BaseChalkLogger} from "../../common/logger";
 
-namespace chalkLogger {
-
-    export const debug = (text: string) => {
-        console.log(chalk`{cyan [browser]} ${text}`)
-    }
-
-    export const info = (text: string) => {
-        console.log(chalk`{cyan [browser]} ${text}`)
-    }
-
-    export const warn = (message: string) => {
-        console.log(chalk`{cyan [browser]} {green ${message}}`)
-    }
-
-    export const error = (message: string) => {
-        console.log(chalk`{cyan [browser]} {red ${message}}`)
-    }
+class ChalkLogger extends BaseChalkLogger {
+    protected _MsgType = 'browser'
 }
 
-namespace ULogger{
+namespace ElectronFrontLogger{
     export const warn = (...message: any[]) => {
         log.warn("[browser] > ", ...message)
 
@@ -47,8 +33,8 @@ namespace ULogger{
 // export const Logger: RendererLogger = (
 export const Logger = (
     // navigator.userAgent.toLowerCase().indexOf('electron') > 0
-    true
-) ? ULogger:chalkLogger
+    !isFrontDev
+) ? ElectronFrontLogger: new ChalkLogger()
 
 
 

@@ -6,20 +6,24 @@ import {VideoPlayer} from "./video-player";
 import {DragTitle} from "../drag-title";
 import {getServiceBySymbol} from "../../../common/container/inject-container";
 import {IRecordService, IUtilService} from "../../../common/service";
-import {IRecordContext, RecordContext} from "../../common/global-context";
+// import {IRecordContext, RecordContext} from "../../common/global-context";
 import {LabelSelect} from "../radix-ui/label-select";
 import {VideoArgs, VideoFps, VideoSizeStr} from "../../../common/models";
 import {Logger} from "../../common/logger";
 
+interface PlayViewProps{
+    playUrl: string;
+    setPlayUrl: (url: string) => void;
+}
 interface PlayViewState{
     titleShow: boolean,
     videoArgs?: VideoArgs,
 }
 
-export class PlayerView extends Component<any, PlayViewState>{
+export class PlayerView extends Component<PlayViewProps, PlayViewState>{
 
-    static contextType = RecordContext
-    context: IRecordContext
+    // static contextType = RecordContext
+    // context: IRecordContext
 
     state: PlayViewState = {
         titleShow: true,
@@ -37,7 +41,7 @@ export class PlayerView extends Component<any, PlayViewState>{
     }
 
     render() {
-        const {videoUrl, setVideoUrl} = this.context
+        const {playUrl, setPlayUrl} = this.props
         return (
             <div className={'w-full bg-gray-500'}>
                 <Theme appearance={'dark'}
@@ -48,7 +52,7 @@ export class PlayerView extends Component<any, PlayViewState>{
                         onMouseEnter={() => this.setState({titleShow: true})}
                         onMouseLeave={() => this.setState({titleShow: false})}
                     >
-                        <VideoPlayer/>
+                        <VideoPlayer playUrl={this.props.playUrl}/>
                     </Box>
 
                     <Box className={`absolute top-1 w-full text-center 
@@ -58,7 +62,7 @@ export class PlayerView extends Component<any, PlayViewState>{
                          onMouseOver={() => this.setState({titleShow: true})}
                          // onMouseLeave={() => this.setState({titleShow: false})}
                     >
-                        <DragTitle title={this.getUrlName(videoUrl) ?? 'Player'}/>
+                        <DragTitle title={this.getUrlName(playUrl) ?? 'Player'}/>
                     </Box>
 
                     <Box className={'p-1 flex items-center justify-center'}>
@@ -71,7 +75,7 @@ export class PlayerView extends Component<any, PlayViewState>{
                                 const fileName: string = await utilService.askSelectAVideoFile(true, false) as string
                                 if (fileName) {
                                     Logger.info("player-view get url form backend: ", fileName)
-                                    setVideoUrl(fileName)
+                                    setPlayUrl(fileName)
                                 }
                             }
                         }>打开其他文件</Button>
@@ -148,7 +152,7 @@ export class PlayerView extends Component<any, PlayViewState>{
                                 className={'m-2 opacity-80'}
                             onClick={() => {
                                 const recordService = getServiceBySymbol<IRecordService>(IRecordService)
-                                recordService.convertToGif(videoUrl, this.state.videoArgs).then((data: string) =>{
+                                recordService.convertToGif(playUrl, this.state.videoArgs).then((data: string) =>{
                                     if (!data) return
                                     Logger.debug("record save to: ", data)
                                     const utilService = getServiceBySymbol<IUtilService>(IUtilService)
@@ -161,7 +165,7 @@ export class PlayerView extends Component<any, PlayViewState>{
                                 className={'m-2 opacity-80'}
                                 onClick={() => {
                                     const utilService: IUtilService = getServiceBySymbol(IUtilService)
-                                    utilService.showFileInFolder(videoUrl).then()
+                                    utilService.showFileInFolder(playUrl).then()
                                 }}
                         >打开所在目录</Button>
                         {/*<Button color={'gold'}*/}

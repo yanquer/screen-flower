@@ -2,11 +2,12 @@
   "private": true,
   "name": "screen-flower",
   "description": "screen util such as flower",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "author": "YanQue",
   "main": "app/background.js",
   "scripts": {
     "dev": "NODE_ENV=development nextron",
+    "dev:only_next": "NODE_ENV=development NODE_ENV_BROWSER=yes next -p 8888 src/renderer",
     "dev:windows:electron": "electron . 8888 --remote-debugging-port=5858 --inspect=9292",
     "dev:windows:next": "next -p 8888 src/renderer",
     "build": "export CSC_IDENTITY_AUTO_DISCOVERY=false && nextron build",

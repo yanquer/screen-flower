@@ -68,14 +68,6 @@ export interface IRecordContext{
     isInActionBar: boolean
     setIsInActionBar?: (isInActionBar: boolean) => void
 
-    // 设置
-    showDock: boolean
-    setShowDock?: (showDock: boolean | ((showDock: boolean) => boolean)) => void
-    cachePath: string
-    setCachePath?: (cachePath: string) => void
-    logPath: string
-    setLogPath?: (logPath: string) => void
-
     devMode: boolean
     setDevMode?: (devMode: boolean) => void
 }
@@ -100,9 +92,6 @@ export const RecordContext = createContext<IRecordContext>({
     capArea: DefaultCapArea(),
     allowPenetrate: false,
     isInActionBar: false,
-    showDock: false,
-    cachePath: "~/screen-recorder",
-    logPath: "~/Log",
     canCapture: false,
     canSetting: false,
     devMode: false,

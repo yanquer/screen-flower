@@ -90,6 +90,7 @@ export class CaptureWin extends Component<any, CaptureWinState>{
             <div className={"overflow-hidden"}>
                 <Rnd
                     enableResizing={!recording}
+                    disableDragging={recording}
                     dragAxis={!recording ? "both" : "none"}
                     className={"border-dotted border-blue-50 border-2"}
                     size={{width: capArea.width, height: capArea.height}}
