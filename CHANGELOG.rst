@@ -5,6 +5,7 @@ CHANGE LOG
 0.3.4
 ========================
 
+- 更新 webpack 依赖
 - 更新 nextjs / tailwindcss 依赖
 
 0.3.3
