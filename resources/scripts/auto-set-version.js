@@ -1,5 +1,7 @@
 
-// rst-parser
+/// 用于自动从 CHANGELOG 获取最新版本号,
+///   设置到 package.json
+
 const fs = require('fs');
 const path = require('path');
 
