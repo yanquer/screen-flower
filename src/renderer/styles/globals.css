@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
   body {
@@ -15,7 +13,7 @@
 
   .tool-every-button{
     @apply size-8 content-center justify-center
-    flex items-center rounded-full tool-button
+    flex items-center rounded-full
     active:bg-blue-100
   }
 

@@ -44,7 +44,7 @@ export class MoreToolbar extends Component<MoreToolbarProps, MoreToolbarState>{
             <>
                 {/*<Toolbar.Separator className="toolbar-separator" />*/}
                 {/*<ToolTipWrap title={"鼠标穿透"}>*/}
-                {/*    <div className={`tool-every-button */}
+                {/*    <div className={`tool-every-button tool-button */}
                 {/*        hover:bg-gray-200 hover:scale-95*/}
                 {/*        ` + `${this.state.devClick ? ' opacity-100 ' : ' opacity-70 '}`*/}
                 {/*    }*/}
@@ -69,7 +69,7 @@ export class MoreToolbar extends Component<MoreToolbarProps, MoreToolbarState>{
 
                 <Toolbar.Separator className="toolbar-separator" />
                 <ToolTipWrap title={"打开开发者工具"}>
-                    <div className={`tool-every-button 
+                    <div className={`tool-every-button tool-button 
                         opacity-70      
                         hover:bg-gray-200 hover:scale-95
                         `}
@@ -114,7 +114,7 @@ export class MoreToolbar extends Component<MoreToolbarProps, MoreToolbarState>{
                 }}
             >
                 <ToolTipWrap title="关闭录制">
-                    <div className={`tool-every-button 
+                    <div className={`tool-every-button tool-button 
                         ${this.context.blurView ? "tool-button-active" : "hover:bg-gray-200 hover:scale-95 "}
                         `}
                          onClick={() => {
@@ -135,7 +135,7 @@ export class MoreToolbar extends Component<MoreToolbarProps, MoreToolbarState>{
                 </ToolTipWrap>
                 <Toolbar.Separator className="toolbar-separator" />
                 <ToolTipWrap title={"退出应用"}>
-                    <div className={`tool-every-button 
+                    <div className={`tool-every-button tool-button 
                         hover:bg-gray-200 hover:scale-95
                         `}
                          onClick={() => {

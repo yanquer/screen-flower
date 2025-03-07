@@ -34,7 +34,7 @@ export class ToolTipWrap extends Component<ToolTipProps, any> {
                                 pl-4 pr-4 pt-2.5 pb-2.5 
                                 mb-2.5 bg-gray-900
                                 bottom-24 leading-none z-50 text-white select-none 
-                                transition transition-opacity ease-in-out delay-150
+                                transition transition-opacity ease-in-out delay-150 
                                 will-change-transform
                                 ${tooltipContent}
                                 `}

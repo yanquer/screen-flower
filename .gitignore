@@ -19,4 +19,4 @@ src/app
 report
 webpack-config-js
 tsconfig.webpack.tsbuildinfo
-yarn.lock
+

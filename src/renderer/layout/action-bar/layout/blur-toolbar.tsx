@@ -42,7 +42,7 @@ export class BlurToolbar extends Component<BlurToolbarProps, any>{
                 }}
             >
                 <ToolTipWrap title="录制区域模糊">
-                    <div className={`tool-every-button 
+                    <div className={`tool-every-button tool-button 
                         ${this.context.blurView ? "tool-button-active" : "hover:bg-gray-200 hover:scale-95 "}
                         `}
                          onClick={() => {
@@ -61,7 +61,7 @@ export class BlurToolbar extends Component<BlurToolbarProps, any>{
                 </ToolTipWrap>
                 <Toolbar.Separator className="toolbar-separator" />
                 <ToolTipWrap title={"清理"}>
-                    <div className={`tool-every-button 
+                    <div className={`tool-every-button tool-button 
                         hover:bg-gray-200 hover:scale-95
                         `}
                          onClick={() => {
