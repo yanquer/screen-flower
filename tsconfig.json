@@ -2,21 +2,29 @@
   "compilerOptions": {
     "target": "es2017",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": false,
-    "incremental": true,
-    "esModuleInterop": true,
     "module": "esnext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "noEmit": false,
     "jsx": "preserve",
+
+    /* Linting */
+    "strict": false,
+
+    /* inject */
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "types": ["reflect-metadata", "jest"],
+
+    /* other */
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "esModuleInterop": true,
     "sourceMap": true,
   },
   "exclude": ["node_modules",
