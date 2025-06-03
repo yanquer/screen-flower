@@ -65,7 +65,11 @@ export class PlayerView extends Component<PlayViewProps, PlayViewState>{
                         <DragTitle title={this.getUrlName(playUrl) ?? 'Player'}/>
                     </Box>
 
-                    <Box className={'p-1 flex items-center justify-center'}>
+                    <Flex
+                        justify={"center"}
+                        p={"4px"}
+                        gap={"2"}
+                        className={'items-center'}>
                         <Button color={'gold'}
                                 size={'1'}
                                 className={'m-2 opacity-80'}
@@ -80,7 +84,10 @@ export class PlayerView extends Component<PlayViewProps, PlayViewState>{
                             }
                         }>打开其他文件</Button>
 
-                        <Box className={'m-2 flex items-center justify-center'}>
+                        <Flex
+                            gap={"2"}
+                            justify={"center"}
+                            className={'items-center'}>
 
                             <LabelSelect
                                 defaultValue={"gif"}
@@ -145,7 +152,7 @@ export class PlayerView extends Component<PlayViewProps, PlayViewState>{
                             />
 
 
-                        </Box>
+                        </Flex>
 
                         <Button color={'gold'}
                                 size={'1'}
@@ -176,7 +183,7 @@ export class PlayerView extends Component<PlayViewProps, PlayViewState>{
                         {/*        }}*/}
                         {/*>删除(此文件)</Button>*/}
 
-                    </Box>
+                    </Flex>
 
 
                 </Theme>

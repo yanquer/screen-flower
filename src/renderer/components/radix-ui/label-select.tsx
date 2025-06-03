@@ -1,5 +1,5 @@
 import {Component} from "react";
-import {Box, Select, Text} from "@radix-ui/themes";
+import {Box, Flex, Select, Text} from "@radix-ui/themes";
 
 interface LabelSelectProps{
     onChange: (value: string) => void;
@@ -15,7 +15,10 @@ export class LabelSelect extends Component<LabelSelectProps, any>{
         const {defaultValue, label, selectLabel,
             onChange, options} = this.props;
         return (
-            <Box className={'flex items-center justify-center'}>
+            <Flex
+                gap={"2"}
+                justify={"center"}
+                className={' items-center'}>
                 <Text size={'2'} className={'pr-1 pl-1'} >{label}</Text>
                 <Box className={'ml-2 mr-2'}  >
 
@@ -43,7 +46,7 @@ export class LabelSelect extends Component<LabelSelectProps, any>{
                         </Select.Content>
                     </Select.Root>
                 </Box>
-            </Box>
+            </Flex>
         )
     }
 }

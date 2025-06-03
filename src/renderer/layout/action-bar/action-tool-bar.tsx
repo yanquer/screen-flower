@@ -199,9 +199,11 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                         </div>
                                     )}
 
-                                    <div className="flex items-center justify-center">
+                                    <Flex
+                                        justify={"center"}
+                                        className=" items-center">
                                         <RecordedTimer/>
-                                    </div>
+                                    </Flex>
 
                                     <ToolTipButtonWrap
                                         title={"重新开始录制"}

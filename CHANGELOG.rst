@@ -5,6 +5,7 @@ CHANGE LOG
 0.3.4
 ========================
 
+- 解决布局问题
 - 更新 nextron
 - 更新 webpack 依赖
 - 更新 nextjs / tailwindcss 依赖

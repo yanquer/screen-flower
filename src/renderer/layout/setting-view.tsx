@@ -69,7 +69,10 @@ export class SettingView extends Component<any, SettingViewStates>{
     }
 
     render() {
-        return (<div className={'w-screen h-screen flex items-center justify-center overflow-hidden bg-gray-500'}>
+        return (<Flex
+            justify={"center"}
+            overflow={"hidden"}
+            className={'w-screen h-screen items-center bg-gray-500'}>
             <Theme appearance={'dark'}
                 className={"p-4 pt-1 bg-gray-800 w-[400px]"}
             >
@@ -125,6 +128,6 @@ export class SettingView extends Component<any, SettingViewStates>{
 
                 </Flex>
             </Theme>
-        </div>)
+        </Flex>)
     }
 }
