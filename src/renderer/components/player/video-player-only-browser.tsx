@@ -11,7 +11,7 @@ interface VideoPlayerOnlyBrowserProps {
 }
 
 export const VideoPlayerOnlyBrowser = (props: VideoPlayerOnlyBrowserProps) => {
-    const {previewBlob, videoUrl} = useContext(RecordContext);
+    const {previewBlob, } = useContext(RecordContext);
     const playerRef = useRef(null);
     const [url, setUrl] = useState(null);
     const [source, setSource] = useState(null);
