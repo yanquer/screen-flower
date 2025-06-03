@@ -40,8 +40,6 @@ export interface IRecordContext{
     setCanPreview?: (canPreview: boolean) => void
     previewBlob?: Blob
     setPreviewBlob?: (previewBlob?: Blob) => void
-    videoUrl?: string
-    setVideoUrl?: (videoUrl?: string) => void
 
     // 是否show Capture-Window
     canCapture: boolean,

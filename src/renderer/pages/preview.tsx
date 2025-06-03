@@ -1,5 +1,5 @@
 
-import {useContext, useEffect} from "react";
+import {useContext, useEffect, useState} from "react";
 import {RecordContext} from "../common/global-context";
 import {invokeElectronHandlerAsync} from "../common/common";
 import {getServiceBySymbol} from "../../common/container/inject-container";
@@ -10,30 +10,19 @@ import {Logger} from "../common/logger";
 
 const Preview_ = () => {
     const {previewBlob, setPreviewBlob,
-        videoUrl, setVideoUrl,
         canPreview, setCanPreview} = useContext(RecordContext);
 
-    // useEffect(()=>{
-    //     // 用于打开预览窗口时, 如果没有 url, 初始化一下
-    //     invokeElectronHandlerAsync(async () => {
-    //         if (!videoUrl && canPreview) {
-    //             const utilService: IUtilService = getServiceBySymbol(IUtilService);
-    //             const videoPath: string = await utilService.askLastRecord(true) as string
-    //             Logger.info("Preview get url form backend: ", videoPath)
-    //             setVideoUrl(videoPath)
-    //         }
-    //     }).then()
-    // }, [])
+    const [videoUrl, setVideoUrl] = useState<string>("")
 
-    // const [videoUrl, setVideoUrl] = useEffect<>("")
-
-    // 每次加载的时候都刷新
+    // 每次加载的时候都刷新 ?
     invokeElectronHandlerAsync(async () => {
         if (canPreview) {
             const utilService: IUtilService = getServiceBySymbol(IUtilService);
             const videoPath: string = await utilService.askLastRecord(true) as string
             Logger.info("Preview get url form backend: ", videoPath)
-            setVideoUrl(videoPath)
+            if (videoPath && videoPath !== videoUrl) {
+                setVideoUrl(videoPath)
+            }
         }
     }).then()
 

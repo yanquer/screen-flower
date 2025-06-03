@@ -106,7 +106,7 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
     render() {
         const {setAllowPenetrate, setIsInActionBar, barMode,
             recording, setRecording, setPreviewBlob, canCapture,
-            setVideoUrl} = this.context
+        } = this.context
 
         return (
             <div className={"bg-white pointer-events-auto"}
@@ -186,7 +186,8 @@ export class ActionToolBar extends Component<any, ActionToolBarState>{
                                                         (data: string) => {
                                                             Logger.info(`>> stop record front, get data ${data}`)
                                                             // todo: 由于窗口关闭状态会丢失, 打算将状态保存到后端去
-                                                            data && setVideoUrl(data)
+                                                            // data && setVideoUrl(data)
+
                                                             // data && setPreviewBlob(createBlobByBuffer(data))
                                                             // data && this.utilService.askOpenPreview()
                                                         }

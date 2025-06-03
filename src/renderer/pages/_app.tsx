@@ -48,7 +48,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   const [canCapture, setCanCapture] = useState<boolean>(false)
   const [canSetting, setCanSetting] = useState<boolean>(false)
-  const [videoUrl, setVideoUrl] = useState<string>("")
 
     const router = useRouter()
     const toPage = (pageUrl: string) => {
@@ -66,7 +65,6 @@ function MyApp({ Component, pageProps }: AppProps) {
                 (winName === WindowNames.SettingWin) && setCanSetting(false);
                 if (winName === WindowNames.PlayerWin) {
                     Logger.debug("_app: set no video url and can't preview")
-                    setVideoUrl("")
                     setCanPreview(false);
                 }
                 setRecording(false)
@@ -138,7 +136,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         isInActionBar, setIsInActionBar,
         canCapture, setCanCapture,
         canSetting, setCanSetting,
-          videoUrl, setVideoUrl,
           devMode, setDevMode,
       }}>
         <Component {...pageProps} />
