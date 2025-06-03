@@ -14,21 +14,19 @@ const Preview_ = () => {
 
     const [videoUrl, setVideoUrl] = useState<string>("")
 
-    // 每次加载的时候都刷新 ?
-    invokeElectronHandlerAsync(async () => {
-        if (canPreview) {
-            const utilService: IUtilService = getServiceBySymbol(IUtilService);
-            const videoPath: string = await utilService.askLastRecord(true) as string
-            Logger.info("Preview get url form backend: ", videoPath)
-            if (videoPath && videoPath !== videoUrl) {
-                setVideoUrl(videoPath)
-            }
-        }
-    }).then()
-
     useEffect(() => {
-
-    }, []);
+        // 每次加载的时候都刷新 ?
+        invokeElectronHandlerAsync(async () => {
+            if (canPreview) {
+                const utilService: IUtilService = getServiceBySymbol(IUtilService);
+                const videoPath: string = await utilService.askLastRecord(true) as string
+                Logger.info("Preview get url form backend: ", videoPath)
+                if (videoPath && videoPath !== videoUrl) {
+                    setVideoUrl(videoPath)
+                }
+            }
+        }).then()
+    }, [canPreview]);
 
     Logger.debug("Preview preview with videoUrl: ", videoUrl)
     return <PlayerView playUrl={videoUrl} setPlayUrl={setVideoUrl}/>
