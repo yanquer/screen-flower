@@ -2,6 +2,7 @@
 
 ## 0.4.0
 
+- webpack编译
 - 依赖注入统一
 - @yanquer/common
 
