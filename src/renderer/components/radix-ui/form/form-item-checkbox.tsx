@@ -1,9 +1,4 @@
-import {Box, Checkbox, Flex, Grid, Text, TextField} from "@radix-ui/themes";
-import {ToolTipWrap} from "../tool-tip-wrap";
-import {FormButton, IButtonProps} from "./form-button";
-import {Logger} from "../../../common/logger";
-import {ISettingService} from "../../../../common/service";
-import {getServiceBySymbol} from "../../../../common/container/inject-container";
+import {Box, Checkbox, Flex, Grid, Text} from "@radix-ui/themes";
 import {useState} from "react";
 
 interface IFormItemProps {

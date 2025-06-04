@@ -1,4 +1,4 @@
-import { injectable } from 'inversify'
+import { injectable } from "@yanquer/common/common"
 // import {Barrier} from "../../common/barrier";
 
 

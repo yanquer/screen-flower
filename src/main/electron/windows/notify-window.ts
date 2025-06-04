@@ -1,11 +1,13 @@
 
 
-import {injectable, postConstruct} from "inversify";
+import {injectable, postConstruct, asyncSleep} from "@yanquer/common/common";
 import {Event, Display, BrowserWindowConstructorOptions} from "electron";
 import {ContextKey, HandlerStr, WindowNames} from "../../../common/defines";
 import {UniversalWindow} from "./universal-window";
-import {asyncSleep} from "../../../common/common";
 import {isProd} from "../../common/defines";
+import {inject} from "@yanquer/common/common";
+import {IScreenManager} from "../service";
+import {IContextService} from "../../../common/service";
 
 @injectable()
 export class NotifyWindow extends UniversalWindow{
@@ -14,6 +16,9 @@ export class NotifyWindow extends UniversalWindow{
     url: string = 'notify'
     name = 'notify-win'
     preLoad = true
+
+    @inject(IScreenManager) protected readonly screenManager: IScreenManager
+    @inject(IContextService) protected readonly contextService: IContextService
 
     get winArea(){
         const {x, y, width, height} = this.screenManager.getCurrentScreenArea()

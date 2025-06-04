@@ -1,5 +1,7 @@
 // for inject
-import 'reflect-metadata'
+// import 'reflect-metadata'
+import "@yanquer/common/common"
+
 // bind
 import '../middle'
 
@@ -16,13 +18,13 @@ import {Logger} from "../common/logger";
 import {invokeElectronHandler} from "../common/common";
 import {WindowNames} from "../../common/defines";
 import {MovieQuality} from "../../common/movie-stream";
-import {DefaultBgView} from "../components/default-bg-view";
-import {getServiceBySymbol} from "../../common/container/inject-container";
 import {IUtilService} from "../../common/service";
 
 // font
 import "@fortawesome/fontawesome-free/css/all.css"
 import {isFrontDev} from "../common/run-time-env";
+import {getServiceBySymbol} from "@yanquer/common/common";
+import {DefaultBgView} from "../components/default-bg-view";
 
 
 Logger.info('>> start _app...')

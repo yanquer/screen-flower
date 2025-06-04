@@ -2,11 +2,11 @@
 import {useContext, useEffect, useState} from "react";
 import {RecordContext} from "../common/global-context";
 import {invokeElectronHandlerAsync} from "../common/common";
-import {getServiceBySymbol} from "../../common/container/inject-container";
+import {getServiceBySymbol} from "@yanquer/common/common";
 import {IUtilService} from "../../common/service";
 import {PlayerView} from "../components/player/player-view";
-import {DefaultBgView} from "../components/default-bg-view";
 import {Logger} from "../common/logger";
+import {DefaultBgView} from "../components/default-bg-view";
 
 const Preview_ = () => {
     const {previewBlob, setPreviewBlob,

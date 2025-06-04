@@ -1,5 +1,5 @@
 import {ISettingService} from "../../common/service";
-import {injectable} from "inversify";
+import {injectable} from "@yanquer/common/common";
 import {ServiceFactory} from "./service-factory";
 
 @injectable()

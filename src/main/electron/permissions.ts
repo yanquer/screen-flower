@@ -6,12 +6,11 @@ import {
 import {ensureDockIsShowing} from "./platform/dock";
 import {hasScreenPremise} from "../common/electron/electron-preferences";
 import {Logger} from "../common/logger";
-import {getServiceBySymbol} from "../../common/container/inject-container";
+import {getServiceBySymbol} from "@yanquer/common/common";
 import {IWindowsManager} from "./service";
 import {WindowNames} from "../../common/defines";
 import {AppManager} from "./manager/app-manager";
 import {DialogManager} from "./manager/dialog-manager";
-import {asyncSleep} from "../../common/common";
 
 
 export namespace NodeMacPermissions {

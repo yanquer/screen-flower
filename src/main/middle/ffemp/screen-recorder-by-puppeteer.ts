@@ -3,7 +3,7 @@
 // import * as Puppeteer from 'puppeteer'
 // import {PuppeteerScreenRecorder} from 'puppeteer-screen-recorder';
 // import {IRecordService} from "../../../common/service";
-// import {injectable, postConstruct} from "inversify";
+// import {injectable, postConstruct} from "@yanquer/common/common";
 // import {Page} from "puppeteer";
 // import {CaptureArea} from "../../../common/models";
 //

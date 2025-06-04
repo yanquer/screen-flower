@@ -1,5 +1,5 @@
 import {BrowserWindow, BrowserWindowConstructorOptions} from "electron";
-import {Event} from "../../common/event";
+import {Event} from "@yanquer/common/common";
 import {CaptureArea, CursorPosition, ScreenArea} from "../../common/models";
 import {WindowNames} from "../../common/defines";
 

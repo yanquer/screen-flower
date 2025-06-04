@@ -2,9 +2,8 @@ import { stat, readFile, readdirSync, writeFileSync, existsSync, mkdirSync, rena
 import { dump, load } from 'js-yaml'
 import { join, dirname } from 'path'
 
-import { IFileService } from '../../common/service'
 import { PathStat } from '../../common/defines'
-import { injectable } from 'inversify'
+import { injectable, IFileService } from "@yanquer/common/common"
 import {Logger} from "../common/logger";
 import {copyFileSync} from "node:fs";
 
@@ -33,6 +32,8 @@ export class FileService implements IFileService {
     return ret
   }
 
+  // todo: buffer / array buffer ?
+  // @ts-ignore
   async openBuffer(path: string): Promise<Buffer | undefined> {
     Logger.info(`>> Opening buffer file ${path}`)
     if (!(await this.isExists(path))) {

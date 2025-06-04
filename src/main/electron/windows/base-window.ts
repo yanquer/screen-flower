@@ -1,20 +1,16 @@
-import {inject, injectable, postConstruct} from "inversify";
+import {inject, postConstruct, } from "@yanquer/common/common";
 import {getHostUrl} from "../../common/defines";
 import {BrowserWindow, BrowserWindowConstructorOptions, Event, Input} from "electron";
-import {Emitter} from "../../../common/event";
+import {Emitter} from "@yanquer/common/common";
 import {createWindow} from "../../helpers";
 import {HandlerStr, WindowNames} from "../../../common/defines";
 import {WindowsUtils} from "./windows-utils";
 import {IBaseWindow, IScreenManager} from "../service";
 import {Logger} from "../../common/logger";
 import {IContextService} from "../../../common/service";
-import {getServiceBySymbol} from "../../../common/container/inject-container";
-import {Barrier} from "../../../common/barrier";
-import {ElePathUtil} from "../../common/dynamic-defines";
-import {asyncSleep} from "../../../common/common";
+import {Barrier, asyncSleep} from "@yanquer/common/common";
 
 
-@injectable()
 export class BaseSFWindow implements IBaseWindow{
     id: WindowNames
     name: string
@@ -35,11 +31,8 @@ export class BaseSFWindow implements IBaseWindow{
     // 是否是第一次show窗口, 支持close后
     firstInit: boolean = true;
 
-    @inject(IScreenManager)
-    protected readonly screenManager: IScreenManager;
-
-    @inject(IContextService)
-    protected readonly contextService: IContextService
+    @inject(IScreenManager) protected readonly screenManager: IScreenManager
+    @inject(IContextService) protected readonly contextService: IContextService
 
     protected windowHideEmitter = new Emitter<WindowNames>()
     windowHideEmitterEvent = this.windowHideEmitter.event

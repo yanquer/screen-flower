@@ -1,17 +1,15 @@
 import ffmpeg from 'ffmpeg-static';
-import {IContextService, IFileService, IRecordService, ISettingService} from "../../../common/service";
-import {inject, injectable, postConstruct} from "inversify";
+import {IContextService, IRecordService, ISettingService} from "../../../common/service";
+import {IFileService, inject, injectable, postConstruct} from "@yanquer/common/common";
 // import {FluentFfmpegApi} from './fluent-ffmpeg/api'
 
 import FfmpegCommand from 'fluent-ffmpeg';
 import {CaptureArea, eqCaptureArea, VideoArgs} from "../../../common/models";
-import {Emitter, Event} from "../../../common/event";
+import {Emitter, Event} from "@yanquer/common/common";
 import {join} from "path";
 import {getHomeDir} from "../../common/dynamic-defines";
-import {Dispose} from "../../../common/container/dispose";
 import {IScreenManager, ISysDialogService, IWindowsManager} from "../../electron/service";
-import {isProd} from "../../common/defines";
-import {getCurrentTime, getRandomStr, isTest} from "../../../common/common";
+import {getCurrentTime, getRandomStr, isTest, Dispose, Barrier} from "@yanquer/common/common";
 import {Process} from "../../common/process";
 import {Logger} from "../../common/logger";
 import {ContextKey, WindowNames} from "../../../common/defines";
@@ -20,7 +18,6 @@ import {getPathDirAndNameAndExt} from "../../common/common";
 import {OS, OsType} from "../../common/os";
 import {FfmpegExtension} from "../../common/third-resources/ffmpeg-ext";
 import {NotifyManager} from "../../electron/manager/notify-manager";
-import {Barrier} from "../../../common/barrier";
 
 // import {fixPathForAsarUnpack} from 'electron-util'
 // const {fixPathForAsarUnpack} = require('electron-util');
@@ -261,7 +258,9 @@ export class ScreenRecorder extends Dispose implements IRecordService{
 
         if (onlyStr) return this.curRecordPath
 
-        const data = await this.fileService.openBuffer(this.curRecordPath)
+        // todo: buffer / array buffer ?
+        // @ts-ignore
+        const data = await this.fileService.openBuffer(this.curRecordPath) as Buffer
         Logger.info(`>> stopRecord buffer has data ${data && data.length > 0}`)
         if (!data) this.windowsManager.hideAllWindows().then();
 
@@ -403,7 +402,9 @@ export class ScreenRecorder extends Dispose implements IRecordService{
 
         Logger.info(`>> recordBgImage...  img: ${newSavePath}`)
 
-        const buffer = await this.fileService.openBuffer(newSavePath)
+        // todo: buffer / array buffer ?
+        // @ts-ignore
+        const buffer = await this.fileService.openBuffer(newSavePath) as Buffer
         // const blob = new Blob([buffer], { type: 'image/png' })
         // return blob
         this.lastBgBuffer = buffer

@@ -1,7 +1,7 @@
 import {Component, useEffect, useId, useRef} from "react";
 import Draggable from 'react-draggable'
 import {Logger} from "../logger";
-import {asyncSleep} from "../../../common/common";
+import {asyncSleep} from "@yanquer/common/common";
 
 
 // 为了使用 useId 换成函数组件

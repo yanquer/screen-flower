@@ -22,7 +22,7 @@ import {ScreenCaptureBrowser} from "../../components/movie-stream/browser/screen
 import {RecordedTimer} from "../../components/movie-stream/record-timer";
 import {CursorToolbar} from "./layout/cursor-toolbar";
 import {BlurToolbar} from "./layout/blur-toolbar";
-import {getServiceBySymbol} from "../../../common/container/inject-container";
+import {getServiceBySymbol} from "@yanquer/common/common";
 import {IRecordService, IUtilService} from "../../../common/service";
 import {Logger} from "../../common/logger";
 import {createBlobByBuffer} from "../../../common/common";

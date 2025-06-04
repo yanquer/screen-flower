@@ -7,7 +7,7 @@ import {
     FullCircleCloseButtonToolbar,
 } from "../../../components/svgs";
 import {Logger} from "../../../common/logger";
-import {getServiceBySymbol} from "../../../../common/container/inject-container";
+import {getServiceBySymbol} from "@yanquer/common/common";
 import {IUtilService} from "../../../../common/service";
 
 interface MoreToolbarProps{

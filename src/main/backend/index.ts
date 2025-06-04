@@ -1,5 +1,5 @@
-import {bindToDefaultContainer} from "../../common/container/inject-container";
-import {IContextService, IFileService} from "../../common/service";
+import {bindToDefaultContainer, IFileService} from "@yanquer/common/common";
+import {IContextService} from "../../common/service";
 import {FileService} from "./file-service";
 import {ContextKeyService} from "./context-key-service";
 

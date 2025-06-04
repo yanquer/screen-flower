@@ -1,7 +1,6 @@
-import { injectable } from 'inversify'
+import { injectable, IFileService} from "@yanquer/common/common"
 import { ServiceFactory } from './service-factory'
 import {BaseToElectron} from "./base-model";
-import {IFileService} from "../../common/service";
 
 
 @injectable()
@@ -44,6 +43,8 @@ export class FileService extends BaseToElectron implements IFileService {
     return await this._backendService('mkDir', path, recursive)
   }
 
+  // todo: buffer / array buffer ?
+  // @ts-ignore
   async openBuffer(path: string): Promise<Buffer | undefined> {
     return await this._backendService('openBuffer', path)
   }

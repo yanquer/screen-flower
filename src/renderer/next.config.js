@@ -2,8 +2,17 @@
 const {join} = require("path");
 
 
+// 支持 node_modules 的 css
+const withTM = require('next-transpile-modules')([
+  // '@patternfly/react-core',
+  // '@patternfly/react-styles',
+  // '@patternfly/react-log-viewer',
+  '@yanquer/common',
+]);
+
+
 /** @type {import('next').NextConfig} */
-module.exports = {
+const nextConfig = {
   output: 'export',
   distDir: process.env.NODE_ENV === 'production' ? '../../app' : '.next',
   trailingSlash: true,
@@ -21,13 +30,21 @@ module.exports = {
     // });
 
     // 解决默认的加载器不识别 const bindToDefaultContainer = <T>(arg: T){} 这种泛型语法
-    config.module.rules.push({ test: /\.([cm]?ts|tsx)$/, loader: "ts-loader" })
+    config.module.rules.push({ test: /\.([cm]?ts|tsx)$/, loader: "ts-loader" ,
+      options: {
+        // node_modules 编译
+        // allowTsInNodeModules: true,
+      }})
 
     return config
   },
   sassOptions: {
     includePaths: [
-        join(__dirname, 'public', 'styles'),
+      join(__dirname, 'public', 'styles'),
     ],
   },
 }
+
+/** @type {import('next').NextConfig} */
+module.exports = withTM(nextConfig)
+

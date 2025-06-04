@@ -1,6 +1,6 @@
 import {IContextService} from "../../common/service";
-import {Emitter, Event} from "../../common/event";
-import {injectable} from "inversify";
+import {Emitter, Event} from "@yanquer/common/common";
+import {injectable} from "@yanquer/common/common";
 import {ContextKey} from "../../common/defines";
 
 

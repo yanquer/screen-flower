@@ -1,9 +1,7 @@
 import {Component} from "react";
-import {Box, TextField, Text, Checkbox, Theme, Grid, Button, Flex} from "@radix-ui/themes";
-import {IRecordContext, RecordContext} from "../common/global-context";
-import {ToolTipWrap} from "../components/radix-ui/tool-tip-wrap";
+import {Theme, Button, Flex} from "@radix-ui/themes";
 import {invokeElectronHandlerAsync} from "../common/common";
-import {getServiceBySymbol} from "../../common/container/inject-container";
+import {getServiceBySymbol} from "@yanquer/common/common";
 import {ISettingService, IUtilService} from "../../common/service";
 import {DragTitle} from "../components/drag-title";
 import {Logger} from "../common/logger";

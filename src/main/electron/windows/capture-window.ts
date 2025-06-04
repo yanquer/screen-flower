@@ -1,14 +1,15 @@
 
 
 import {BaseSFWindow} from "./base-window";
-import {injectable, postConstruct} from "inversify";
+import {injectable, postConstruct} from "@yanquer/common/common";
 import {Event, Display, BrowserWindowConstructorOptions} from "electron";
 import path from "path";
-import {getServiceBySymbol} from "../../../common/container/inject-container";
 import {ContextKey, HandlerStr, WindowNames} from "../../../common/defines";
-import {values} from "lodash";
 import {Logger} from "../../common/logger";
 import {isProd} from "../../common/defines";
+import {inject} from "@yanquer/common/common";
+import {IScreenManager} from "../service";
+import {IContextService} from "../../../common/service";
 
 @injectable()
 export class CaptureWindow extends BaseSFWindow{
@@ -17,6 +18,9 @@ export class CaptureWindow extends BaseSFWindow{
     url: string = 'capture'
     name = 'capture-win'
     preLoad = true
+
+    @inject(IScreenManager) protected readonly screenManager: IScreenManager
+    @inject(IContextService) protected readonly contextService: IContextService
 
     get options(): BrowserWindowConstructorOptions  {
         return {

@@ -1,4 +1,4 @@
-import {Box, Checkbox, Grid, Text, TextField} from "@radix-ui/themes";
+import {Box, Flex, Grid, Text, TextField} from "@radix-ui/themes";
 import {ToolTipWrap} from "../tool-tip-wrap";
 import {FormButton, IButtonProps} from "./form-button";
 
@@ -18,9 +18,9 @@ export const FormItemInputText = (props: IFormItemProps) => {
         <Box gridColumnStart={"1"}>
             <Text as="label" size="2">{label}</Text>
         </Box>
-        <Box>
+        <Flex gap={"2"}>
             {buttons?.map(val => <FormButton {...val}/>)}
-        </Box>
+        </Flex>
 
         {/* input */}
         <Box gridColumn={"1 / span 2"}>

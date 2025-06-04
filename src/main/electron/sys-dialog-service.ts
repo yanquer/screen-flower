@@ -1,6 +1,6 @@
 import {ISysDialogService} from "./service";
 import {BrowserWindow} from "electron";
-import {inject, injectable} from "inversify";
+import {inject, injectable} from "@yanquer/common/common";
 import {ISettingService} from "../../common/service";
 import {Logger} from "../common/logger";
 import {DialogManager} from "./manager/dialog-manager";

@@ -7,7 +7,7 @@ import {resizeHandle, topLeft, topRight, top, right, left, bottomRight, bottom, 
 } from '../styles/layout/capture-win.module.scss'
 import {IRecordContext, RecordContext} from "../common/global-context";
 import CursorModes from "./action-bar/tool/cursor-modes";
-import {getServiceBySymbol} from "../../common/container/inject-container";
+import {getServiceBySymbol} from "@yanquer/common/common";
 import {IRecordService} from "../../common/service";
 import {Logger} from "../common/logger";
 import {invokeElectronHandler, invokeElectronHandlerAsync} from "../common/common";

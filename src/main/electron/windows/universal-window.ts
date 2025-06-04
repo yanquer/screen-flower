@@ -1,9 +1,12 @@
 import {BaseSFWindow} from "./base-window";
 import {BrowserWindow, BrowserWindowConstructorOptions, Event, Input} from "electron";
 import path from "path";
-import {injectable} from "inversify";
+import {injectable} from "@yanquer/common/common";
 import {WindowNames} from "../../../common/defines";
 import {Logger} from "../../common/logger";
+import {inject} from "@yanquer/common/common";
+import {IScreenManager} from "../service";
+import {IContextService} from "../../../common/service";
 
 
 
@@ -17,6 +20,9 @@ export class UniversalWindow extends BaseSFWindow {
     url: string = 'setting'
     name = 'universal-win'
     preLoad = true
+
+    @inject(IScreenManager) protected readonly screenManager: IScreenManager
+    @inject(IContextService) protected readonly contextService: IContextService
 
     get winArea(){
         const {x, y, width, height} = this.screenManager.getCurrentScreenArea()

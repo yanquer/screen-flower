@@ -1,5 +1,5 @@
-import {IFileService, IRecordService, IUtilService} from "../../common/service";
-import {inject, injectable} from "inversify";
+import {IRecordService, IUtilService} from "../../common/service";
+import {inject, injectable, IFileService} from "@yanquer/common/common";
 import {IScreenManager, ISysDialogService, IWindowsManager} from "../electron/service";
 import {Logger} from "../common/logger";
 import {WindowNames} from "../../common/defines";
@@ -69,7 +69,9 @@ export class UtilService implements IUtilService{
             return selectFile
         }
         if (selectFile){
-            const data = await this.fileService.openBuffer(selectFile)
+            // todo: buffer / array buffer ?
+            // @ts-ignore
+            const data = await this.fileService.openBuffer(selectFile) as Buffer
             Logger.info(`>> askSelectAVideoFile buffer has data ${data && data.length > 0}`)
             if (data) return data
         }

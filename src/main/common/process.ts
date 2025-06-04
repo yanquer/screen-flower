@@ -4,7 +4,7 @@
 
 import {ChildProcessWithoutNullStreams, spawn} from "node:child_process";
 import {Logger} from "./logger";
-import {Dispose} from "../../common/container/dispose";
+import {Dispose} from "@yanquer/common/common";
 
 export class Process extends Dispose{
     value = 'clean process'

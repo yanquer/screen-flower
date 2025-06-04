@@ -10,5 +10,8 @@ module.exports = {
     // do some stuff here
     return config
   },
+
+  // 是否允许编译 node_modules
+  allowTsInNodeModules: false,
 }
 

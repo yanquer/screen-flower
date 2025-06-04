@@ -2,27 +2,7 @@
 import { MenuItem, MenuItemConstructorOptions } from 'electron'
 import {ContextKey, ContextMenuNames} from "./defines";
 import {CaptureArea, VideoArgs} from "./models";
-import {Event} from "./event";
-
-export const IFileService = Symbol('IFileService')
-export interface IFileService {
-  isExists(path: string): Promise<boolean>
-  open(path: string): Promise<string>
-  openBuffer(path: string): Promise<Buffer | undefined>
-  openYaml<T>(path: string): Promise<T>
-
-  write(path: string, data: any): Promise<void>
-  writeYaml(path: string, data: any): Promise<void>
-
-  isFile(name: string): Promise<boolean>
-  isDir(name: string): Promise<boolean>
-
-  readDir(path: string, recursive?: boolean | number): Promise<string[]>
-  mkDir(path: string, recursive?: boolean | number): Promise<boolean>
-
-  move(originPath: string, newPath: string): Promise<boolean>
-  copy?(originPath: string, newPath: string): Promise<boolean>
-}
+import {Event} from "@yanquer/common/common"
 
 
 export const IRightContextMenuManager = Symbol.for('IRightContextMenuManager')

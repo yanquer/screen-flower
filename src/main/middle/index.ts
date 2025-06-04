@@ -1,5 +1,5 @@
-import {bindToDefaultContainer, invokeInterfaceFun} from "../../common/container/inject-container";
-import {IFileService, IRecordService, ISettingService, IUtilService} from "../../common/service";
+import {bindToDefaultContainer, IFileService, invokeInterfaceFun} from "@yanquer/common/common";
+import {IRecordService, ISettingService, IUtilService} from "../../common/service";
 import {ipcMain} from "electron";
 import {HandlerStr} from "../../common/defines";
 import {ScreenRecorder} from "./ffemp/screen-recorder";
