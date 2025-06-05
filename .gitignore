@@ -20,3 +20,6 @@ report
 webpack-config-js
 tsconfig.webpack.tsbuildinfo
 
+
+.husky/_
+
