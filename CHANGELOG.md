@@ -2,6 +2,7 @@
 
 ## 0.4.0
 
+- 解决编译后无法运行问题
 - webpack编译
 - 依赖注入统一
 - @yanquer/common

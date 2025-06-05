@@ -9,6 +9,8 @@ const withTM = require('next-transpile-modules')([
   // '@patternfly/react-log-viewer',
   '@yanquer/common',
 ]);
+// withTM2 暂时取消效果
+const withTM2 = (data) => data
 
 
 /** @type {import('next').NextConfig} */
@@ -46,5 +48,5 @@ const nextConfig = {
 }
 
 /** @type {import('next').NextConfig} */
-module.exports = withTM(nextConfig)
+module.exports = withTM2(nextConfig)
 
