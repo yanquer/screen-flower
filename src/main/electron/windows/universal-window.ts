@@ -1,9 +1,8 @@
 import {BaseSFWindow} from "./base-window";
-import {BrowserWindow, BrowserWindowConstructorOptions, Event, Input} from "electron";
+import {BrowserWindowConstructorOptions, Event, Input} from "electron";
 import path from "path";
-import {injectable} from "@yanquer/common/common";
+import {injectable, injectFromBase} from "@yanquer/common/common";
 import {WindowNames} from "../../../common/defines";
-import {Logger} from "../../common/logger";
 import {inject} from "@yanquer/common/common";
 import {IScreenManager} from "../service";
 import {IContextService} from "../../../common/service";
@@ -13,6 +12,10 @@ import {IContextService} from "../../../common/service";
 // 通用窗口
 //  比如, 设置View, 播放器View
 @injectable()
+@injectFromBase({
+    extendConstructorArguments: true,
+    extendProperties: true,
+})
 export class UniversalWindow extends BaseSFWindow {
 
     id = WindowNames.UniversalWin

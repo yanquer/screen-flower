@@ -1,26 +1,24 @@
 
 
 import {BaseSFWindow} from "./base-window";
-import {injectable, postConstruct} from "@yanquer/common/common";
+import {injectable, injectFromBase, postConstruct} from "@yanquer/common/common";
 import {Event, Display, BrowserWindowConstructorOptions} from "electron";
 import path from "path";
 import {ContextKey, HandlerStr, WindowNames} from "../../../common/defines";
 import {Logger} from "../../common/logger";
 import {isProd} from "../../common/defines";
-import {inject} from "@yanquer/common/common";
-import {IScreenManager} from "../service";
-import {IContextService} from "../../../common/service";
 
 @injectable()
+@injectFromBase({
+    extendConstructorArguments: true,
+    extendProperties: true,
+})
 export class CaptureWindow extends BaseSFWindow{
     id = WindowNames.CaptureWin
 
     url: string = 'capture'
     name = 'capture-win'
     preLoad = true
-
-    @inject(IScreenManager) protected readonly screenManager: IScreenManager
-    @inject(IContextService) protected readonly contextService: IContextService
 
     get options(): BrowserWindowConstructorOptions  {
         return {
