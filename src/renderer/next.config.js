@@ -3,12 +3,12 @@ const {join} = require("path");
 
 
 // 支持 node_modules 的 css
-const withTM = require('next-transpile-modules')([
-  // '@patternfly/react-core',
-  // '@patternfly/react-styles',
-  // '@patternfly/react-log-viewer',
-  '@yanquer/common',
-]);
+// const withTM = require('next-transpile-modules')([
+//   // '@patternfly/react-core',
+//   // '@patternfly/react-styles',
+//   // '@patternfly/react-log-viewer',
+//   '@yanquer/common',
+// ]);
 // withTM2 暂时取消效果
 const withTM2 = (data) => data
 
@@ -18,6 +18,9 @@ const nextConfig = {
   output: 'export',
   distDir: process.env.NODE_ENV === 'production' ? '../../app' : '.next',
   trailingSlash: true,
+  transpilePackages: [
+    // "@yanquer/common",
+  ],
   images: {
     unoptimized: true,
   },
@@ -45,6 +48,7 @@ const nextConfig = {
       join(__dirname, 'public', 'styles'),
     ],
   },
+  // runtime: "edge",
 }
 
 /** @type {import('next').NextConfig} */

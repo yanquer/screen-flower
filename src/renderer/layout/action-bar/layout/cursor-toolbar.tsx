@@ -2,7 +2,7 @@ import {Component} from "react";
 import * as Toolbar from "@radix-ui/react-toolbar";
 import {CursorIcon, HighlightCursorIcon, SpotlightCursorIcon, TargetCursorIcon} from "../../../components/svgs";
 import {CursorMode, IRecordContext, RecordContext} from "../../../common/global-context";
-import {ToolTipWrap} from "../../../components/radix-ui/tool-tip-wrap";
+import {ToolTipWrap} from "@yanquer/common/browser";
 import {Logger} from "../../../common/logger";
 
 

@@ -1,6 +1,8 @@
 // for inject
 // import 'reflect-metadata'
 import "@yanquer/common/common"
+// global css
+import "@yanquer/common/style/css/all.css"
 
 // bind
 import '../middle'
@@ -24,7 +26,7 @@ import {IUtilService} from "../../common/service";
 import "@fortawesome/fontawesome-free/css/all.css"
 import {isFrontDev} from "../common/run-time-env";
 import {getServiceBySymbol} from "@yanquer/common/common";
-import {DefaultBgView} from "../components/default-bg-view";
+import {DefaultBgView} from "@yanquer/common/browser";
 
 
 Logger.info('>> start _app...')
@@ -80,6 +82,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           })
           window.ipcInvoke?.onHandleWindowShow((winName: WindowNames) => {
             Logger.info(`>>>> _app get: show ${winName}`)
+            console.log(`>>>> _app get: show ${winName}`)
             setCanCapture(winName === WindowNames.CaptureWin);
             setCanSetting(winName === WindowNames.SettingWin);
             setCanPreview(winName === WindowNames.PlayerWin);

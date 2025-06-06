@@ -1,12 +1,11 @@
 import {Component} from "react";
-import {Theme, Button, Flex} from "@radix-ui/themes";
+import {Theme, Button, Flex, Box} from "@radix-ui/themes";
 import {invokeElectronHandlerAsync} from "../common/common";
 import {getServiceBySymbol} from "@yanquer/common/common";
+import {BlurBgBox, DragTitle, FormItemCheckbox, FormItemInputTextWithBtn, PageBox} from "@yanquer/common/browser";
 import {ISettingService, IUtilService} from "../../common/service";
-import {DragTitle} from "../components/drag-title";
 import {Logger} from "../common/logger";
-import {FormItemInputText} from "../components/radix-ui/form/form-item-input-text";
-import {FormItemCheckbox} from "../components/radix-ui/form/form-item-checkbox";
+
 
 interface SettingViewStates {
     showDock: boolean
@@ -67,65 +66,75 @@ export class SettingView extends Component<any, SettingViewStates>{
     }
 
     render() {
-        return (<Flex
+
+        return <Flex
             justify={"center"}
             overflow={"hidden"}
-            className={'w-screen h-screen items-center bg-gray-500'}>
+            className={'w-screen h-screen items-center'}>
             <Theme appearance={'dark'}
-                className={"p-4 pt-1 bg-gray-800 w-[400px]"}
+                   className={"w-[400px]"}
             >
-                <DragTitle title={'设置'}/>
-                <Flex gap="3"
-                      direction={"column"}
-                    className="bg-gray-700 p-4 rounded-lg"
+                <BlurBgBox
+                    defaultImg={"/images/bg.png"}
+                    className={"w-screen h-screen"}
                 >
+                    <PageBox className={"p-2"}>
+                        <DragTitle title={'设置'}/>
+                        <Flex gap="3"
+                              direction={"column"}
+                              className="bg-gray-800-35 p-4 rounded-lg"
+                        >
 
-
-                    <FormItemCheckbox
-                        label={"显示dock栏"}
-                        value={this.state.showDock}
-                        clickEvent={(val: boolean) => {
-                            Logger.debug(`显示dock栏 checked: ${val}`)
-                            const setService: ISettingService = getServiceBySymbol(ISettingService);
-                            setService.setDockShow(val).then()
-                            this.setShowDock(val)
-                        }}
-                    />
-
-                    <FormItemInputText
-                        label={"录制缓存"}
-                        value={this.state.cachePath}
-                        buttons={[
-                            {name: "打开", clickEvent: () => {
-                                    invokeElectronHandlerAsync(async () => {
-                                        const utilService = getServiceBySymbol<IUtilService>(IUtilService)
-                                        await utilService.showFileInFolder(this.state.cachePath)
-                                    }).then()
-                                }},
-                            {name: "选择", clickEvent: () => {
+                            <FormItemCheckbox
+                                label={"显示dock栏"}
+                                value={this.state.showDock}
+                                clickEvent={(val: boolean) => {
+                                    Logger.debug(`显示dock栏 checked: ${val}`)
                                     const setService: ISettingService = getServiceBySymbol(ISettingService);
-                                    setService.setOrSelectCachePath().then(
-                                        (retPath) => retPath && this.setCachePath(retPath)
-                                    )
-                                }},
-                        ]}
-                    />
+                                    setService.setDockShow(val).then()
+                                    this.setShowDock(val)
+                                }}
+                            />
 
-                    <FormItemInputText
-                        label={"日志"}
-                        value={this.state.logPath}
-                        buttons={[
-                            {name: "打开", clickEvent: () => {
-                                    invokeElectronHandlerAsync(async () => {
-                                        const utilService = getServiceBySymbol<IUtilService>(IUtilService)
-                                        await utilService.showFileInFolder(this.state.logPath)
-                                    }).then()
-                                }},
-                        ]}
-                    />
+                            <FormItemInputTextWithBtn
+                                label={"录制缓存"}
+                                value={this.state.cachePath}
+                                buttons={[
+                                    {name: "打开", clickEvent: () => {
+                                            invokeElectronHandlerAsync(async () => {
+                                                const utilService = getServiceBySymbol<IUtilService>(IUtilService)
+                                                await utilService.showFileInFolder(this.state.cachePath)
+                                            }).then()
+                                        }},
+                                    {name: "选择", clickEvent: () => {
+                                            const setService: ISettingService = getServiceBySymbol(ISettingService);
+                                            setService.setOrSelectCachePath().then(
+                                                (retPath) => retPath && this.setCachePath(retPath)
+                                            )
+                                        }},
+                                ]}
+                            />
 
-                </Flex>
+                            <FormItemInputTextWithBtn
+                                label={"日志"}
+                                value={this.state.logPath}
+                                buttons={[
+                                    {name: "打开", clickEvent: () => {
+                                            invokeElectronHandlerAsync(async () => {
+                                                const utilService = getServiceBySymbol<IUtilService>(IUtilService)
+                                                await utilService.showFileInFolder(this.state.logPath)
+                                            }).then()
+                                        }},
+                                ]}
+                            />
+
+                        </Flex>
+                    </PageBox>
+                </BlurBgBox>
+
             </Theme>
-        </Flex>)
+        </Flex>
+
+
     }
 }

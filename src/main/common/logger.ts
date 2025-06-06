@@ -1,10 +1,11 @@
 
 import log from 'electron-log/main';
 import {MainLogger} from "electron-log";
+import 'electron-log/preload'
 
 const logInit = () => {
     // Optional, initialize the logger for any renderer process
-    log.initialize();
+    log.initialize({ preload: true });
     log.transports.file.level = 'debug';
     // log.transports.console.format = '{h}:{i}:{s} {text}';
 }

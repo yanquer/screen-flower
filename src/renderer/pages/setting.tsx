@@ -1,7 +1,7 @@
 import {SettingView} from "../layout/setting-view";
-import {useContext, useEffect} from "react";
+import {useContext} from "react";
 import {RecordContext} from "../common/global-context";
-import {DefaultBgView} from "../components/default-bg-view";
+import {DefaultBgView} from "@yanquer/common/browser";
 import {isFrontDev} from "../common/run-time-env";
 import {Logger} from "../common/logger";
 

@@ -171,7 +171,8 @@ export class BaseSFWindow implements IBaseWindow{
             this.win?.setOpacity(1)
             this.firstInit = false
 
-            await asyncSleep(50)
+            // todo: 150ms 后重新发一次... 但是后面如果组件复杂时间还要长一点...
+            await asyncSleep(150)
             // 再发一次, 因为上面那次发过去的时候, 前端事件监听可能还没加载过来
             this.win?.webContents.send(HandlerStr.onWindowShow, this.id)
 

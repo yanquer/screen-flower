@@ -1,5 +1,5 @@
 import {MenuItem, MenuItemConstructorOptions} from 'electron';
-import {forceQuit, getAboutMenuItem} from "./menu-items";
+import {forceQuit, getAboutMenuItem, openDevTool} from "./menu-items";
 import {MenuNames} from "./menu-names";
 import {getServiceBySymbol} from "@yanquer/common/common";
 import {IWindowsManager} from "../service";
@@ -53,6 +53,7 @@ export const getMenuTemplate = async (): Promise<Array<(MenuItemConstructorOptio
         }
     },
     getAboutMenuItem(),
+    openDevTool(),
     {
         type: 'separator'
     },

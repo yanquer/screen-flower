@@ -16,7 +16,7 @@ import {
 
 // @ts-ignore
 import {toolbarButton} from "../../styles/layout/action-tool-bar.module.scss"
-import {ToolTipButtonWrap} from "../../components/radix-ui/tool-tip-button-wrap";
+import {ToolTipButtonWrap} from "@yanquer/common/browser";
 import {BarVideoMode, IRecordContext, RecordContext} from "../../common/global-context";
 import {ScreenCaptureBrowser} from "../../components/movie-stream/browser/screen-capture-browser";
 import {RecordedTimer} from "../../components/movie-stream/record-timer";

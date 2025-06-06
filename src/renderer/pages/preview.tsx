@@ -6,7 +6,7 @@ import {getServiceBySymbol} from "@yanquer/common/common";
 import {IUtilService} from "../../common/service";
 import {PlayerView} from "../components/player/player-view";
 import {Logger} from "../common/logger";
-import {DefaultBgView} from "../components/default-bg-view";
+import {DefaultBgView} from "@yanquer/common/browser";
 
 const Preview_ = () => {
     const {previewBlob, setPreviewBlob,

@@ -9,4 +9,7 @@ export enum MenuNames {
     settingView = 'settingView',
     openVideo = 'openVideo',
     openRecVideo = 'openRecVideo',
+
+    // dev
+    openDevTool = 'openDevTool',
 }

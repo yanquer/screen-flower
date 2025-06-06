@@ -7,7 +7,7 @@ import {invokeElectronHandler} from "../common/common";
 import {IUtilService} from "../../common/service";
 import {getServiceBySymbol} from "@yanquer/common/common";
 import {Logger} from "../common/logger";
-import {DefaultBgView} from "../components/default-bg-view";
+import {DefaultBgView} from "@yanquer/common/browser";
 
 
 const Capture_ = () => {
