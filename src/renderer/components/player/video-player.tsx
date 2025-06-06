@@ -156,12 +156,11 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
 
     return (
         <div className="videoPlayer rounded-xl">
-            <div className="playerWrap w-full h-full rounded-xl"
+            <div className="playerWrap w-full h-full rounded-xl overflow-hidden rounded-bl-none rounded-br-none"
                  // onClick={handleClick}
             >
                 {url && (
                     <Plyr
-                        className={"rounded-xl"}
                         ref={playerRef}
                         id="plyr-player"
                         source={source}

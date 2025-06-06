@@ -42,9 +42,9 @@ export class PlayerView extends Component<PlayViewProps, PlayViewState>{
     render() {
         const {playUrl, setPlayUrl} = this.props
         return (
-            <div className={'w-screen h-screen bg-gray-500 '}>
+            <div className={''}>
                 <Theme appearance={'dark'}
-                       className={"p-0 pt-0 bg-gray-950 w-full h-full rounded-xl"}
+                       className={"p-0 rounded-xl"}
                 >
                     <BlurBgBox
                         defaultImg={"/images/bg.png"}
@@ -55,7 +55,7 @@ export class PlayerView extends Component<PlayViewProps, PlayViewState>{
                             width={"100%"}
                             direction={"column"}
                             gap={"2"}
-                            p={"4px"}
+                            pb={"4px"}
                             className={"rounded-xl"}
                         >
                             <Box
