@@ -70,9 +70,9 @@ export class SettingView extends Component<any, SettingViewStates>{
         return <Flex
             justify={"center"}
             overflow={"hidden"}
-            className={'w-screen h-screen items-center'}>
+            className={'w-screen h-screen items-center rounded-xl'}>
             <Theme appearance={'dark'}
-                   className={"w-[400px]"}
+                   className={"w-[400px]  rounded-xl"}
             >
                 <BlurBgBox
                     defaultImg={"/images/bg.png"}

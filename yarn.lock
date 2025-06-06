@@ -2755,10 +2755,10 @@
   resolved "https://registry.npmmirror.com/@xtuc/long/-/long-4.2.2.tgz"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@yanquer/common@^0.7.24":
-  version "0.7.24"
-  resolved "https://npm.pkg.github.com/download/@yanquer/common/0.7.24/ffde7101e4a6846030421a6d2ed41f34e5d81e87"
-  integrity sha512-lN4PLKiCdeeyAVtaA1ssgu3iAWdbWZRbyqP2T771Svyo6fNFs/uMEQkeB3wM3i1PT1BEod2D7Tcq10SCawuZog==
+"@yanquer/common@^0.7.25":
+  version "0.7.25"
+  resolved "https://npm.pkg.github.com/download/@yanquer/common/0.7.25/bf52dff90bc302c2357d46c132e1d821d679c29e"
+  integrity sha512-JB4G9DLZo7sG10OudKFSsS2+6KHB69G5KNeda3ySXg3bKRnWrM0JZ4uQ0eLPQxmhfnGiJAYRjY5qOYLqN9534A==
   dependencies:
     "@radix-ui/react-icons" "^1.3.2"
     "@radix-ui/react-toolbar" "^1.1.3"

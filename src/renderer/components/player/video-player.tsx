@@ -155,12 +155,13 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
     // }, [isSet]);
 
     return (
-        <div className="videoPlayer">
-            <div className="playerWrap w-full h-full"
+        <div className="videoPlayer rounded-xl">
+            <div className="playerWrap w-full h-full rounded-xl"
                  // onClick={handleClick}
             >
                 {url && (
                     <Plyr
+                        className={"rounded-xl"}
                         ref={playerRef}
                         id="plyr-player"
                         source={source}

@@ -53,7 +53,7 @@ export const getMenuTemplate = async (): Promise<Array<(MenuItemConstructorOptio
         }
     },
     getAboutMenuItem(),
-    openDevTool(),
+    // openDevTool(),
     {
         type: 'separator'
     },

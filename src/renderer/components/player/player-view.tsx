@@ -4,7 +4,7 @@ import {Box, Flex, TextField, Text, Checkbox, Theme, Grid, Button,
 } from "@radix-ui/themes";
 import {VideoPlayer} from "./video-player";
 import {getServiceBySymbol} from "@yanquer/common/common";
-import {DragTitle, LabelSelect} from "@yanquer/common/browser";
+import {BlurBgBox, DragTitle, LabelSelect} from "@yanquer/common/browser";
 import {IRecordService, IUtilService} from "../../../common/service";
 // import {IRecordContext, RecordContext} from "../../common/global-context";
 import {VideoArgs, VideoFps, VideoSizeStr} from "../../../common/models";
@@ -42,156 +42,164 @@ export class PlayerView extends Component<PlayViewProps, PlayViewState>{
     render() {
         const {playUrl, setPlayUrl} = this.props
         return (
-            <div className={'w-screen h-screen bg-gray-500'}>
+            <div className={'w-screen h-screen bg-gray-500 '}>
                 <Theme appearance={'dark'}
-                       className={"p-0 pt-0 bg-gray-950 w-full h-full"}
+                       className={"p-0 pt-0 bg-gray-950 w-full h-full rounded-xl"}
                 >
-
-                    <Flex
-                        height={"100%"}
-                        width={"100%"}
-                        direction={"column"}
-                        gap={"2"}
-                        p={"4px"}
+                    <BlurBgBox
+                        defaultImg={"/images/bg.png"}
+                        className={"w-screen h-screen rounded-xl"}
                     >
-                        <Box
-                            flexGrow={"1"}
-                            onMouseEnter={() => this.setState({titleShow: true})}
-                            onMouseLeave={() => this.setState({titleShow: false})}
-                        >
-                            <VideoPlayer playUrl={this.props.playUrl}/>
-                        </Box>
-
                         <Flex
-                            justify={"center"}
-                            p={"4px"}
+                            height={"100%"}
+                            width={"100%"}
+                            direction={"column"}
                             gap={"2"}
-                            className={'items-center'}>
-                            <Button color={'gold'}
-                                    size={'1'}
-                                    className={'m-2 opacity-80'}
-                                    onClick={
-                                        async () => {
-                                            const utilService = getServiceBySymbol<IUtilService>(IUtilService)
-                                            const fileName: string = await utilService.askSelectAVideoFile(true, false) as string
-                                            if (fileName) {
-                                                Logger.info("player-view get url form backend: ", fileName)
-                                                setPlayUrl(fileName)
-                                            }
-                                        }
-                                    }>打开其他文件</Button>
+                            p={"4px"}
+                            className={"rounded-xl"}
+                        >
+                            <Box
+                                className={"rounded-xl"}
+                                flexGrow={"1"}
+                                onMouseEnter={() => this.setState({titleShow: true})}
+                                onMouseLeave={() => this.setState({titleShow: false})}
+                            >
+                                <VideoPlayer playUrl={this.props.playUrl}/>
+                            </Box>
 
                             <Flex
-                                gap={"2"}
                                 justify={"center"}
-                                className={'items-center'}>
+                                p={"4px"}
+                                gap={"2"}
+                                className={'items-center rounded-xl'}>
+                                <Button color={'gold'}
+                                        size={'1'}
+                                        className={'m-2 opacity-80'}
+                                        onClick={
+                                            async () => {
+                                                const utilService = getServiceBySymbol<IUtilService>(IUtilService)
+                                                const fileName: string = await utilService.askSelectAVideoFile(true, false) as string
+                                                if (fileName) {
+                                                    Logger.info("player-view get url form backend: ", fileName)
+                                                    setPlayUrl(fileName)
+                                                }
+                                            }
+                                        }>打开其他文件</Button>
 
-                                <LabelSelect
-                                    defaultValue={"gif"}
-                                    label={"类型"}
-                                    selectLabel={"生成目标类型"}
-                                    options={[
-                                        {value: "gif", disabled: false, text: "GIF"},
-                                        {value: "mp4", disabled: true, text: "MP4"},
-                                    ]}
-                                    onChange={(value: 'gif' | 'mp4') => {
-                                        this.setState((preState) => {
-                                            return {videoArgs: {
-                                                    ...preState.videoArgs,
-                                                    videoType: value
-                                                }}
-                                        })
-                                    }}
-                                />
+                                <Flex
+                                    gap={"2"}
+                                    justify={"center"}
+                                    className={'items-center rounded-xl'}>
 
-                                <LabelSelect
-                                    defaultValue={"origin"}
-                                    label={"尺寸"}
-                                    selectLabel={"视频尺寸"}
-                                    options={[
-                                        {value: "origin", disabled: false, text: "原始"},
-                                        {value: "HD", disabled: false, text: "1920 x 1080"},
-                                        {value: "SD4", disabled: false, text: "480p"},
-                                        {value: "SD3", disabled: false, text: "360p"},
-                                        {value: "S2", disabled: false, text: "240p"},
-                                    ]}
-                                    onChange={(value: VideoSizeStr) => {
-                                        this.setState((preState) => {
-                                            return {videoArgs: {
-                                                    ...preState.videoArgs,
-                                                    videoSize: value
-                                                }}
-                                        })
-                                    }}
-                                />
+                                    <LabelSelect
+                                        defaultValue={"gif"}
+                                        label={"类型"}
+                                        selectLabel={"生成目标类型"}
+                                        options={[
+                                            {value: "gif", disabled: false, text: "GIF"},
+                                            {value: "mp4", disabled: true, text: "MP4"},
+                                        ]}
+                                        onChange={(value: 'gif' | 'mp4') => {
+                                            this.setState((preState) => {
+                                                return {videoArgs: {
+                                                        ...preState.videoArgs,
+                                                        videoType: value
+                                                    }}
+                                            })
+                                        }}
+                                    />
 
-                                <LabelSelect
-                                    defaultValue={"origin"}
-                                    label={"FPS"}
-                                    selectLabel={"FPS"}
-                                    options={[
-                                        {value: "origin", disabled: false, text: "原始"},
-                                        {value: "10", disabled: false, text: "10"},
-                                        {value: "15", disabled: false, text: "15"},
-                                        {value: "20", disabled: false, text: "20"},
-                                        {value: "25", disabled: false, text: "25"},
-                                        {value: "30", disabled: false, text: "30"},
-                                        {value: "60", disabled: true, text: "60"},
-                                    ]}
-                                    onChange={(value: VideoFps) => {
-                                        this.setState((preState) => {
-                                            return {videoArgs: {
-                                                    ...preState.videoArgs,
-                                                    fps: value
-                                                }}
-                                        })
-                                    }}
-                                />
+                                    <LabelSelect
+                                        defaultValue={"origin"}
+                                        label={"尺寸"}
+                                        selectLabel={"视频尺寸"}
+                                        options={[
+                                            {value: "origin", disabled: false, text: "原始"},
+                                            {value: "HD", disabled: false, text: "1920 x 1080"},
+                                            {value: "SD4", disabled: false, text: "480p"},
+                                            {value: "SD3", disabled: false, text: "360p"},
+                                            {value: "S2", disabled: false, text: "240p"},
+                                        ]}
+                                        onChange={(value: VideoSizeStr) => {
+                                            this.setState((preState) => {
+                                                return {videoArgs: {
+                                                        ...preState.videoArgs,
+                                                        videoSize: value
+                                                    }}
+                                            })
+                                        }}
+                                    />
 
+                                    <LabelSelect
+                                        defaultValue={"origin"}
+                                        label={"FPS"}
+                                        selectLabel={"FPS"}
+                                        options={[
+                                            {value: "origin", disabled: false, text: "原始"},
+                                            {value: "10", disabled: false, text: "10"},
+                                            {value: "15", disabled: false, text: "15"},
+                                            {value: "20", disabled: false, text: "20"},
+                                            {value: "25", disabled: false, text: "25"},
+                                            {value: "30", disabled: false, text: "30"},
+                                            {value: "60", disabled: true, text: "60"},
+                                        ]}
+                                        onChange={(value: VideoFps) => {
+                                            this.setState((preState) => {
+                                                return {videoArgs: {
+                                                        ...preState.videoArgs,
+                                                        fps: value
+                                                    }}
+                                            })
+                                        }}
+                                    />
+
+
+                                </Flex>
+
+                                <Button color={'gold'}
+                                        size={'1'}
+                                        className={'m-2 opacity-80'}
+                                        onClick={() => {
+                                            const recordService = getServiceBySymbol<IRecordService>(IRecordService)
+                                            recordService.convertToGif(playUrl, this.state.videoArgs).then((data: string) =>{
+                                                if (!data) return
+                                                Logger.debug("record save to: ", data)
+                                                const utilService = getServiceBySymbol<IUtilService>(IUtilService)
+                                                utilService.showFileInFolder(data).then(() => utilService.askHideWin())
+                                            })
+                                        }}
+                                >保存</Button>
+                                <Button color={'gold'}
+                                        size={'1'}
+                                        className={'m-2 opacity-80'}
+                                        onClick={() => {
+                                            const utilService: IUtilService = getServiceBySymbol(IUtilService)
+                                            utilService.showFileInFolder(playUrl).then()
+                                        }}
+                                >打开所在目录</Button>
+                                {/*<Button color={'gold'}*/}
+                                {/*        size={'1'}*/}
+                                {/*        className={'m-2 opacity-80'}*/}
+                                {/*        onClick={() => {*/}
+                                {/*            const fileService: IFileService = getServiceBySymbol(IFileService)*/}
+                                {/*        }}*/}
+                                {/*>删除(此文件)</Button>*/}
 
                             </Flex>
-
-                            <Button color={'gold'}
-                                    size={'1'}
-                                    className={'m-2 opacity-80'}
-                                    onClick={() => {
-                                        const recordService = getServiceBySymbol<IRecordService>(IRecordService)
-                                        recordService.convertToGif(playUrl, this.state.videoArgs).then((data: string) =>{
-                                            if (!data) return
-                                            Logger.debug("record save to: ", data)
-                                            const utilService = getServiceBySymbol<IUtilService>(IUtilService)
-                                            utilService.showFileInFolder(data).then(() => utilService.askHideWin())
-                                        })
-                                    }}
-                            >保存</Button>
-                            <Button color={'gold'}
-                                    size={'1'}
-                                    className={'m-2 opacity-80'}
-                                    onClick={() => {
-                                        const utilService: IUtilService = getServiceBySymbol(IUtilService)
-                                        utilService.showFileInFolder(playUrl).then()
-                                    }}
-                            >打开所在目录</Button>
-                            {/*<Button color={'gold'}*/}
-                            {/*        size={'1'}*/}
-                            {/*        className={'m-2 opacity-80'}*/}
-                            {/*        onClick={() => {*/}
-                            {/*            const fileService: IFileService = getServiceBySymbol(IFileService)*/}
-                            {/*        }}*/}
-                            {/*>删除(此文件)</Button>*/}
-
                         </Flex>
-                    </Flex>
 
-                    <Box className={`absolute top-1 w-full text-center 
+                        <Box className={`absolute top-1 w-full text-center rounded-xl  
                         ${this.state.titleShow ? '' : ' hidden '}
                        
                         `}
-                         onMouseOver={() => this.setState({titleShow: true})}
-                        // onMouseLeave={() => this.setState({titleShow: false})}
-                    >
-                        <DragTitle title={this.getUrlName(playUrl) ?? 'Player'}/>
-                    </Box>
+                             onMouseOver={() => this.setState({titleShow: true})}
+                            // onMouseLeave={() => this.setState({titleShow: false})}
+                        >
+                            <DragTitle title={this.getUrlName(playUrl) ?? 'Player'}/>
+                        </Box>
+                    </BlurBgBox>
+
+
 
                 </Theme>
             </div>
