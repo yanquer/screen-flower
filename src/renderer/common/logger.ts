@@ -3,7 +3,7 @@ import log from 'electron-log/renderer';
 // import {RendererLogger} from "electron-log";
 
 import {isFrontDev} from "./run-time-env";
-import {BaseChalkLogger} from "@yanquer/common/common"
+import {BaseChalkLogger} from "@yanquer/common"
 
 class ChalkLogger extends BaseChalkLogger {
     protected _MsgType = 'browser'

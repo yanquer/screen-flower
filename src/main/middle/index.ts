@@ -1,4 +1,4 @@
-import {bindToDefaultContainer, IFileService, invokeInterfaceFun} from "@yanquer/common/common";
+import {bindToDefaultContainer, IFileService, invokeInterfaceFun} from "@yanquer/common";
 import {IRecordService, ISettingService, IUtilService} from "../../common/service";
 import {ipcMain} from "electron";
 import {HandlerStr} from "../../common/defines";

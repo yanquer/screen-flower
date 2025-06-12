@@ -16,13 +16,13 @@ import {
 
 // @ts-ignore
 import {toolbarButton} from "../../styles/layout/action-tool-bar.module.scss"
-import {ToolTipButtonWrap} from "@yanquer/common/browser";
+import {ToolTipButtonWrap} from "@yanquer/browser";
 import {BarVideoMode, IRecordContext, RecordContext} from "../../common/global-context";
 import {ScreenCaptureBrowser} from "../../components/movie-stream/browser/screen-capture-browser";
 import {RecordedTimer} from "../../components/movie-stream/record-timer";
 import {CursorToolbar} from "./layout/cursor-toolbar";
 import {BlurToolbar} from "./layout/blur-toolbar";
-import {getServiceBySymbol} from "@yanquer/common/common";
+import {getServiceBySymbol} from "@yanquer/common";
 import {IRecordService, IUtilService} from "../../../common/service";
 import {Logger} from "../../common/logger";
 import {createBlobByBuffer} from "../../../common/common";

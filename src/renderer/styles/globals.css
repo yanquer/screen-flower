@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@source "../../../node_modules/@yanquer/common/lib";
+@source "../../../node_modules/@yanquer/browser/lib";
 
 @layer base {
   body {

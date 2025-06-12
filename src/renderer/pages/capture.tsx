@@ -5,9 +5,9 @@ import {useContext, useEffect} from "react";
 import {RecordContext} from "../common/global-context";
 import {invokeElectronHandler} from "../common/common";
 import {IUtilService} from "../../common/service";
-import {getServiceBySymbol} from "@yanquer/common/common";
+import {getServiceBySymbol} from "@yanquer/common";
 import {Logger} from "../common/logger";
-import {DefaultBgView} from "@yanquer/common/browser";
+import {DefaultBgView} from "@yanquer/browser";
 
 
 const Capture_ = () => {

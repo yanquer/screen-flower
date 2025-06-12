@@ -1,6 +1,6 @@
 import {bindWindows} from "./windows";
 import {bindDisplay} from "./dispaly";
-import {bindToDefaultContainer} from "@yanquer/common/common";
+import {bindToDefaultContainer} from "@yanquer/common";
 import {ISysDialogService} from "./service";
 import {SysDialogService} from "./sys-dialog-service";
 import {LocalProtocol} from "./local-protocol";

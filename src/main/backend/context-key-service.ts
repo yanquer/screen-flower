@@ -1,6 +1,6 @@
 import {IContextService} from "../../common/service";
-import {Emitter, Event} from "@yanquer/common/common";
-import {injectable} from "@yanquer/common/common";
+import {Emitter, Event} from "@yanquer/common";
+import {injectable} from "@yanquer/common";
 import {ContextKey} from "../../common/defines";
 
 

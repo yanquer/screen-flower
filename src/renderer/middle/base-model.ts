@@ -1,4 +1,4 @@
-import { injectable } from "@yanquer/common/common"
+import { injectable } from "@yanquer/common"
 // import {Barrier} from "../../common/barrier";
 
 

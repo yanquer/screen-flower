@@ -1,8 +1,8 @@
 import {Component} from "react";
 import {Theme, Button, Flex, Box} from "@radix-ui/themes";
 import {invokeElectronHandlerAsync} from "../common/common";
-import {getServiceBySymbol} from "@yanquer/common/common";
-import {BlurBgBox, DragTitle, FormItemCheckbox, FormItemInputTextWithBtn, PageBox} from "@yanquer/common/browser";
+import {getServiceBySymbol} from "@yanquer/common";
+import {BlurBgBox, DragTitle, FormItemCheckbox, FormItemInputTextWithBtn, PageBox} from "@yanquer/browser";
 import {ISettingService, IUtilService} from "../../common/service";
 import {Logger} from "../common/logger";
 

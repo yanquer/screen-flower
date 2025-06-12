@@ -1,12 +1,12 @@
 import {ISettingService} from "../../common/service";
-import {inject, injectable, postConstruct} from "@yanquer/common/common";
+import {inject, injectable, postConstruct} from "@yanquer/common";
 import {dockShow} from "../common/electron/menu";
 import {join} from "path";
 import {getHomeDir} from "../common/dynamic-defines";
 import {DefaultLogFile, Logger} from "../common/logger";
 import {ISysDialogService, IWindowsManager} from "../electron/service";
-import {Emitter, Event} from "@yanquer/common/common";
-import {getServiceBySymbol} from "@yanquer/common/common";
+import {Emitter, Event} from "@yanquer/common";
+import {getServiceBySymbol} from "@yanquer/common";
 import {WindowNames} from "../../common/defines";
 import {LocalCache} from "../electron/local-cache";
 import {SettingOptions} from "../../common/models";

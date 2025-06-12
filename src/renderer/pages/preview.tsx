@@ -2,11 +2,11 @@
 import {useContext, useEffect, useState} from "react";
 import {RecordContext} from "../common/global-context";
 import {invokeElectronHandlerAsync} from "../common/common";
-import {getServiceBySymbol} from "@yanquer/common/common";
+import {getServiceBySymbol} from "@yanquer/common";
 import {IUtilService} from "../../common/service";
 import {PlayerView} from "../components/player/player-view";
 import {Logger} from "../common/logger";
-import {DefaultBgView} from "@yanquer/common/browser";
+import {DefaultBgView} from "@yanquer/browser";
 
 const Preview_ = () => {
     const {previewBlob, setPreviewBlob,

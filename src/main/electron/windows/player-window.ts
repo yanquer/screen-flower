@@ -1,6 +1,6 @@
 
 
-import {injectable, injectFromBase} from "@yanquer/common/common";
+import {injectable, injectFromBase} from "@yanquer/common";
 import {UniversalWindow} from "./universal-window";
 import {WindowNames} from "../../../common/defines";
 import {BrowserWindowConstructorOptions} from "electron";

@@ -1,4 +1,4 @@
-import {DefaultBgView} from "@yanquer/common/browser";
+import {DefaultBgView} from "@yanquer/browser";
 
 
 export default function Notify(){

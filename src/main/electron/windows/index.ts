@@ -1,5 +1,5 @@
 import {IBaseWindow, IWindowsManager} from "../service";
-import {bindContributions, bindToDefaultContainer} from "@yanquer/common/common";
+import {bindContributions, bindToDefaultContainer} from "@yanquer/common";
 import {WindowsManager} from "./windows-manager";
 import {CaptureWindow} from "./capture-window";
 import {SettingWindow} from "./setting-window";

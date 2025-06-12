@@ -1,6 +1,6 @@
 import {MenuNames} from "./menu-names";
 import {AppManager} from "../manager/app-manager";
-import {getServiceBySymbolMayNull} from "@yanquer/common/common";
+import {getServiceBySymbolMayNull} from "@yanquer/common";
 import {IWindowsManager} from "../service";
 import {WindowNames} from "../../../common/defines";
 

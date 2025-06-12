@@ -1,7 +1,7 @@
 import {MenuItem, MenuItemConstructorOptions} from 'electron';
 import {forceQuit, getAboutMenuItem, openDevTool} from "./menu-items";
 import {MenuNames} from "./menu-names";
-import {getServiceBySymbol} from "@yanquer/common/common";
+import {getServiceBySymbol} from "@yanquer/common";
 import {IWindowsManager} from "../service";
 import {WindowNames} from "../../../common/defines";
 import {AppManager} from "../manager/app-manager";

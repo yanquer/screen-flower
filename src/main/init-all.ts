@@ -1,16 +1,16 @@
 // for inject
 // import 'reflect-metadata'
-import "@yanquer/common/common"
+import "@yanquer/common"
 
 import {initializeMenu} from "./electron/menu";
 import {ensureScreenCapturePermissions} from "./electron/permissions";
 import {bindMiddle} from "./middle";
 import {bindBackend} from "./backend";
 import {ipcMain, globalShortcut} from "electron";
-import {getNeedCleanDispose, IDispose} from "@yanquer/common/common";
+import {getNeedCleanDispose, IDispose} from "@yanquer/common";
 import {bindElectron} from "./electron";
 import {Logger} from "./common/logger";
-import {getServiceBySymbol} from "@yanquer/common/common";
+import {getServiceBySymbol} from "@yanquer/common";
 import {IWindowsManager} from "./electron/service";
 import {WindowNames} from "../common/defines";
 import {ElePathUtil} from "./common/dynamic-defines";

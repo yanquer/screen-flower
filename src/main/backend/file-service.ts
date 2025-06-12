@@ -3,7 +3,7 @@ import { dump, load } from 'js-yaml'
 import { join, dirname } from 'path'
 
 import { PathStat } from '../../common/defines'
-import { injectable, IFileService } from "@yanquer/common/common"
+import { injectable, IFileService } from "@yanquer/common"
 import {Logger} from "../common/logger";
 import {copyFileSync} from "node:fs";
 

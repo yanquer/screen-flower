@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import {RecordContext} from "../../../common/global-context";
-import {getServiceBySymbol} from "@yanquer/common/common";
+import {getServiceBySymbol} from "@yanquer/common";
 import {IUtilService} from "../../../../common/service";
 import {Logger} from "../../../common/logger";
 

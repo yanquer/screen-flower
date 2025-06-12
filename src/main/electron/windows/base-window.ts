@@ -1,14 +1,14 @@
-import {inject, postConstruct, } from "@yanquer/common/common";
+import {inject, postConstruct, } from "@yanquer/common";
 import {getHostUrl} from "../../common/defines";
 import {BrowserWindow, BrowserWindowConstructorOptions, Event, Input} from "electron";
-import {Emitter} from "@yanquer/common/common";
+import {Emitter} from "@yanquer/common";
 import {createWindow} from "../../helpers";
 import {HandlerStr, WindowNames} from "../../../common/defines";
 import {WindowsUtils} from "./windows-utils";
 import {IBaseWindow, IScreenManager} from "../service";
 import {Logger} from "../../common/logger";
 import {IContextService} from "../../../common/service";
-import {Barrier, asyncSleep} from "@yanquer/common/common";
+import {Barrier, asyncSleep} from "@yanquer/common";
 
 
 export class BaseSFWindow implements IBaseWindow{

@@ -6,7 +6,7 @@ import {
 import {ensureDockIsShowing} from "./platform/dock";
 import {hasScreenPremise} from "../common/electron/electron-preferences";
 import {Logger} from "../common/logger";
-import {getServiceBySymbol} from "@yanquer/common/common";
+import {getServiceBySymbol} from "@yanquer/common";
 import {IWindowsManager} from "./service";
 import {WindowNames} from "../../common/defines";
 import {AppManager} from "./manager/app-manager";

@@ -1,5 +1,5 @@
 // import 'reflect-metadata'
-import "@yanquer/common/common"
+import "@yanquer/common"
 
 import {ScreenRecorder} from "../main/middle/ffemp/screen-recorder";
 

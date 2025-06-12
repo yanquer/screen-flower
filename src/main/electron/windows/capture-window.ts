@@ -1,7 +1,7 @@
 
 
 import {BaseSFWindow} from "./base-window";
-import {injectable, injectFromBase, postConstruct} from "@yanquer/common/common";
+import {injectable, injectFromBase, postConstruct} from "@yanquer/common";
 import {Event, Display, BrowserWindowConstructorOptions} from "electron";
 import path from "path";
 import {ContextKey, HandlerStr, WindowNames} from "../../../common/defines";

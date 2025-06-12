@@ -1,4 +1,4 @@
-import { injectable, IFileService} from "@yanquer/common/common"
+import { injectable, IFileService} from "@yanquer/common"
 import { ServiceFactory } from './service-factory'
 import {BaseToElectron} from "./base-model";
 

@@ -1,6 +1,6 @@
 import {IUtilService} from "../../common/service";
 import {ServiceFactory} from "./service-factory";
-import {injectable} from "@yanquer/common/common";
+import {injectable} from "@yanquer/common";
 import * as Buffer from "node:buffer";
 
 

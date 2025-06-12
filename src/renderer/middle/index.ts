@@ -1,4 +1,4 @@
-import {bindToDefaultContainer} from "@yanquer/common/common";
+import {bindToDefaultContainer} from "@yanquer/common";
 import {IRecordService, ISettingService, IUtilService} from "../../common/service";
 import {RecordService} from "./record-service";
 import {UtilService} from "./util-service";

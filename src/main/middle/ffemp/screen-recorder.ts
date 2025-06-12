@@ -1,15 +1,15 @@
 import ffmpeg from 'ffmpeg-static';
 import {IContextService, IRecordService, ISettingService} from "../../../common/service";
-import {IFileService, inject, injectable, postConstruct} from "@yanquer/common/common";
+import {IFileService, inject, injectable, postConstruct} from "@yanquer/common";
 // import {FluentFfmpegApi} from './fluent-ffmpeg/api'
 
 import FfmpegCommand from 'fluent-ffmpeg';
 import {CaptureArea, eqCaptureArea, VideoArgs} from "../../../common/models";
-import {Emitter, Event} from "@yanquer/common/common";
+import {Emitter, Event} from "@yanquer/common";
 import {join} from "path";
 import {getHomeDir} from "../../common/dynamic-defines";
 import {IScreenManager, ISysDialogService, IWindowsManager} from "../../electron/service";
-import {getCurrentTime, getRandomStr, isTest, Dispose, Barrier} from "@yanquer/common/common";
+import {getCurrentTime, getRandomStr, isTest, Dispose, Barrier} from "@yanquer/common";
 import {Process} from "../../common/process";
 import {Logger} from "../../common/logger";
 import {ContextKey, WindowNames} from "../../../common/defines";

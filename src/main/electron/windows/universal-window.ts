@@ -1,9 +1,9 @@
 import {BaseSFWindow} from "./base-window";
 import {BrowserWindowConstructorOptions, Event, Input} from "electron";
 import path from "path";
-import {injectable, injectFromBase} from "@yanquer/common/common";
+import {injectable, injectFromBase} from "@yanquer/common";
 import {WindowNames} from "../../../common/defines";
-import {inject} from "@yanquer/common/common";
+import {inject} from "@yanquer/common";
 import {IScreenManager} from "../service";
 import {IContextService} from "../../../common/service";
 

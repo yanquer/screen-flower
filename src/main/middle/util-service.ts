@@ -1,5 +1,5 @@
 import {IRecordService, IUtilService} from "../../common/service";
-import {inject, injectable, IFileService} from "@yanquer/common/common";
+import {inject, injectable, IFileService} from "@yanquer/common";
 import {IScreenManager, ISysDialogService, IWindowsManager} from "../electron/service";
 import {Logger} from "../common/logger";
 import {WindowNames} from "../../common/defines";

@@ -1,5 +1,5 @@
 import {IScreenManager} from "../service";
-import {Emitter, injectable} from "@yanquer/common/common";
+import {Emitter, injectable} from "@yanquer/common";
 import {BrowserWindow, Display, screen} from "electron";
 import {CaptureArea, CursorPosition, ScreenArea} from "../../../common/models";
 import {toNumber} from "lodash";

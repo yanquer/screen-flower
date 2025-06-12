@@ -1,7 +1,7 @@
 import {IRecordService} from "../../common/service";
 import {BaseToElectron} from "./base-model";
 import {ServiceFactory} from "./service-factory";
-import {injectable} from "@yanquer/common/common";
+import {injectable} from "@yanquer/common";
 import {CaptureArea, VideoArgs} from "../../common/models";
 
 

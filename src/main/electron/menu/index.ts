@@ -1,6 +1,6 @@
 import {Menu, Tray, nativeImage} from 'electron';
 import {getMenuTemplate} from "./template";
-import {getServiceBySymbol} from "@yanquer/common/common";
+import {getServiceBySymbol} from "@yanquer/common";
 import {IWindowsManager} from "../service";
 import {WindowNames} from "../../../common/defines";
 

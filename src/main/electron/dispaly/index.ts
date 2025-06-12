@@ -1,4 +1,4 @@
-import {bindToDefaultContainer, getServiceBySymbol, Logger} from "@yanquer/common/common";
+import {bindToDefaultContainer, getServiceBySymbol, Logger} from "@yanquer/common";
 import {IScreenManager} from "../service";
 import {ScreenManager} from "./screen-manager";
 

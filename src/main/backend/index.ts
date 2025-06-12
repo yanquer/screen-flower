@@ -1,4 +1,4 @@
-import {bindToDefaultContainer, IFileService} from "@yanquer/common/common";
+import {bindToDefaultContainer, IFileService} from "@yanquer/common";
 import {IContextService} from "../../common/service";
 import {FileService} from "./file-service";
 import {ContextKeyService} from "./context-key-service";

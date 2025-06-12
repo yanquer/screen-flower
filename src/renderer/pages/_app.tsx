@@ -1,8 +1,8 @@
 // for inject
 // import 'reflect-metadata'
-import "@yanquer/common/common"
+import "@yanquer/common"
 // global css
-import "@yanquer/common/style/css/all.css"
+import "@yanquer/browser/style/css/all.css"
 
 // bind
 import '../middle'
@@ -25,8 +25,8 @@ import {IUtilService} from "../../common/service";
 // font
 import "@fortawesome/fontawesome-free/css/all.css"
 import {isFrontDev} from "../common/run-time-env";
-import {getServiceBySymbol} from "@yanquer/common/common";
-import {DefaultBgView} from "@yanquer/common/browser";
+import {getServiceBySymbol} from "@yanquer/common";
+import {DefaultBgView} from "@yanquer/browser";
 
 
 Logger.info('>> start _app...')

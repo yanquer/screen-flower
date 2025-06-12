@@ -2,7 +2,7 @@
 import { MenuItem, MenuItemConstructorOptions } from 'electron'
 import {ContextKey, ContextMenuNames} from "./defines";
 import {CaptureArea, VideoArgs} from "./models";
-import {Event} from "@yanquer/common/common"
+import {Event} from "@yanquer/common"
 
 
 export const IRightContextMenuManager = Symbol.for('IRightContextMenuManager')

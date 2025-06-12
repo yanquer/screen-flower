@@ -1,5 +1,5 @@
 import {IBaseWindow, IWindowsManager} from "../service";
-import {injectable, multiInject, postConstruct} from "@yanquer/common/common";
+import {injectable, multiInject, postConstruct} from "@yanquer/common";
 import {Logger} from "../../common/logger";
 import {WindowNames} from "../../../common/defines";
 

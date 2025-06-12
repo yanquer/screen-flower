@@ -3,8 +3,8 @@ import {Box, Flex, TextField, Text, Checkbox, Theme, Grid, Button,
     Select,
 } from "@radix-ui/themes";
 import {VideoPlayer} from "./video-player";
-import {getServiceBySymbol} from "@yanquer/common/common";
-import {BlurBgBox, DragTitle, LabelSelect} from "@yanquer/common/browser";
+import {getServiceBySymbol} from "@yanquer/common";
+import {BlurBgBox, DragTitle, LabelSelect} from "@yanquer/browser";
 import {IRecordService, IUtilService} from "../../../common/service";
 // import {IRecordContext, RecordContext} from "../../common/global-context";
 import {VideoArgs, VideoFps, VideoSizeStr} from "../../../common/models";

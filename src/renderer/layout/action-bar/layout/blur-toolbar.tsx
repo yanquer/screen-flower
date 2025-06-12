@@ -1,7 +1,7 @@
 import {Component} from "react";
 import { IRecordContext, RecordContext} from "../../../common/global-context";
 import * as Toolbar from "@radix-ui/react-toolbar";
-import {ToolTipWrap} from "@yanquer/common/browser";
+import {ToolTipWrap} from "@yanquer/browser";
 import {
     TransformIcon,
     TrashIcon
